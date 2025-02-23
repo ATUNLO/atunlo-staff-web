@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Outfit", serif;
+}
+
+
+.css-1umw9bq-MuiSvgIcon-root{
+  fill: #50ca00!important
+}
+
+.css-jupps9-MuiInputBase-root-MuiOutlinedInput-root{
+  border-radius: 10px!important;
+  outline: none!important;
+}
