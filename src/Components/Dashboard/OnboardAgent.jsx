@@ -86,30 +86,30 @@ function OnboardAgent() {
                   name="FullName"
                   placeholder=""
                   type="text"
-                  className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
                 />
               </FormGroup>
-              <FormGroup className="flex flex-col">
+              <FormGroup className="flex flex-col mb-0">
                 <Label
                   for="phoneNumber"
                   className="font-normal text-[16px] mb-[10px]"
                 >
                   Phone Number
                 </Label>
-                <div className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
+                <div className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
                   <span className="text-[#8F8F8F] text-[16px]">+234</span>
                   <Input
                     id="phoneNumber"
                     name="phoneNumber"
                     placeholder=""
                     type="emtextail"
-                    className="w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                    className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                   />
                 </div>
               </FormGroup>
             </div>
             <div className="flex items-center justify-center gap-[50px] mt-[40px]">
-              <FormGroup className="flex flex-col">
+              <div className="flex flex-col">
                 <Label
                   for="Address"
                   className="font-normal text-[16px] mb-[10px]"
@@ -121,10 +121,10 @@ function OnboardAgent() {
                   name="Address"
                   placeholder=""
                   type="text"
-                  className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
                 />
-              </FormGroup>
-              <FormGroup className="flex flex-col ">
+              </div>
+              <FormGroup className="flex flex-col">
                 <Label
                   htmlFor="state"
                   className="font-normal text-[16px] mb-[10px]"
@@ -137,7 +137,7 @@ function OnboardAgent() {
                   type="select"
                   value={selectedState}
                   onChange={(e) => setSelectedState(e.target.value)}
-                  className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
                 >
                   <option value="">Select a State</option>
                   {statesOfNigeria.map((state) => (
@@ -162,7 +162,7 @@ function OnboardAgent() {
                   type="select"
                   value={selectedState}
                   onChange={(e) => setSelectedState(e.target.value)}
-                  className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px] pl-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] pl-[10px]"
                 >
                   <option value="">Select a Bank</option>
                   {banks.map((bank) => (
@@ -172,7 +172,7 @@ function OnboardAgent() {
                   ))}
                 </Input>
               </FormGroup>
-              <FormGroup className="flex flex-col ">
+              <FormGroup className="flex flex-col">
                 <Label
                   for="AccountNumber"
                   className="font-normal text-[16px] mb-[10px]"
@@ -184,7 +184,7 @@ function OnboardAgent() {
                   name="AccountNumber"
                   placeholder=""
                   type="text"
-                  className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
                 />
               </FormGroup>
             </div>
@@ -211,7 +211,7 @@ function OnboardAgent() {
                       onChange={(e) =>
                         handleMaterialChange(index, "type", e.target.value)
                       }
-                      className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px] pl-[10px] bg-white"
+                      className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] pl-[10px] bg-white"
                     >
                       <option value="">Select a Material Type</option>
                       {materialTypes.map((type) => (
@@ -239,7 +239,7 @@ function OnboardAgent() {
                         onChange={(e) =>
                           handleMaterialChange(index, "price", e.target.value)
                         }
-                        className="border-solid border-[1px] border-[#E9E9E9] w-[428px] h-[55px] rounded-[10px] bg-white"
+                        className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] bg-white"
                       />
                     </FormGroup>
 
@@ -257,16 +257,16 @@ function OnboardAgent() {
 
               {/* Add Material Button */}
               <div
-                className="flex items-center gap-[5px] cursor-pointer mt-[20px]"
+                className="flex items-center justify-center gap-[5px] cursor-pointer mt-[20px]"
                 onClick={addMaterial}
               >
-                <FaSquarePlus className="fill-[#50CA00] w-[20px] h-[20px]" />
-                <p className="font-medium text-[14px] text-[#50CA00]">
+                <FaSquarePlus className="fill-[#50CA00] !w-[20px] h-[20px]" />
+                <p className="font-medium text-[14px] text-[#50CA00] mb-0">
                   Add Material
                 </p>
               </div>
             </div>
-            <Button className="w-[70%] mt-[60px] bg-[#50cA00] h-[55px] text-white rounded-[10px]">
+            <Button className="!w-[50%] mt-[60px] bg-[#50cA00] h-[55px] text-white rounded-[10px]">
               Onboard
             </Button>
           </Form>

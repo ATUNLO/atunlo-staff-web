@@ -59,7 +59,7 @@ function CreatePassword() {
 
         {/* Submit Button */}
         <Button
-          className="w-full h-[55px] bg-[#50CA00] text-white rounded-[10px] mt-[39px]"
+          className="w-full h-[55px] !bg-[#50CA00] text-white rounded-[10px] mt-[39px]"
           type="submit"
         >
           Create New Password

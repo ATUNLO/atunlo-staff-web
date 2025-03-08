@@ -1,8 +1,14 @@
+
+
 body {
   margin: 0;
   padding: 0;
-  font-family: "Outfit", serif;
+  font-family: "Outfit", serif!important;
 }
+
+*{
+  font-family: "Outfit", serif!important;
+} 
 
 
 .css-1umw9bq-MuiSvgIcon-root{
@@ -12,4 +18,38 @@ body {
 .css-jupps9-MuiInputBase-root-MuiOutlinedInput-root{
   border-radius: 10px!important;
   outline: none!important;
+}
+
+.custom-pagination .page-item {
+  border: none !important;
+}
+
+.custom-pagination .page-link {
+  border: none !important;
+  box-shadow: none !important;
+  color: black !important;
+}
+
+.custom-pagination .page-item.active .page-link {
+  background-color: green !important;
+  color: white !important;
+  border-radius: 5px; /* Optional for a rounded look */
+}
+
+
+
+.css-1mauqrt-MuiTableCell-root.MuiTableCell-head{
+  background-color: white!important;
+  color: #8F8F8F!important;
+  font-weight: 400;
+
+}
+
+.dateRange  .css-jupps9-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 36px!important;
+  border: none;
+}
+
+.dateRange .css-1ll44ll-MuiOutlinedInput-notchedOutline{
+  border: none!important;
 }

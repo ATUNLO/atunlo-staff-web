@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CreatePassword from "./Components/Auth/CreatePassword";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import "react-datepicker/dist/react-datepicker.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (

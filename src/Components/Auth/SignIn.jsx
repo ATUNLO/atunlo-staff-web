@@ -50,7 +50,7 @@ function SignIn() {
           </div>
           <Link to='/overview'>
           <Button
-            className="w-full h-[55px] bg-[#50CA00] text-white rounded-[10px] mt-[50px]"
+            className="w-full h-[55px] !bg-[#50CA00] text-white rounded-[10px] mt-[50px]"
             type="submit"
           >
             Login

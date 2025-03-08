@@ -25,7 +25,7 @@ function Overview() {
                         alt=""
                         className="w-[20px] h-[20px]"
                       />
-                      <p className="text-[14px] font-normal">Total Agents</p>
+                      <p className="text-[14px] font-normal mb-0">Total Agents</p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
                       150
@@ -41,7 +41,7 @@ function Overview() {
                         alt=""
                         className="w-[15px] h-[15px]"
                       />
-                      <p className="text-[14px] font-normal">Active Agents</p>
+                      <p className="text-[14px] font-normal mb-0">Active Agents</p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
                       150
@@ -105,11 +105,11 @@ function Overview() {
                 <div className="mr-10">
                   <div className="flex items-center gap-[5px]">
                     <div className="w-[15px] h-[12px] bg-[#50cA00]"></div>
-                    <p className="text-[#8f8f8f] text-[14px]">Top 3 Agents</p>
+                    <p className="text-[#8f8f8f] text-[14px] mb-0">Top 3 Agents</p>
                   </div>
                   <div className="flex items-center gap-[5px]">
                     <div className="w-[15px] h-[12px] bg-[#FF9A30]"></div>
-                    <p className="text-[#8f8f8f] text-[14px]">
+                    <p className="text-[#8f8f8f] text-[14px] mb-0">
                       Bottom 3 Agents
                     </p>
                   </div>

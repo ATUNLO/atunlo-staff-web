@@ -8,7 +8,7 @@ function ForgotPassword() {
         Forgot Password
       </h1>
       <p className="mt-[20px] text-[#8F8F8F]">We&apos;ll send your reset instructions</p>
-      <Form>
+      <Form className="w-[378px]">
           <FormGroup className="flex flex-col mt-[60px]">
             <Label for="email" className="font-normal text-[16px] mb-[10px]">
               Email Address
@@ -18,11 +18,11 @@ function ForgotPassword() {
               name="email"
               placeholder=""
               type="email"
-              className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px]"
+              className="border-solid border-[1px] border-[#E9E9E9] w-full h-[55px] rounded-[10px]"
             />
           </FormGroup>
           <Button
-            className="w-full h-[55px] bg-[#50CA00] text-white rounded-[10px] mt-[39px]"
+            className="w-full h-[55px] !bg-[#50CA00] text-white rounded-[10px] mt-[39px]"
             type="submit"
           >
             Reset Password
