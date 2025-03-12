@@ -53,3 +53,13 @@ body {
 .dateRange .css-1ll44ll-MuiOutlinedInput-notchedOutline{
   border: none!important;
 }
+
+.Sidebar{
+  flex: 1;
+  height: 100vh;
+  position: sticky;
+  z-index: 1;
+  overflow-x: hidden;
+  min-width: 220px;
+  max-width: 220px;
+}

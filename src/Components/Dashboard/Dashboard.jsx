@@ -9,7 +9,7 @@ import Payments from "./Payments";
 function Dashboard() {
   return (
     <div>
-      <Navbar />
+
       <div className="flex">
         <Sidebar />
         <div className="border-solid border-[1px] border-[#E9E9E9] w-full">
