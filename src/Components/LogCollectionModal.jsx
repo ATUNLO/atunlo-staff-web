@@ -6,6 +6,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { materialTypes } from "../utils/dataset";
 import { FaTrash } from "react-icons/fa";
 import { FaSquarePlus, FaRegImage } from "react-icons/fa6";
+import PropTypes from "prop-types";
 
 function LogCollectionModal({ logmodal, toggle }) {
   const [materials, setMaterials] = useState([
@@ -423,7 +424,7 @@ function LogCollectionModal({ logmodal, toggle }) {
                       className="w-[378px] bg-[#50CA00] bg-opacity-10 h-[180px] mt-[30px] flex flex-col items-center justify-center border-2 border-dashed border-[#50CA00] cursor-pointer"
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
-                      onClick={triggerFileInput}
+                      onClick={triggerFileInput2}
                     >
                       <img
                         src="/assets/document-upload.png"
@@ -478,5 +479,9 @@ function LogCollectionModal({ logmodal, toggle }) {
     </div>
   );
 }
+LogCollectionModal.propTypes = {
+  logmodal: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
+};
 
 export default LogCollectionModal;
