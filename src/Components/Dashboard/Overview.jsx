@@ -1,5 +1,6 @@
 import { BarChart } from "@mui/x-charts";
 import { dataset, dataset2, valueFormatter } from "../../utils/dataset";
+import { useSelector } from "react-redux";
 
 const chartSetting = {
   width: 500,
@@ -8,6 +9,8 @@ const chartSetting = {
 };
 
 function Overview() {
+  const user = useSelector((state) => state?.user?.currentUser.data);
+
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">

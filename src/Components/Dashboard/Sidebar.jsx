@@ -18,7 +18,7 @@ function Sidebar() {
 
   return (
     <div className="flex flex-col Sidebar z-1 sticky top-0 max-h-[100vh]">
-      <div className="w-[220px] flex items-center pl-5 py-3">
+      <div className="w-[220px] flex items-center pl-5 h-[65px]">
         <img src="assets/logo.png" alt="" className="" />
       </div>
       <div className="w-[220px] h-full border-solid border-[1px] border-[#E9E9E9] flex flex-col gap-[40px] items-start pt-[40px] pl-[26px]">

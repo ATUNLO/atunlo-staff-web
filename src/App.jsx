@@ -6,6 +6,7 @@ import CreatePassword from "./Components/Auth/CreatePassword";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SetPassword from "./Components/Auth/SetPassword";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/create-password" element={<CreatePassword />} />
+        <Route path="/set-password" element={<SetPassword />} />
         <Route
           exact
           path="*"
