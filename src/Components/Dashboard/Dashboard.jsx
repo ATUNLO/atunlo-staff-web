@@ -6,12 +6,14 @@ import LogCollection from "./LogCollection";
 import Payments from "./Payments";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut } from "../../Redux/LoginSlice";
+import Pickups from "./Pickups";
 
 
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user?.currentUser?.data);
+  console.log(user.isPasswordSet)
 
 
   const LogOutHandler = () => {
@@ -41,6 +43,7 @@ function Dashboard() {
               <Route path="/onboard-agents" element={<OnboardAgent />} />
               <Route path="/log-collection" element={<LogCollection />} />
               <Route path="/payments" element={<Payments />} />
+              <Route path="/pickups" element={<Pickups />} />
               <Route path="*" element={<Navigate to="/overview" />} />
             </Routes>
           </div>

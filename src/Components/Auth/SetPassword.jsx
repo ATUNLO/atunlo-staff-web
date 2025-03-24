@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Button, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { setNewPassword } from "../../Api/apiCalls";
-
+import { publicRequest } from "../../requestMehod";
+import { useSelector,useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { resetSuccess } from "../../Redux/LoginSlice";
 
 function SetPassword() {
   const [password, setPassword] = useState("");
@@ -12,6 +15,32 @@ function SetPassword() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const token = useSelector((state) => state?.user?.currentUser?.data.token);
+
+  const setNewPAsswordStaff = async () => {
+    try {
+      const url = `/staff/set-password`;
+      const response = await publicRequest.patch(
+        url,
+        { password: password },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setSuccessMessage("Password successfully updated!");
+      setConfirmPassword("");
+      dispatch(resetSuccess());
+      navigate("/");
+    } catch (error) {
+      setError(error);
+      navigate("/set-password")
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,16 +52,7 @@ function SetPassword() {
 
     setError("");
     setLoading(true);
-
-    try {
-      await setNewPassword(password);
-      setSuccessMessage("Password successfully updated!");
-      setConfirmPassword("");
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
+    setNewPAsswordStaff();
   };
   return (
     <div className="w-full flex flex-col items-center justify-center">
@@ -41,7 +61,10 @@ function SetPassword() {
       <Form onSubmit={handleSubmit}>
         {/* New Password Field */}
         <FormGroup className="flex flex-col mt-[30px]">
-          <Label htmlFor="password" className="font-normal text-[16px] mb-[10px]">
+          <Label
+            htmlFor="password"
+            className="font-normal text-[16px] mb-[10px]"
+          >
             New Password
           </Label>
           <div className="relative w-[378px]">
@@ -65,7 +88,10 @@ function SetPassword() {
 
         {/* Confirm New Password Field */}
         <FormGroup className="flex flex-col mt-[30px]">
-          <Label htmlFor="confirmPassword" className="font-normal text-[16px] mb-[10px]">
+          <Label
+            htmlFor="confirmPassword"
+            className="font-normal text-[16px] mb-[10px]"
+          >
             Confirm New Password
           </Label>
           <div className="relative w-[378px]">
@@ -82,7 +108,11 @@ function SetPassword() {
               className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              {showConfirmPassword ? (
+                <FaEyeSlash size={20} />
+              ) : (
+                <FaEye size={20} />
+              )}
             </button>
           </div>
         </FormGroup>
@@ -95,7 +125,7 @@ function SetPassword() {
           className="w-full h-[55px] !bg-[#50CA00] text-white rounded-[10px] mt-[20px]"
           type="submit"
         >
-          {loading ? <Spinner/> : "Set Password"}
+          {loading ? <Spinner /> : "Set Password"}
         </Button>
       </Form>
     </div>

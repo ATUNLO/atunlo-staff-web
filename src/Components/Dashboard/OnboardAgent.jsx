@@ -1,53 +1,40 @@
-import { Button, Form, FormGroup, Input, Label } from "reactstrap";
-import { useState } from "react";
+import { Button, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
+import { useEffect, useState } from "react";
 import { FaSquarePlus, FaTrash } from "react-icons/fa6";
-
-const statesOfNigeria = [
-  "Abia",
-  "Adamawa",
-  "Akwa Ibom",
-  "Anambra",
-  "Bauchi",
-  "Bayelsa",
-  "Benue",
-  "Borno",
-  "Cross River",
-  "Delta",
-  "Ebonyi",
-  "Edo",
-  "Ekiti",
-  "Enugu",
-  "Gombe",
-  "Imo",
-  "Jigawa",
-  "Kaduna",
-  "Kano",
-  "Katsina",
-  "Kebbi",
-  "Kogi",
-  "Kwara",
-  "Lagos",
-  "Nasarawa",
-  "Niger",
-  "Ogun",
-  "Ondo",
-  "Osun",
-  "Oyo",
-  "Plateau",
-  "Rivers",
-  "Sokoto",
-  "Taraba",
-  "Yobe",
-  "Zamfara",
-];
-
-const banks = ["Access Bank", "First Bank", "GT Bank"];
-const materialTypes = ["PET", "PP", "PE", "Metal", "Paper"];
+import { publicRequest } from "../../requestMehod";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import Select from "react-select";
 
 function OnboardAgent() {
-  const [selectedState, setSelectedState] = useState("");
-  const [materials, setMaterials] = useState([{ id: 1, type: "", price: "" }]);
+  const [loading, setLoading] = useState(false);
+  const [fullName, setFullName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [stateId, setStateId] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [availableStates, setAvailableStates] = useState([]);
+  const [materialTypeSelection, setMaterialTypeSelection] = useState([]);
+  const [availableBanks, setAvailableBanks] = useState([]);
+  const [selectedBank, setSelectedBank] = useState({
+    bankCode: "",
+    bankName: "",
+  });
+  const handleBankChange = (selectedOption) => {
+    if (!selectedOption) {
+      setSelectedBank({ bankCode: "", bankName: "" }); // Reset if cleared
+      return;
+    }
 
+    setSelectedBank({
+      bankCode: String(selectedOption.value), // Ensure it's a string
+      bankName: selectedOption.label,
+    });
+  };
+
+  const [materials, setMaterials] = useState([{ id: 1, type: "", price: "" }]);
+  const token = useSelector((state) => state?.user?.currentUser?.data?.token);
+  console.log(token);
   const addMaterial = () => {
     setMaterials([
       ...materials,
@@ -67,6 +54,114 @@ function OnboardAgent() {
     );
     setMaterials(updatedMaterials);
   };
+
+  const formattedMaterials = materials.map((material) => ({
+    materialTypeId: material.type,
+    price: Number(material.price),
+  }));
+
+  const bankOptions = availableBanks?.map((bank) => ({
+    value: String(bank.id), // Ensure value is a string
+    label: bank.name,
+  }));
+
+  const formatPhoneNumberIntl = (phone) => {
+    phone = phone.trim(); // Remove spaces
+  
+    if (phone.startsWith("+234")) {
+      return phone; // Already in correct format
+    } else if (phone.startsWith("0")) {
+      return "+234" + phone.substring(1); // Remove "0" and add "+234"
+    } else if (phone.length === 10 && /^[789]\d{9}$/.test(phone)) {
+      return "+234" + phone; // If it's a valid 10-digit Nigerian number
+    } else {
+      return "Invalid phone number"; // Reject incorrect formats
+    }
+  };
+
+  const agentData = {
+    fullname: fullName,
+    address: address,
+    phone: formatPhoneNumberIntl(phone),
+    stateid: stateId,
+    bankCode: selectedBank.bankCode,
+    bankName: selectedBank.bankName,
+    accountNumber: accountNumber,
+    materials: formattedMaterials,
+  };
+
+  console.log(agentData);
+
+  const getStates = async () => {
+    try {
+      const response = await publicRequest.get(`/misc/states`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response.data?.data;
+      setAvailableStates(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getBanks = async () => {
+    try {
+      const response = await publicRequest.get(`/transactions/banks`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response.data?.data;
+      setAvailableBanks(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getMaterialType = async () => {
+    try {
+      const response = await publicRequest.get(`/misc/material-types`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response.data?.data;
+      setMaterialTypeSelection(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getStates();
+    getMaterialType();
+    getBanks();
+  }, []);
+
+  const onboardAgent = async (token, agentData) => {
+    setLoading(true);
+    try {
+      const url = `/admin_staff/onboard-agent`;
+      const response = await publicRequest.post(url, agentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setLoading(false);
+      toast.success("Agent onboarded successfully!");
+
+      return response.data;
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.response?.data?.message || "Failed to onboard agent.");
+
+      throw error;
+    }
+  };
+
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
@@ -87,6 +182,7 @@ function OnboardAgent() {
                   placeholder=""
                   type="text"
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                  onChange={(e) => setFullName(e.target.value)}
                 />
               </FormGroup>
               <FormGroup className="flex flex-col mb-0">
@@ -104,6 +200,7 @@ function OnboardAgent() {
                     placeholder=""
                     type="emtextail"
                     className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
               </FormGroup>
@@ -122,6 +219,7 @@ function OnboardAgent() {
                   placeholder=""
                   type="text"
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
               <FormGroup className="flex flex-col">
@@ -135,14 +233,14 @@ function OnboardAgent() {
                   id="state"
                   name="state"
                   type="select"
-                  value={selectedState}
-                  onChange={(e) => setSelectedState(e.target.value)}
+                  value={stateId}
+                  onChange={(e) => setStateId(e.target.value)}
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
                 >
                   <option value="">Select a State</option>
-                  {statesOfNigeria.map((state) => (
-                    <option key={state} value={state}>
-                      {state}
+                  {availableStates?.map((state) => (
+                    <option key={state.id} value={state.id}>
+                      {state.name}
                     </option>
                   ))}
                 </Input>
@@ -156,21 +254,18 @@ function OnboardAgent() {
                 >
                   Bank Name
                 </Label>
-                <Input
+                <Select
                   id="BankName"
                   name="BankName"
-                  type="select"
-                  value={selectedState}
-                  onChange={(e) => setSelectedState(e.target.value)}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] pl-[10px]"
-                >
-                  <option value="">Select a Bank</option>
-                  {banks.map((bank) => (
-                    <option key={bank} value={bank}>
-                      {bank}
-                    </option>
-                  ))}
-                </Input>
+                  options={bankOptions}
+                  value={bankOptions.find(
+                    (option) => option.value === selectedBank.bankCode
+                  )}
+                  onChange={handleBankChange}
+                  isSearchable
+                  isClearable
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] !h-[55px] rounded-[10px]"
+                />
               </FormGroup>
               <FormGroup className="flex flex-col">
                 <Label
@@ -185,6 +280,7 @@ function OnboardAgent() {
                   placeholder=""
                   type="text"
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                  onChange={(e) => setAccountNumber(e.target.value)}
                 />
               </FormGroup>
             </div>
@@ -214,9 +310,9 @@ function OnboardAgent() {
                       className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] pl-[10px] bg-white"
                     >
                       <option value="">Select a Material Type</option>
-                      {materialTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
+                      {materialTypeSelection?.map((type) => (
+                        <option key={type.id} value={type.id}>
+                          {type.name}
                         </option>
                       ))}
                     </Input>
@@ -266,8 +362,11 @@ function OnboardAgent() {
                 </p>
               </div>
             </div>
-            <Button className="!w-[50%] mt-[60px] bg-[#50cA00] h-[55px] text-white rounded-[10px]">
-              Onboard
+            <Button
+              className="!w-[50%] mt-[60px] !bg-[#50cA00] h-[55px] text-white rounded-[10px]"
+              onClick={() => onboardAgent(token, agentData)}
+            >
+              {loading ? <Spinner /> : "Onboard"}
             </Button>
           </Form>
         </div>

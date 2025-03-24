@@ -22,6 +22,9 @@ const loginSlice = createSlice({
       state.success = true;
       state.error = false;
     },
+    resetSuccess: (state) => {
+      state.success = false;
+    },
     LoginFailure: (state) => {
       state.isFetching = false;
       state.error = true;
@@ -37,5 +40,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, LoginFailure,LogOut } = loginSlice.actions;
+export const { loginStart, loginSuccess, LoginFailure,LogOut,resetSuccess } = loginSlice.actions;
 export default loginSlice.reducer;

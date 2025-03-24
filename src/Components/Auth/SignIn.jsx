@@ -14,7 +14,9 @@ function SignIn() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state?.user);
+    const changedPassword = user?.currentUser?.data?.isPasswordSet
+    console.log(user.isPasswordSet)
     const { success, isFetching, error } = user;
 
     const handleSignIn = async (e) => {
@@ -22,8 +24,11 @@ function SignIn() {
       try {
         setLoading(true);
         await login(dispatch, { emailaddress, password });
-        if (success) {
+        if (success && changedPassword) {
           navigate("/dashboard");
+        }
+        if (success && !changedPassword) {
+          navigate("/set-password");
         }
         setLoading(false);
       } catch (error) {
@@ -33,10 +38,16 @@ function SignIn() {
     };
 
     useEffect(() => {
-      if (success) {
+      if (success && changedPassword) {
         navigate("/dashboard");
+      } 
+      if(success && !changedPassword){
+        navigate("/set-password");
       }
-    }, [navigate, success]);
+      if(!success && !changedPassword){
+        navigate("/");
+      }
+    }, [navigate, success,changedPassword]);
   return (
     <div className="w-full flex flex-col items-center justify-center py-10">
       <img src="/assets/logo.png" className="mt-[40px]" />

@@ -4,7 +4,7 @@
 // import { FaTrash } from "react-icons/fa";
 // import { materialTypes } from "../../utils/dataset";
 import { MobileDatePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 // import { FaSquarePlus } from "react-icons/fa6";
 import { FaPlus, FaDownload, FaCalendarAlt, FaTrash } from "react-icons/fa";
@@ -15,20 +15,76 @@ import {
 } from "../../utils/dataset";
 import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
 import LogCollectionModal from "../LogCollectionModal";
+import { publicRequest } from "../../requestMehod";
+import { useSelector } from "react-redux";
 
 function LogCollection() {
   const [collectionType, setCollectionType] = useState("Agents");
   const totalPages = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [logmodal, setLogModal] = useState(false);
+  const [totalPages1, setTotalPages1] = useState("");
+  const [collections,setCollections] = useState([])
+  const [materialTypeSelection, setMaterialTypeSelection] = useState([]);
+  const token = useSelector((state) => state?.user?.currentUser?.data.token);
+  
 
   const toggle = () => {
     setLogModal(!logmodal);
   };
 
+  const getCollections = async () => {
+    try {
+      const response = await publicRequest.get(`/admin_staff/get-collections`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response.data?.data?.result;
+      setCollections(data);
+      setTotalPages1(response?.data?.data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getMaterialType = async () => {
+    try {
+      const response = await publicRequest.get(`/misc/material-types`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response.data?.data;
+      setMaterialTypeSelection(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+   getCollections();
+   getMaterialType();
+  }, []);
+
+
+
+  const moneyFormat = (value) => {
+    if (value === "" || value === null || value === undefined) return "";
+    
+    // Ensure it's a valid number before formatting
+    const number = Number(value);
+    if (isNaN(number)) return "₦0"; // Prevent NaN issues
+    
+    return `₦${number.toLocaleString("en-US")}`;
+  };
+  
+  
+
+
   return (
     <>
-      {logmodal && <LogCollectionModal logmodal={logmodal} toggle={toggle} />}
+      {logmodal && <LogCollectionModal logmodal={logmodal} toggle={toggle} materialTypeSelection={materialTypeSelection}/>}
       <div className="px-[30px] py-[40px] w-full">
         <div className="flex flex-col">
           <div className="w-full flex items-center justify-between">
@@ -101,18 +157,24 @@ function LogCollection() {
                         Agent Name
                       </th>
                       <th className="!text-[#8F8F8F] font-normal">
-                        Material Type
+                       Date of Collection
                       </th>
-                      <th className="!text-[#8F8F8F] font-normal">Assignee</th>
+                      <th className="!text-[#8F8F8F] font-normal">
+                       Prepayment
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal">
+                       Total Due
+                      </th>
                       <th className="!text-[#8F8F8F] font-normal"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {agentCollection.map((agents, index) => (
+                    {collections?.map((agents, index) => (
                       <tr key={index}>
-                        <td>{agents.name}</td>
-                        <td>{agents.material}</td>
-                        <td>{agents.Assignee}</td>
+                        <td>{agents.agentName}</td>
+                        <td>{agents.collectionDate}</td>
+                        <td>{moneyFormat(agents.prepayment)}</td>
+                        <td>{moneyFormat(agents.totalDue)}</td>
                         <td className="flex gap-[29px] items-center justify-center">
                           <p className="underline mb-0">View</p>
                           <FaTrash className="fill-red-600" />
@@ -122,27 +184,39 @@ function LogCollection() {
                   </tbody>
                 </Table>
                 <div className="flex items-center justify-between pl-5">
-                  <p>
-                    Page ({currentPage} of {totalPages}) {paymentData.length}{" "}
-                    items
-                  </p>
-                  <Pagination className="custom-pagination">
-                    <PaginationItem disabled={currentPage === 1}>
-                      <PaginationLink
-                        first
-                        href="#"
-                        onClick={() => setCurrentPage(1)}
-                      />
-                    </PaginationItem>
-                    <PaginationItem disabled={currentPage === 1}>
-                      <PaginationLink
-                        previous
-                        href="#"
-                        onClick={() => setCurrentPage(currentPage - 1)}
-                      />
-                    </PaginationItem>
-                    {[1, 2, 3, 4, 5].map((page) => (
-                      <PaginationItem key={page} active={currentPage === page}>
+                <p>
+                  Page ({totalPages1?.currentPage} of {totalPages1?.totalPages}){" "}
+                  {totalPages1?.totalItems} items
+                </p>
+                <Pagination className="custom-pagination">
+                  {/* First Page */}
+                  <PaginationItem disabled={totalPages1?.currentPage === 1}>
+                    <PaginationLink
+                      first
+                      href="#"
+                      onClick={() => setCurrentPage(1)}
+                    />
+                  </PaginationItem>
+
+                  {/* Previous Page */}
+                  <PaginationItem disabled={totalPages1?.currentPage === 1}>
+                    <PaginationLink
+                      previous
+                      href="#"
+                      onClick={() =>
+                        setCurrentPage(totalPages1?.currentPage - 1)
+                      }
+                    />
+                  </PaginationItem>
+
+                  {/* Dynamic Page Numbers */}
+                  {[...Array(totalPages1?.totalPages || 1)].map((_, index) => {
+                    const page = index + 1;
+                    return (
+                      <PaginationItem
+                        key={page}
+                        active={totalPages1?.currentPage === page}
+                      >
                         <PaginationLink
                           href="#"
                           onClick={() => setCurrentPage(page)}
@@ -150,22 +224,37 @@ function LogCollection() {
                           {page}
                         </PaginationLink>
                       </PaginationItem>
-                    ))}
-                    <PaginationItem disabled={currentPage === totalPages}>
-                      <PaginationLink
-                        next
-                        href="#"
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                      />
-                    </PaginationItem>
-                    <PaginationItem disabled={currentPage === totalPages}>
-                      <PaginationLink
-                        last
-                        href="#"
-                        onClick={() => setCurrentPage(totalPages)}
-                      />
-                    </PaginationItem>
-                  </Pagination>
+                    );
+                  })}
+
+                  {/* Next Page */}
+                  <PaginationItem
+                    disabled={
+                      totalPages1?.currentPage === totalPages1?.totalPages
+                    }
+                  >
+                    <PaginationLink
+                      next
+                      href="#"
+                      onClick={() =>
+                        setCurrentPage(totalPages1?.currentPage + 1)
+                      }
+                    />
+                  </PaginationItem>
+
+                  {/* Last Page */}
+                  <PaginationItem
+                    disabled={
+                      totalPages1?.currentPage === totalPages1?.totalPages
+                    }
+                  >
+                    <PaginationLink
+                      last
+                      href="#"
+                      onClick={() => setCurrentPage(totalPages1?.totalPages)}
+                    />
+                  </PaginationItem>
+                </Pagination>
                 </div>
               </>
             )}

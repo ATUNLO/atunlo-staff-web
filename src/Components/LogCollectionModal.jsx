@@ -1,19 +1,44 @@
-import { Modal, FormGroup, Label, Input } from "reactstrap";
+import { Modal, FormGroup, Label, Input, Spinner } from "reactstrap";
 import { IoMdCloseCircle } from "react-icons/io";
-import { useState } from "react";
-import { FiSearch } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiCheckCircle, FiSearch, FiXCircle } from "react-icons/fi";
 import { DatePicker } from "@mui/x-date-pickers";
 import { materialTypes } from "../utils/dataset";
 import { FaTrash } from "react-icons/fa";
 import { FaSquarePlus, FaRegImage } from "react-icons/fa6";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
+import { publicRequest } from "../requestMehod";
+import { toast } from "react-toastify";
 
-function LogCollectionModal({ logmodal, toggle }) {
+function LogCollectionModal({ logmodal, toggle, materialTypeSelection }) {
+  const token = useSelector((state) => state?.user?.currentUser?.data.token);
+  const [agentName, setAgentName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const balance = useSelector((state) => state?.user?.currentUser?.data.balance);
+  const [agentSearchResults, setAgentSearchResults] = useState([]);
+  const [agentData, setAgentData] = useState("");
+  const [selectedAgent, setSelectedAgent] = useState([]);
+  console.log("selected", selectedAgent);
+  const [status, setStatus] = useState("idle");
+  const [collectionDate, setCollectionDate] = useState("");
+  const [prepayment, setPrepayment] = useState("");
+
   const [materials, setMaterials] = useState([
     { id: 1, type: "", price: "", quantity: "", amount: "" },
   ]);
   const [selectedImages, setSelectedImages] = useState([]);
+  console.log("selectedImages", selectedImages);
+  const [totalDue, setTotalDue] = useState(0);
+  useEffect(() => {
+    const total = materials.reduce(
+      (acc, item) => acc + parseFloat(item.amount),
+      0
+    );
+    setTotalDue(total);
+  }, [materials]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [page, setPage] = useState("Log");
 
   const handleImageUpload = (event) => {
@@ -61,12 +86,160 @@ function LogCollectionModal({ logmodal, toggle }) {
       setMaterials(materials.filter((_, i) => i !== index));
     }
   };
+
   const handleMaterialChange = (index, field, value) => {
-    const updatedMaterials = materials.map((material, i) =>
-      i === index ? { ...material, [field]: value } : material
-    );
+    const updatedMaterials = materials.map((material, i) => {
+      if (i === index) {
+        return {
+          ...material,
+          [field]: 
+            field === "pricePerKg" || field === "amount" || field === "quantity"
+              ? value === "" ? "" : Number(value) // ✅ Keep empty string if input is cleared
+              : value,
+        };
+      }
+      return material;
+    });
+  
     setMaterials(updatedMaterials);
   };
+  
+  const getAgentName = async () => {
+    if (agentName.length < 3) return; // Only search after 3+ characters
+    setStatus("loading");
+
+    try {
+      const response = await publicRequest.get(
+        `/admin_staff/getAgentByName?agentName=${agentName}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const data = response?.data?.data || [];
+      setAgentSearchResults(data);
+      setStatus("success");
+      setShowDropdown(true);
+    } catch (error) {
+      console.error("Error fetching agents:", error);
+      setStatus("error");
+    }
+  };
+
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      getAgentName();
+    }, 500); // Debounce API call
+    return () => clearTimeout(delaySearch);
+  }, [agentName]);
+
+  const collectionData = {
+    agentName: selectedAgent?.fullName,
+    collectionDate: collectionDate, // Ensure correct format
+    prepayment: balance?.toString(), // Convert to string if needed
+    materials: materials.map((material) => ({
+      materialTypeId: material.materialTypeId,
+      amount: Number(material.amount), // Convert to number
+      quantity: material.quantity.toString(), // Ensure it's a string
+      pricePerKg: Number(material.pricePerKg),
+    })),
+  };
+
+  console.log(collectionData);
+
+  // const logCollection = async (token, collectionData, imageFile) => {
+  //   setLoading(true);
+  //   try {
+  //     const url = `/admin_staff/log-collection`;
+
+  //     const formData = new FormData();
+  //     formData.append("agentName", collectionData.agentName);
+  //     formData.append("collectionDate", collectionData.collectionDate);
+  //     formData.append("prepayment", collectionData.prepayment);
+
+  //     // ✅ Ensure materials are properly stringified
+  //     formData.append("materials", JSON.stringify(collectionData.materials));
+
+  //     // ✅ Ensure an image is attached
+  //     formData.append("image1", imageFile);
+
+  //     const response = await publicRequest.post(url, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+
+  //     setLoading(false);
+  //     toast.success("Collection logged successfully!");
+  //     return response.data;
+  //   } catch (error) {
+  //     setLoading(false);
+  //     toast.error(error.response?.data?.message || "Failed to log collection.");
+  //     throw error;
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    if (!selectedAgent) {
+      toast.error("Please select an agent.");
+      return;
+    }
+
+    if (!selectedImages || selectedImages.length === 0) {
+      toast.error("Please select at least one image.");
+      return;
+    }
+
+    const collectionData = {
+      agentName: selectedAgent?.fullName,
+      collectionDate: collectionDate, // Ensure correct format
+      prepayment: balance.toString(), // Convert to string if needed
+      materials: materials.map((material) => ({
+        materialTypeId: material.materialTypeId,
+        amount: Number(material.amount), // Convert to number
+        quantity: material.quantity.toString(), // Ensure it's a string
+        pricePerKg: Number(material.pricePerKg),
+      })),
+    };
+
+    try {
+      const formData = new FormData();
+
+      // ✅ Convert `collectionData` to a JSON string and append as "data"
+      formData.append("data", JSON.stringify(collectionData));
+
+      // ✅ Append image as file
+      formData.append("image1", selectedImages[0]);
+
+      console.log(
+        "FormData before sending:",
+        Object.fromEntries(formData.entries())
+      );
+
+      const response = await publicRequest.post(
+        "/admin_staff/log-collection",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Success:", response);
+      toast.success("Collection logged successfully!");
+    } catch (error) {
+      console.error("Error:", error.response?.data || error);
+      toast.error(error.response?.data?.message || "Failed to log collection.");
+    }
+  };
+
+  const moneyFormat = (value) => {
+    if (!value) return "";
+    const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
+    return `₦${new Intl.NumberFormat("en-US").format(number)}`;
+  };
+
   return (
     <div>
       <Modal
@@ -80,30 +253,67 @@ function LogCollectionModal({ logmodal, toggle }) {
           <>
             <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
               <span className="text-[30px]">Logging Collection</span>
-              <IoMdCloseCircle size={20} className="absolute right-20" />
+              <IoMdCloseCircle
+                size={20}
+                className="absolute right-20"
+                onClick={toggle}
+              />
             </div>
             <div className="w-full h-auto  rounded-[10px] px-[50px] py-[22px] mb-[30px] overflow-y-scroll">
               <div className="flex items-center justify-between gap-[50px]">
-                <FormGroup className="flex flex-col">
+                <FormGroup className="flex flex-col relative">
                   <Label
-                    for="phoneNumber"
+                    for="agentName"
                     className="font-normal text-[16px] mb-[10px]"
                   >
-                    Name
+                    Agent Name
                   </Label>
-                  <div className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
+                  <div className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px] flex items-center pl-[20px] relative">
                     <span className="text-[#8F8F8F] text-[16px]">
                       <FiSearch />
                     </span>
                     <Input
-                      id="phoneNumber"
-                      name="phoneNumber"
+                      id="agentName"
+                      name="agentName"
                       placeholder="Search Agent Name"
-                      type="emtextail"
+                      type="text"
+                      value={agentName}
+                      onChange={(e) => setAgentName(e.target.value)}
                       className="w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                     />
+                    <span className="ml-auto absolute right-3">
+                      {status === "loading" && (
+                        <Spinner className="animate-spin text-gray-500" />
+                      )}
+                      {status === "success" && (
+                        <FiCheckCircle className="text-green-500" />
+                      )}
+                      {status === "error" && (
+                        <FiXCircle className="text-red-500" />
+                      )}
+                    </span>
                   </div>
+
+                  {/* Dropdown for search results */}
+                  {showDropdown && agentSearchResults.length > 0 && (
+                    <div className="absolute bottom-[-50px] z-10 mt-1 w-[378px] bg-white border border-gray-300 shadow-md rounded-lg max-h-40 overflow-y-auto">
+                      {agentSearchResults.map((agent) => (
+                        <div
+                          key={agent.id}
+                          onClick={() => {
+                            setAgentName(agent.fullName);
+                            setSelectedAgent(agent);
+                            setShowDropdown(false);
+                          }}
+                          className="p-3 cursor-pointer hover:bg-gray-100"
+                        >
+                          {agent.fullName}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </FormGroup>
+
                 <FormGroup className="flex flex-col">
                   <Label
                     for="phoneNumber"
@@ -111,12 +321,18 @@ function LogCollectionModal({ logmodal, toggle }) {
                   >
                     Date of Collection
                   </Label>
-                  <DatePicker className="w-[378px] h-[55px] rounded-[10px] outline-none border-[#E9E9E9]" />
+                  <DatePicker
+                    className="w-[378px] h-[55px] rounded-[10px] outline-none border-[#E9E9E9]"
+                    selected={collectionDate ? new Date(collectionDate) : null}
+                    onChange={(date) =>
+                      setCollectionDate(date.toISOString().split("T")[0])
+                    }
+                  />
                 </FormGroup>
               </div>
               <div>
                 {materials.map((material, index) => (
-                  <div key={material.id} className="mt-[40px]">
+                  <div key={material.id} className="mt-[40px] relative">
                     {/* First Row: Material Type & Quantity */}
                     <div className="flex items-center justify-between gap-[50px]">
                       {/* Material Type */}
@@ -131,16 +347,21 @@ function LogCollectionModal({ logmodal, toggle }) {
                           id={`materialType-${index}`}
                           name="materialType"
                           type="select"
-                          value={material.type}
-                          onChange={(e) =>
-                            handleMaterialChange(index, "type", e.target.value)
+                          value={material.materialTypeId} // ✅ Use correct field
+                          onChange={
+                            (e) =>
+                              handleMaterialChange(
+                                index,
+                                "materialTypeId",
+                                Number(e.target.value)
+                              ) // ✅ Convert value to number
                           }
                           className="border-solid border-[1px] border-[#E9E9E9] !w-[378px] h-[55px] rounded-[10px] pl-[10px] bg-white"
                         >
                           <option value="">Select a Material Type</option>
-                          {materialTypes.map((type) => (
-                            <option key={type} value={type}>
-                              {type}
+                          {materialTypeSelection?.map((type) => (
+                            <option key={type.id} value={type.id}>
+                              {type.name}
                             </option>
                           ))}
                         </Input>
@@ -185,9 +406,9 @@ function LogCollectionModal({ logmodal, toggle }) {
                           id={`pricePerKg-${index}`}
                           name="pricePerKg"
                           type="text"
-                          value={material.price}
+                          value={material.pricePerKg}
                           onChange={(e) =>
-                            handleMaterialChange(index, "price", e.target.value)
+                            handleMaterialChange(index, "pricePerKg", e.target.value)
                           }
                           className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px] bg-white"
                         />
@@ -229,7 +450,7 @@ function LogCollectionModal({ logmodal, toggle }) {
                       {/* Delete Button (Only if more than 1 row) */}
                       {materials.length > 1 && (
                         <FaTrash
-                          className="text-red-500 cursor-pointer mt-[25px]"
+                          className="text-red-500 cursor-pointer mt-[25px] absolute right-[-40px] top-[20px]"
                           size={20}
                           onClick={() => removeMaterial(index)}
                         />
@@ -250,8 +471,10 @@ function LogCollectionModal({ logmodal, toggle }) {
                       id="prepayment"
                       name="prepayment"
                       placeholder=""
-                      type="emtextail"
+                      type="text"
+                      value={moneyFormat(balance)}
                       className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                      onChange={() => setPrepayment(balance)}
                     />
                   </FormGroup>
                   <FormGroup className="flex flex-col">
@@ -265,6 +488,8 @@ function LogCollectionModal({ logmodal, toggle }) {
                     <Input
                       id="totalDue"
                       name="totalDue"
+                      value={totalDue}
+                      readOnly
                       placeholder=""
                       type="emtextail"
                       className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
@@ -315,162 +540,12 @@ function LogCollectionModal({ logmodal, toggle }) {
                 </div>
                 <div
                   className="w-full !h-[55px] bg-[#50c100] flex items-center justify-center rounded-md mt-[70px]"
-                  onClick={() => setPage("Confirm")}
+                  onClick={handleSubmit}
                 >
                   <p className="mb-0 text-white font-semibold text-[16px]">
                     Submit
                   </p>
                 </div>
-              </div>
-            </div>
-          </>
-        )}
-        {page === "Confirm" && (
-          <>
-            <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
-              <span className="text-[30px]">Confirmation</span>
-              <IoMdCloseCircle size={20} className="absolute right-20" />
-            </div>
-            <div className="w-full h-auto  rounded-[10px] px-[50px] py-[22px] mb-[30px] overflow-y-scroll">
-              <div className="flex items-center justify-between gap-[50px] mb-[30px]">
-                <FormGroup className="flex flex-col w-[378px]">
-                  <Label
-                    for="Name"
-                    className="font-normal text-[16px] mb-[10px]"
-                  >
-                    Customer Name
-                  </Label>
-                  <Input
-                    id="Name"
-                    name="Name"
-                    placeholder="Search Agent Name"
-                    type="emtextail"
-                    value="Dominoes Truger"
-                    readOnly
-                    className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
-                  />
-                </FormGroup>
-                <FormGroup className="flex flex-col w-[378px]">
-                  <Label
-                    for="Address"
-                    className="font-normal text-[16px] mb-[10px]"
-                  >
-                    Address
-                  </Label>
-                  <Input
-                    id="Address"
-                    name="Address"
-                    placeholder=""
-                    type="emtextail"
-                    value="IDK way, off Admonition road, Ikorodu, Lagos."
-                    readOnly
-                    className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
-                  />
-                </FormGroup>
-              </div>
-              <div className="flex items-center justify-between gap-[50px]">
-                <FormGroup className="flex flex-col w-[378px]">
-                  <Label
-                    for="Date"
-                    className="font-normal text-[16px] mb-[10px]"
-                  >
-                    Date
-                  </Label>
-                  <Input
-                    id="Date"
-                    name="Date"
-                    placeholder=""
-                    type="emtextail"
-                    value="24th September 2025"
-                    readOnly
-                    className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
-                  />
-                </FormGroup>
-                <FormGroup className="flex flex-col w-[378px]">
-                  <Label
-                    for="PET"
-                    className="font-normal text-[16px] mb-[10px]"
-                  >
-                    PET Amount
-                  </Label>
-                  <Input
-                    id="PET"
-                    name="PET"
-                    placeholder=""
-                    type="emtexttextail"
-                    value="50kg"
-                    readOnly
-                    className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
-                  />
-                </FormGroup>
-              </div>
-              <div className="flex items-start justify-between mt-[30px] gap-[50px]">
-                <div className="w-[378px]">
-                  <p className="text-[16px] mb-5">Retailer&apos;s Image</p>
-                  <img
-                    src="/assets/recycled.png"
-                    alt=""
-                    className="object-cover w-[378px] h-[180px]"
-                  />
-                </div>
-                <div className="w-[378px]">
-                  <p className="text-[16px] mb-0">Staff image upload</p>
-                  <p className="text-[#737373] text-[12px]">
-                    Image upload is compulsory for staff
-                  </p>
-                  <div>
-                    {/* Drag & Drop Area */}
-                    <div
-                      className="w-[378px] bg-[#50CA00] bg-opacity-10 h-[180px] mt-[30px] flex flex-col items-center justify-center border-2 border-dashed border-[#50CA00] cursor-pointer"
-                      onDrop={handleDrop}
-                      onDragOver={handleDragOver}
-                      onClick={triggerFileInput2}
-                    >
-                      <img
-                        src="/assets/document-upload.png"
-                        alt="Upload Icon"
-                      />
-                      <p className="mb-0">
-                        Drag and Drop file here or{" "}
-                        <span className="text-[#50CA00] underline">
-                          Choose file
-                        </span>
-                      </p>
-                      <p className="text-[12px] text-[#737373]">
-                        Supported format: PNG | Max size: 10MB
-                      </p>
-                    </div>
-
-                    {/* Hidden File Input */}
-                    <input
-                      id="fileUpload2"
-                      type="file"
-                      multiple
-                      accept="image/png"
-                      className="hidden"
-                      onChange={handleFileSelect}
-                    />
-
-                    {/* Preview Uploaded Files */}
-                    {selectedFiles.length > 0 && (
-                      <div className="mt-4 grid grid-cols-3 gap-2">
-                        {selectedFiles.map((file, index) => (
-                          <img
-                            key={index}
-                            src={URL.createObjectURL(file)}
-                            alt={`Uploaded ${index}`}
-                            className="w-24 h-24 object-cover rounded-lg"
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="w-full !h-[55px] bg-[#50c100] flex items-center justify-center rounded-md mt-[70px]">
-                <p className="mb-0 text-white font-semibold text-[16px]">
-                  Complete
-                </p>
               </div>
             </div>
           </>

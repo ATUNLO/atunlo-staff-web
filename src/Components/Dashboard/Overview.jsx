@@ -1,6 +1,7 @@
 import { BarChart } from "@mui/x-charts";
 import { dataset, dataset2, valueFormatter } from "../../utils/dataset";
 import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 
 const chartSetting = {
   width: 500,
@@ -9,11 +10,22 @@ const chartSetting = {
 };
 
 function Overview() {
-  const user = useSelector((state) => state?.user?.currentUser.data);
+  // const user = useSelector((state) => state?.user?.currentUser.data);
+  const balance = useSelector((state) => state?.user?.currentUser?.data.balance);
+
+  const moneyFormat = (value) => {
+    if (!value) return "";
+    const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
+    return `₦${new Intl.NumberFormat("en-US").format(number)}`;
+  };
 
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
+        <div className="mb-10">
+          <h2 className="mb-4">Staff Balance</h2>
+          <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[40px] px-[20px] py-[15px] rounded-[10px]">{moneyFormat(balance)}</span>
+        </div>
         <h1 className="text-[20px] font-medium mb-[30px]">Agents Overview</h1>
         <div className="w-full h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           <div className="flex justify-end">Calendar</div>
@@ -28,7 +40,9 @@ function Overview() {
                         alt=""
                         className="w-[20px] h-[20px]"
                       />
-                      <p className="text-[14px] font-normal mb-0">Total Agents</p>
+                      <p className="text-[14px] font-normal mb-0">
+                        Total Agents
+                      </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
                       150
@@ -44,7 +58,9 @@ function Overview() {
                         alt=""
                         className="w-[15px] h-[15px]"
                       />
-                      <p className="text-[14px] font-normal mb-0">Active Agents</p>
+                      <p className="text-[14px] font-normal mb-0">
+                        Active Agents
+                      </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
                       150
@@ -108,7 +124,9 @@ function Overview() {
                 <div className="mr-10">
                   <div className="flex items-center gap-[5px]">
                     <div className="w-[15px] h-[12px] bg-[#50cA00]"></div>
-                    <p className="text-[#8f8f8f] text-[14px] mb-0">Top 3 Agents</p>
+                    <p className="text-[#8f8f8f] text-[14px] mb-0">
+                      Top 3 Agents
+                    </p>
                   </div>
                   <div className="flex items-center gap-[5px]">
                     <div className="w-[15px] h-[12px] bg-[#FF9A30]"></div>
@@ -150,7 +168,7 @@ function Overview() {
                       "#50CA00",
                       "#50CA00",
                       "#50CA00",
-                      "#50CA00"
+                      "#50CA00",
                     ],
                   },
                 },

@@ -3,6 +3,7 @@ import { RiHome5Fill } from "react-icons/ri";
 import { FaSquarePlus } from "react-icons/fa6";
 import { IoBook } from "react-icons/io5";
 import { TbArrowsExchange2 } from "react-icons/tb";
+import { FaTruckMoving } from "react-icons/fa6";
 
 function Sidebar() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Sidebar() {
     { name: "Onboard Agent", icon: FaSquarePlus, path: "/onboard-agents" },
     { name: "Collection", icon: IoBook, path: "/log-collection" },
     { name: "Payments", icon: TbArrowsExchange2, path: "/payments" },
+    { name: "Pickups", icon: FaTruckMoving, path: "/pickups" }
   ];
 
   return (

@@ -63,3 +63,7 @@ body {
   min-width: 220px;
   max-width: 220px;
 }
+
+.css-13cymwt-control,.css-t3ipsp-control {
+  height: 55px!important;
+}
