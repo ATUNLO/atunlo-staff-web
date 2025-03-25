@@ -7,6 +7,7 @@ import Payments from "./Payments";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut } from "../../Redux/LoginSlice";
 import Pickups from "./Pickups";
+import CollectionDetails from "./CollectionDetails";
 
 
 function Dashboard() {
@@ -44,6 +45,7 @@ function Dashboard() {
               <Route path="/log-collection" element={<LogCollection />} />
               <Route path="/payments" element={<Payments />} />
               <Route path="/pickups" element={<Pickups />} />
+              <Route path="/log-collection/:id" element={<CollectionDetails />} />
               <Route path="*" element={<Navigate to="/overview" />} />
             </Routes>
           </div>

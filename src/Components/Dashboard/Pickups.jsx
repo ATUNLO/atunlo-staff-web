@@ -18,11 +18,7 @@ function Pickups() {
   const [totalPages1, setTotalPages1] = useState("");
   const [totalPages2, setTotalPages2] = useState("");
   const totalPages = 5;
-  const moneyFormat = (value) => {
-    if (!value) return "";
-    const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
-    return `₦${new Intl.NumberFormat("en-US").format(number)}`;
-  };
+
 
   const getPickUps = async () => {
     try {
