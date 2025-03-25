@@ -3,11 +3,12 @@ import { Link, useParams } from "react-router-dom";
 import { publicRequest } from "../../requestMehod"; // API instance
 import { useSelector } from "react-redux";
 import { BiArrowBack } from "react-icons/bi";
-import { FormGroup, Input, Label } from "reactstrap";
+import { FormGroup, Input, Label, Table } from "reactstrap";
 
 function CollectionDetails() {
   const { id } = useParams();
   const [collection, setCollection] = useState(null);
+  const [collectionMaterial, setCollectionMaterial] = useState(null);
   const token = useSelector((state) => state?.user?.currentUser?.data?.token);
 
   const moneyFormat = (value) => {
@@ -31,7 +32,8 @@ function CollectionDetails() {
         );
 
         setCollection(response?.data?.data?.collection);
-        console.log("Collection", response?.data?.data?.collection);
+        setCollectionMaterial(response?.data?.data?.collectionMaterials);
+        console.log("Collection", response?.data?.data);
       } catch (error) {
         console.error("Error fetching collection details:", error);
       }
@@ -132,9 +134,35 @@ function CollectionDetails() {
               <img
                 src={collection?.images[0]}
                 alt=""
-                className="min-w-[400px]"
+                className="object-contain max-h-full max-w-full"
               />
             </div>
+          </div>
+          <div className="w-[55%] mt-[30px]">
+            <Table striped>
+              <thead>
+                <tr>
+                  <th className="!text-[#8F8F8F] font-normal">Material Type</th>
+                  <th className="!text-[#8F8F8F] font-normal">Amount</th>
+                  <th className="!text-[#8F8F8F] font-normal">
+                    Total Amount Disbursed
+                  </th>
+                  <th className="!text-[#8F8F8F] font-normal">
+                    Total Collected Material
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {collectionMaterial?.map((material, index) => (
+                  <tr key={index}>
+                    <td>{material.materialType?.name}</td>
+                    <td>{moneyFormat(material.amount)}</td>
+                    <td>{moneyFormat(material.totalAmountDisbursed)}</td>
+                    <td>{material.totalCollectedMaterial}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
         </div>
       </div>

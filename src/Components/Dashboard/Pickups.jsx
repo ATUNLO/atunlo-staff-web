@@ -17,7 +17,7 @@ function Pickups() {
   const [pickupsCompleted, setPickupsCompleted] = useState([]);
   const [totalPages1, setTotalPages1] = useState("");
   const [totalPages2, setTotalPages2] = useState("");
-  const totalPages = 5;
+ 
 
 
   const getPickUps = async () => {
@@ -40,7 +40,7 @@ function Pickups() {
 
   const assignPickuptoMe = async (userId) => {
     try {
-      const url = `admin_staff/assign-picku/${userId}`;
+      const url = `admin_staff/assign-pickup/${userId}`;
       const response = await publicRequest.patch(
         url,
         {},

@@ -3,7 +3,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { useEffect, useState } from "react";
 import { FiCheckCircle, FiSearch, FiXCircle } from "react-icons/fi";
 import { DatePicker } from "@mui/x-date-pickers";
-import { materialTypes } from "../utils/dataset";
+
 import { FaTrash } from "react-icons/fa";
 import { FaSquarePlus, FaRegImage } from "react-icons/fa6";
 import PropTypes from "prop-types";
@@ -31,42 +31,46 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
   console.log("selectedImages", selectedImages);
   const [totalDue, setTotalDue] = useState(0);
   useEffect(() => {
-    const total = materials.reduce(
-      (acc, item) => acc + parseFloat(item.amount),
-      0
-    );
-    setTotalDue(total);
-  }, [materials]);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+    const total = materials.reduce((acc, item) => {
+      const amount = parseFloat(item.amount) || 0; // Ensure valid number
+      return acc + amount;
+    }, 0);
+  
+    const parsedPrepayment = parseFloat(prepayment.toString().replace(/[^\d.]/g, "")) || 0; // Remove non-numeric characters
+    
+    const calculatedTotalDue = parsedPrepayment - total; 
+    setTotalDue(calculatedTotalDue);
+  }, [materials, prepayment]);
+  // const [selectedFiles, setSelectedFiles] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [page, setPage] = useState("Log");
+  
 
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     setSelectedImages(files);
   };
-  const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(files);
-  };
+  // const handleFileSelect = (event) => {
+  //   const files = Array.from(event.target.files);
+  //   setSelectedFiles(files);
+  // };
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const files = Array.from(event.dataTransfer.files);
-    setSelectedFiles(files);
-  };
+  // const handleDrop = (event) => {
+  //   event.preventDefault();
+  //   const files = Array.from(event.dataTransfer.files);
+  //   setSelectedFiles(files);
+  // };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
+  // const handleDragOver = (event) => {
+  //   event.preventDefault();
+  // };
 
   const triggerFileInput = () => {
     document.getElementById("fileUpload").click();
   };
 
-  const triggerFileInput2 = () => {
-    document.getElementById("fileUpload2").click();
-  };
+  // const triggerFileInput2 = () => {
+  //   document.getElementById("fileUpload2").click();
+  // };
 
   const addMaterial = () => {
     setMaterials([
@@ -203,6 +207,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
 
     try {
       const formData = new FormData();
+      setLoading(true)
 
       // ✅ Convert `collectionData` to a JSON string and append as "data"
       formData.append("data", JSON.stringify(collectionData));
@@ -227,11 +232,13 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
       );
 
       console.log("Success:", response);
+      setLoading(false)
       toggle();
       toast.success("Collection logged successfully!");
       getCollections();
 
     } catch (error) {
+      setLoading(false)
       console.error("Error:", error.response?.data || error);
       toast.error(error.response?.data?.message || "Failed to log collection.");
     }
@@ -252,7 +259,6 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
         className="w-full px-[100px]"
         scrollable
       >
-        {page === "Log" && (
           <>
             <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
               <span className="text-[30px]">Logging Collection</span>
@@ -475,9 +481,9 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                       name="prepayment"
                       placeholder=""
                       type="text"
-                      value={moneyFormat(balance)}
+                      value={moneyFormat(prepayment)}
                       className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
-                      onChange={() => setPrepayment(balance)}
+                      onChange={(e) => setPrepayment(e.target.value)}
                     />
                   </FormGroup>
                   <FormGroup className="flex flex-col">
@@ -546,13 +552,12 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                   onClick={handleSubmit}
                 >
                   <p className="mb-0 text-white font-semibold text-[16px]">
-                    Submit
+                    {loading ? <Spinner/> : "Submit" }
                   </p>
                 </div>
               </div>
             </div>
           </>
-        )}
       </Modal>
     </div>
   );
