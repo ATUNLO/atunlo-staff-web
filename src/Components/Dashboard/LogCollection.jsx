@@ -84,7 +84,7 @@ function LogCollection() {
 
   return (
     <>
-      {logmodal && <LogCollectionModal logmodal={logmodal} toggle={toggle} materialTypeSelection={materialTypeSelection}/>}
+      {logmodal && <LogCollectionModal logmodal={logmodal} toggle={toggle} materialTypeSelection={materialTypeSelection} getCollections={getCollections}/>}
       <div className="px-[30px] py-[40px] w-full">
         <div className="flex flex-col">
           <div className="w-full flex items-center justify-between">

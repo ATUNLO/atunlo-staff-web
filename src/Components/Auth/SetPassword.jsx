@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { setNewPassword } from "../../Api/apiCalls";
 import { publicRequest } from "../../requestMehod";
 import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,16 @@ function SetPassword() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const token = useSelector((state) => state?.user?.currentUser?.data.token);
+  console.log(successMessage)
+
+  const token = useSelector((state) => state?.user?.currentUser?.data?.token);
+
+  useEffect(() => {
+    if (!token) {
+      dispatch(resetSuccess()); // Reset login success state
+      navigate("/"); // Redirect to home page
+    }
+  }, [token, dispatch, navigate]);
 
   const setNewPAsswordStaff = async () => {
     try {

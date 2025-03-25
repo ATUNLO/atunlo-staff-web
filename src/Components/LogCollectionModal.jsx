@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { publicRequest } from "../requestMehod";
 import { toast } from "react-toastify";
 
-function LogCollectionModal({ logmodal, toggle, materialTypeSelection }) {
+function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollections }) {
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   const [agentName, setAgentName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -227,7 +227,10 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection }) {
       );
 
       console.log("Success:", response);
+      toggle();
       toast.success("Collection logged successfully!");
+      getCollections();
+
     } catch (error) {
       console.error("Error:", error.response?.data || error);
       toast.error(error.response?.data?.message || "Failed to log collection.");
