@@ -42,6 +42,17 @@ function OnboardAgent() {
     ]);
   };
 
+  const resetForm = () => {
+    setFullName("");
+    setAddress("");
+    setPhone("");
+    setStateId("");
+    setSelectedBank({ bankCode: "", bankName: "" });
+    setAccountNumber("");
+    setMaterialTypeSelection([]);
+    setMaterials([{ id: 1, type: "", price: "" }]);
+  };
+
   const removeMaterial = (index) => {
     if (materials.length > 1) {
       setMaterials(materials.filter((_, i) => i !== index));
@@ -67,7 +78,7 @@ function OnboardAgent() {
 
   const formatPhoneNumberIntl = (phone) => {
     phone = phone.trim(); // Remove spaces
-  
+
     if (phone.startsWith("+234")) {
       return phone; // Already in correct format
     } else if (phone.startsWith("0")) {
@@ -152,12 +163,11 @@ function OnboardAgent() {
 
       setLoading(false);
       toast.success("Agent onboarded successfully!");
-
+      resetForm();
       return response.data;
     } catch (error) {
       setLoading(false);
       toast.error(error.response?.data?.message || "Failed to onboard agent.");
-
       throw error;
     }
   };
@@ -181,6 +191,7 @@ function OnboardAgent() {
                   name="FullName"
                   placeholder=""
                   type="text"
+                  value={fullName}
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
                   onChange={(e) => setFullName(e.target.value)}
                 />
@@ -198,9 +209,11 @@ function OnboardAgent() {
                     id="phoneNumber"
                     name="phoneNumber"
                     placeholder=""
+                    value={phone}
                     type="emtextail"
                     className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                     onChange={(e) => setPhone(e.target.value)}
+                    maxLength='10'
                   />
                 </div>
               </FormGroup>
@@ -218,6 +231,7 @@ function OnboardAgent() {
                   name="Address"
                   placeholder=""
                   type="text"
+                  value={address}
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
                   onChange={(e) => setAddress(e.target.value)}
                 />
@@ -258,9 +272,11 @@ function OnboardAgent() {
                   id="BankName"
                   name="BankName"
                   options={bankOptions}
-                  value={bankOptions.find(
-                    (option) => option.value === selectedBank.bankCode
-                  )}
+                  value={
+                    bankOptions.find(
+                      (option) => option.value === selectedBank?.bankCode
+                    ) || null
+                  }
                   onChange={handleBankChange}
                   isSearchable
                   isClearable
@@ -279,6 +295,7 @@ function OnboardAgent() {
                   name="AccountNumber"
                   placeholder=""
                   type="text"
+                  value={accountNumber}
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
                   onChange={(e) => setAccountNumber(e.target.value)}
                 />

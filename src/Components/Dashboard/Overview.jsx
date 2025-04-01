@@ -117,7 +117,7 @@ function Overview() {
                       {...chartSetting}
                     />
                     <p className="text-center text-[14px] font-light text-[#8F8F8F]">
-                      Quantity
+                      Quantity (KG)
                     </p>
                   </div>
                 </div>
@@ -184,7 +184,7 @@ function Overview() {
               {...chartSetting}
             />
             <p className="text-center text-[14px] font-light text-[#8F8F8F]">
-              Quantity
+              Quantity (KG)
             </p>
           </div>
         </div>
