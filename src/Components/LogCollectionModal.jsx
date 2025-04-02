@@ -214,6 +214,7 @@ function LogCollectionModal({
 
     const collectionData = {
       agentName: selectedAgent?.fullName,
+      agentId: selectedAgent?.id,
       collectionDate: collectionDate, // Ensure correct format
       prepayment: balance.toString(), // Convert to string if needed
       materials: materials.map((material) => ({
