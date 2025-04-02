@@ -153,20 +153,7 @@ function LogCollectionModal({
 
   console.log(selectedAgent)
 
-  const collectionData = {
-    agentName: selectedAgent?.fullName,
-    agentId: selectedAgent?.id,
-    collectionDate: collectionDate, // Ensure correct format
-    prepayment: balance?.toString(), // Convert to string if needed
-    materials: materials.map((material) => ({
-      materialTypeId: material.materialTypeId,
-      amount: Number(material.amount), // Convert to number
-      quantity: material.quantity.toString(), // Ensure it's a string
-      pricePerKg: Number(material.pricePerKg),
-    })),
-  };
 
-  console.log(collectionData);
 
   // const logCollection = async (token, collectionData, imageFile) => {
   //   setLoading(true);
@@ -216,7 +203,7 @@ function LogCollectionModal({
       agentName: selectedAgent?.fullName,
       agentId: selectedAgent?.id,
       collectionDate: collectionDate, // Ensure correct format
-      prepayment: balance.toString(), // Convert to string if needed
+      prepayment: prepayment.toString(), // Convert to string if needed
       materials: materials.map((material) => ({
         materialTypeId: material.materialTypeId,
         amount: Number(material.amount), // Convert to number
