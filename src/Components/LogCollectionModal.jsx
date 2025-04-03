@@ -202,8 +202,8 @@ function LogCollectionModal({
     const collectionData = {
       agentName: selectedAgent?.fullName,
       agentId: selectedAgent?.id,
-      collectionDate: collectionDate, // Ensure correct format
-      prepayment: prepayment.toString(), // Convert to string if needed
+      collectionDate: collectionDate,
+      prepayment: Number(prepayment.replace(/[^\d.]/g, "")),
       materials: materials.map((material) => ({
         materialTypeId: material.materialTypeId,
         amount: Number(material.amount), // Convert to number
