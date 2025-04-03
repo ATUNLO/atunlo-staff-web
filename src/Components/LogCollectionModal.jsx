@@ -20,11 +20,8 @@ function LogCollectionModal({
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   const [agentName, setAgentName] = useState("");
   const [loading, setLoading] = useState(false);
-  const balance = useSelector(
-    (state) => state?.user?.currentUser?.data.balance
-  );
   const [agentSearchResults, setAgentSearchResults] = useState([]);
-  const [agentData, setAgentData] = useState("");
+
   const [selectedAgent, setSelectedAgent] = useState([]);
   const [status, setStatus] = useState("idle");
   const [collectionDate, setCollectionDate] = useState("");

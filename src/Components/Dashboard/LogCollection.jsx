@@ -20,6 +20,8 @@ function LogCollection() {
   const [logmodal, setLogModal] = useState(false);
   const [totalPages1, setTotalPages1] = useState("");
   const [collections, setCollections] = useState([]);
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   const navigate = useNavigate();
   const [materialTypeSelection, setMaterialTypeSelection] = useState([]);
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
@@ -64,10 +66,20 @@ function LogCollection() {
     XLSX.writeFile(workbook, "collections.xlsx");
   };
 
-  const getCollections = async () => {
+  const handleFetch = () => {
+    getCollections(fromDate, toDate);
+  };
+
+  const getCollections = async (from, to) => {
     try {
+      // Construct query parameters dynamically
+      const params = {};
+      if (from) params.from = from;
+      if (to) params.to = to;
+
       const response = await publicRequest.get(`/admin_staff/get-collections`, {
         headers: { Authorization: `Bearer ${token}` },
+        params, // Attach params to the request
       });
 
       const data = response.data?.data?.result;
@@ -131,7 +143,10 @@ function LogCollection() {
             </div>
           </div>
           <div className="flex justify-between  mb-[40px] mt-[20px] w-full">
-            <div className="flex items-center justify-center w-[250px] gap-2 bg-[#EDEDED] py-[16px] px-[10px] text-black text-[16px] rounded-[10px] cursor-pointer" onClick={handleDownload}>
+            <div
+              className="flex items-center justify-center w-[250px] gap-2 bg-[#EDEDED] py-[16px] px-[10px] text-black text-[16px] rounded-[10px] cursor-pointer"
+              onClick={handleDownload}
+            >
               <span className="text-[14px] font-bold">
                 Download Collections
               </span>
@@ -153,11 +168,22 @@ function LogCollection() {
                 <div className="w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
                   <FaCalendarAlt size={20} className="text-[#50CA00]" />
                   <MobileDatePicker
-                    className="w-[200px] text-[14px]"
+                    className="w-[200px] text-[14px] cursor-pointer"
                     placeholder="mm/dd/yyyy"
+                    onChange={(date) => setFromDate(date)}
                   />
                   <span>-</span>
-                  <MobileDatePicker className="" />
+                  <MobileDatePicker
+                    className="cursor-pointer"
+                    placeholder="mm/dd/yyyy"
+                    onChange={(date) => setToDate(date)}
+                  />
+                  <button
+                    onClick={handleFetch}
+                    className="ml-2 bg-green-500 text-white px-3 py-1 rounded"
+                  >
+                    Fetch
+                  </button>
                 </div>
               </div>
               <Table striped>

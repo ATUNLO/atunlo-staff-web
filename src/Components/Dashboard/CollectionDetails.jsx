@@ -12,9 +12,13 @@ function CollectionDetails() {
   const token = useSelector((state) => state?.user?.currentUser?.data?.token);
 
   const moneyFormat = (value) => {
-    if (!value) return "";
-    const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
-    return `₦${new Intl.NumberFormat("en-US").format(number)}`;
+    if (value === "" || value === null || value === undefined) return "";
+
+    // Ensure it's a valid number before formatting
+    const number = Number(value);
+    if (isNaN(number)) return "₦0"; // Prevent NaN issues
+
+    return `₦${number.toLocaleString("en-US")}`;
   };
 
   useEffect(() => {
