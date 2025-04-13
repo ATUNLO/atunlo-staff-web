@@ -394,3 +394,26 @@ export const paymentData = [
 function getRandomStatus() {
   return statuses[Math.floor(Math.random() * statuses.length)];
 }
+
+export const staffList = [
+  { id: 1, name: "Dominoes Truger", mobile: "08045698742", email: "Dominoes@email.com", location: "Lagos" },
+  { id: 2, name: "Alice Johnson", mobile: "08123456789", email: "alice@email.com", location: "Abuja" },
+  { id: 3, name: "John Doe", mobile: "09098765432", email: "johndoe@email.com", location: "Kano" },
+  { id: 4, name: "Sarah Smith", mobile: "07011223344", email: "sarah@email.com", location: "Port Harcourt" },
+  { id: 5, name: "Michael Brown", mobile: "08099887766", email: "michael@email.com", location: "Ibadan" },
+  { id: 6, name: "Jessica Green", mobile: "08155667788", email: "jessica@email.com", location: "Enugu" },
+  { id: 7, name: "David White", mobile: "09033221100", email: "david@email.com", location: "Benin" },
+  { id: 8, name: "Emma Wilson", mobile: "08044332211", email: "emma@email.com", location: "Jos" },
+  { id: 9, name: "Daniel Black", mobile: "07055443322", email: "daniel@email.com", location: "Kaduna" },
+  { id: 10, name: "Sophia Blue", mobile: "09066554433", email: "sophia@email.com", location: "Abeokuta" },
+  { id: 11, name: "James Gray", mobile: "08077665544", email: "james@email.com", location: "Owerri" },
+  { id: 12, name: "Olivia Gold", mobile: "08188776655", email: "olivia@email.com", location: "Uyo" },
+  { id: 13, name: "William Silver", mobile: "09099887744", email: "william@email.com", location: "Warri" },
+  { id: 14, name: "Isabella Red", mobile: "07088997766", email: "isabella@email.com", location: "Ilorin" },
+  { id: 15, name: "Benjamin Purple", mobile: "08011223344", email: "benjamin@email.com", location: "Maiduguri" },
+  { id: 16, name: "Charlotte Cyan", mobile: "08122334455", email: "charlotte@email.com", location: "Calabar" },
+  { id: 17, name: "Henry Violet", mobile: "09033445566", email: "henry@email.com", location: "Yola" },
+  { id: 18, name: "Mia Indigo", mobile: "08044556677", email: "mia@email.com", location: "Osogbo" },
+  { id: 19, name: "Ethan Orange", mobile: "07055667788", email: "ethan@email.com", location: "Ekiti" },
+  { id: 20, name: "Amelia Magenta", mobile: "09066778899", email: "amelia@email.com", location: "Akure" },
+];

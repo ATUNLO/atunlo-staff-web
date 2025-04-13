@@ -1,5 +1,5 @@
 import { BarChart } from "@mui/x-charts";
-import { dataset, dataset2, valueFormatter } from "../../utils/dataset";
+import { dataset, dataset2, valueFormatter } from "../../../utils/dataset";
 import { useSelector } from "react-redux";
 //import { useSelector } from "react-redux";
 
@@ -9,7 +9,7 @@ const chartSetting = {
   margin: { left: 120 },
 };
 
-function Overview() {
+function OverviewAdmin() {
   // const user = useSelector((state) => state?.user?.currentUser.data);
   const balance = useSelector((state) => state?.user?.currentUser?.data.balance);
 
@@ -22,10 +22,10 @@ function Overview() {
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
-        <div className="mb-10">
+        {/* <div className="mb-10">
           <h2 className="mb-4">Staff Balance</h2>
           <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[40px] px-[20px] py-[15px] rounded-[10px]">{moneyFormat(balance)}</span>
-        </div>
+        </div> */}
         <h1 className="text-[20px] font-medium mb-[30px]">Agents Overview</h1>
         <div className="w-full h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           <div className="flex justify-end">Calendar</div>
@@ -117,7 +117,7 @@ function Overview() {
                       {...chartSetting}
                     />
                     <p className="text-center text-[14px] font-light text-[#8F8F8F]">
-                      Quantity (KG)
+                      Quantity
                     </p>
                   </div>
                 </div>
@@ -184,7 +184,7 @@ function Overview() {
               {...chartSetting}
             />
             <p className="text-center text-[14px] font-light text-[#8F8F8F]">
-              Quantity (KG)
+              Quantity
             </p>
           </div>
         </div>
@@ -193,4 +193,4 @@ function Overview() {
   );
 }
 
-export default Overview;
+export default OverviewAdmin;

@@ -3,23 +3,28 @@ import { Button, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../Redux/apiCalls";
+import { loginStaff, loginAdmin } from "../../Redux/apiCalls";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [emailaddress, setEmail] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+  console.log(isAdmin)
 
   const user = useSelector((state) => state?.user);
   const changedPassword = user?.currentUser?.data?.isPasswordSet;
-  console.log(user.isPasswordSet);
   const { success } = user;
+
+  const handleToggle = () => {
+    setIsAdmin(!isAdmin);
+  };
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -31,21 +36,34 @@ function SignIn() {
     e.preventDefault();
     try {
       setLoading(true);
-      await login(dispatch, { emailaddress, password });
+      if (isAdmin) {
+        await loginAdmin(dispatch, { emailaddress, password });
+      } else {
+        await loginStaff(dispatch, { emailaddress, password });
+      }
+      if(isAdmin){
+        navigate("/dashboard");
+      } else {
       if (success && changedPassword) {
         navigate("/dashboard");
       }
       if (success && !changedPassword) {
         navigate("/set-password");
       }
+    }
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      toast.error(error?.response?.data?.message)
+      toast.error(error?.response?.data?.message);
     }
   };
 
   useEffect(() => {
+    if(isAdmin){
+      if (success) {
+        navigate("/dashboard");
+      }
+    } else {
     if (success && changedPassword) {
       navigate("/dashboard");
     }
@@ -55,13 +73,25 @@ function SignIn() {
     if (!success && !changedPassword) {
       navigate("/");
     }
-  }, [navigate, success, changedPassword]);
+  }
+  }, [navigate, success, changedPassword, isAdmin]);
   return (
     <div className="w-full flex flex-col items-center justify-center py-10">
       <img src="/assets/logo.png" className="mt-[40px]" />
-      <h1 className="mt-[50px] text-[24px] font-medium">
+      <h1 className="my-[50px] text-[24px] font-medium">
         Login to your account
       </h1>
+      <div className="flex items-center justify-center w-full">
+        <FormGroup switch>
+          <Input
+            type="switch"
+            role="switch"
+            checked={isAdmin}
+            onChange={handleToggle}
+          />
+          <Label check>Login as Admin</Label>
+        </FormGroup>
+      </div>
       <div>
         <Form>
           <FormGroup className="flex flex-col mt-[30px]">

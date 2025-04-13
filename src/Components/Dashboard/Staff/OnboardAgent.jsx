@@ -1,7 +1,7 @@
 import { Button, Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { useEffect, useState } from "react";
 import { FaSquarePlus, FaTrash } from "react-icons/fa6";
-import { publicRequest } from "../../requestMehod";
+import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Select from "react-select";
@@ -13,6 +13,8 @@ function OnboardAgent() {
   const [phone, setPhone] = useState("");
   const [stateId, setStateId] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [accountInfo, setAccountInfo] = useState("");
+  const [accountInfoLoading, setAccountInfoLoading] = useState(false);
   const [availableStates, setAvailableStates] = useState([]);
   const [materialTypeSelection, setMaterialTypeSelection] = useState([]);
   const [availableBanks, setAvailableBanks] = useState([]);
@@ -72,7 +74,7 @@ function OnboardAgent() {
   }));
 
   const bankOptions = availableBanks?.map((bank) => ({
-    value: String(bank.id), // Ensure value is a string
+    value: String(bank.code), // Ensure value is a string
     label: bank.name,
   }));
 
@@ -95,7 +97,7 @@ function OnboardAgent() {
     address: address,
     phone: formatPhoneNumberIntl(phone),
     stateid: stateId,
-    bankCode: selectedBank.bankCode,
+    bankCode: selectedBank?.bankCode,
     bankName: selectedBank.bankName,
     accountNumber: accountNumber,
     materials: formattedMaterials,
@@ -131,6 +133,28 @@ function OnboardAgent() {
     }
   };
 
+  const getAccountInfo = async (accountNumber, bankCode) => {
+    setAccountInfoLoading(true)
+    try {
+      const response = await publicRequest.get(`/transactions/bank/details`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: {
+          accountNumber,
+          bank: bankCode,
+        },
+      });
+
+      const data = response.data?.data;
+      setAccountInfo(data);
+      setAccountInfoLoading(false)
+      console.log(data);
+    } catch (error) {
+      setAccountInfoLoading(false)
+      console.log(error.response.data)
+      setAccountInfo(error?.response?.data?.message)
+    }
+  };
+
   const getMaterialType = async () => {
     try {
       const response = await publicRequest.get(`/misc/material-types`, {
@@ -150,6 +174,15 @@ function OnboardAgent() {
     getMaterialType();
     getBanks();
   }, []);
+
+  useEffect(() => {
+    const isValidAccount = accountNumber?.length === 10;
+    const hasBankCode = !!selectedBank?.bankCode;
+
+    if (isValidAccount && hasBankCode) {
+      getAccountInfo(accountNumber, selectedBank?.bankCode);
+    }
+  }, [accountNumber, selectedBank]);
 
   const onboardAgent = async (token, agentData) => {
     setLoading(true);
@@ -213,7 +246,7 @@ function OnboardAgent() {
                     type="emtextail"
                     className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                     onChange={(e) => setPhone(e.target.value)}
-                    maxLength='10'
+                    maxLength="10"
                   />
                 </div>
               </FormGroup>
@@ -283,23 +316,32 @@ function OnboardAgent() {
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] !h-[55px] rounded-[10px]"
                 />
               </FormGroup>
-              <FormGroup className="flex flex-col">
-                <Label
-                  for="AccountNumber"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  Account Number
-                </Label>
-                <Input
-                  id="AccountNumber"
-                  name="AccountNumber"
-                  placeholder=""
-                  type="text"
-                  value={accountNumber}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                  onChange={(e) => setAccountNumber(e.target.value)}
-                />
-              </FormGroup>
+              <div className="flex flex-col relative">
+                <FormGroup className="flex flex-col">
+                  <Label
+                    htmlFor="AccountNumber"
+                    className="font-normal text-[16px] mb-[10px]"
+                  >
+                    Account Number
+                  </Label>
+                  <Input
+                    id="AccountNumber"
+                    name="AccountNumber"
+                    placeholder=""
+                    type="text"
+                    value={accountNumber}
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                    maxLength={10}
+                  />
+                </FormGroup>
+
+                {accountInfo?.name && (
+                  <p className="text-sm text-gray-700  absolute bottom-[-30px]">
+                    {accountInfo.name}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="bg-[#F3F3F3] w-full min-h-[150px] flex flex-col items-center justify-center gap-[20px] mt-[40px] px-[20px] py-[30px]">

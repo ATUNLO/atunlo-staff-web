@@ -1,52 +1,46 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { publicRequest } from "../../requestMehod"; // API instance
+import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { BiArrowBack } from "react-icons/bi";
 import { FormGroup, Input, Label, Table } from "reactstrap";
 
-function CollectionDetails() {
+function AgentDetails() {
   const { id } = useParams();
-  const [collection, setCollection] = useState(null);
+  const [agent, setAgent] = useState(null);
   const [collectionMaterial, setCollectionMaterial] = useState(null);
   const token = useSelector((state) => state?.user?.currentUser?.data?.token);
 
   const moneyFormat = (value) => {
-    if (value === "" || value === null || value === undefined) return "";
-
-    // Ensure it's a valid number before formatting
-    const number = Number(value);
-    if (isNaN(number)) return "₦0"; // Prevent NaN issues
-
-    return `₦${number.toLocaleString("en-US")}`;
+    if (!value) return "";
+    const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
+    return `₦${new Intl.NumberFormat("en-US").format(number)}`;
   };
 
   useEffect(() => {
-    const fetchCollection = async () => {
+    const fetchAgent = async () => {
       if (!token) return;
 
       try {
-        const response = await publicRequest.get(
-          `/admin_staff/getCollection/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ Include token in headers
-            },
-          }
-        );
+        const response = await publicRequest.get(`/admin/agent-details/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ Include token in headers
+          },
+        });
 
-        setCollection(response?.data?.data?.collection);
+        setAgent(response?.data?.data?.agent);
         setCollectionMaterial(response?.data?.data?.collectionMaterials);
+        console.log(collectionMaterial);
         console.log("Collection", response?.data?.data);
       } catch (error) {
         console.error("Error fetching collection details:", error);
       }
     };
 
-    fetchCollection();
+    fetchAgent();
   }, [id, token]);
 
-  if (!collection) return <p>Loading...</p>;
+  if (!agent) return <p>Loading...</p>;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -67,13 +61,14 @@ function CollectionDetails() {
               <p className="mb-0">Back</p>
             </div>
           </Link>
+          <h4>Agent Management</h4>
         </div>
         <div className="w-full h-[1px] bg-[#e9e9e9] mt-[20px]"></div>
         <div className="w-full flex flex-col items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
           <div className="w-full flex items-center justify-center gap-[50px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
-                Name
+                Full Name
               </Label>
               <Input
                 id="FullName"
@@ -81,7 +76,7 @@ function CollectionDetails() {
                 placeholder=""
                 type="text"
                 className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                value={collection?.agentName}
+                value={agent?.fullName}
               />
             </FormGroup>
             <FormGroup className="flex flex-col mb-0">
@@ -89,13 +84,13 @@ function CollectionDetails() {
                 for="phoneNumber"
                 className="font-normal text-[16px] mb-[10px]"
               >
-                Date of Collection
+                Address
               </Label>
               <Input
                 id="phoneNumber"
                 name="phoneNumber"
                 placeholder=""
-                value={formatDate(collection?.collectionDate)}
+                value={agent?.address}
                 type="emtextail"
                 className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
@@ -104,7 +99,7 @@ function CollectionDetails() {
           <div className="w-full flex items-center justify-center gap-[50px] mt-[20px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
-                Prepayment
+                State
               </Label>
               <Input
                 id="FullName"
@@ -112,7 +107,7 @@ function CollectionDetails() {
                 placeholder=""
                 type="text"
                 className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                value={collection?.prepayment}
+                value={agent?.state?.name}
               />
             </FormGroup>
             <FormGroup className="flex flex-col mb-0">
@@ -120,29 +115,50 @@ function CollectionDetails() {
                 for="phoneNumber"
                 className="font-normal text-[16px] mb-[10px]"
               >
-                Total Due
+                Phone Number
               </Label>
               <Input
                 id="phoneNumber"
                 name="phoneNumber"
                 placeholder=""
-                value={collection?.totalDue}
+                value={agent?.phoneNumber}
                 type="emtextail"
                 className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
             </FormGroup>
           </div>
-          <div className="w-[55%] mt-[20px] flex flex-col items-start justify-start">
-            <p>Image</p>
-            <div className="w-full h-[252px] bg-[#F3F3F3] rounded-[10px] flex items-center justify-center">
-              <img
-                src={collection?.images[0]}
-                alt=""
-                className="object-contain max-h-full max-w-full"
+          <div className="w-full flex items-center justify-center gap-[50px] mt-[20px]">
+            <FormGroup className="flex flex-col ">
+              <Label for="Name" className="font-normal text-[16px] mb-[10px]">
+                Bank Name
+              </Label>
+              <Input
+                id="FullName"
+                name="FullName"
+                placeholder=""
+                type="text"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                value={agent?.bankName}
               />
-            </div>
+            </FormGroup>
+            <FormGroup className="flex flex-col mb-0">
+              <Label
+                for="phoneNumber"
+                className="font-normal text-[16px] mb-[10px]"
+              >
+                Account Number
+              </Label>
+              <Input
+                id="phoneNumber"
+                name="phoneNumber"
+                placeholder=""
+                value={agent?.accountNumber}
+                type="emtextail"
+                className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+              />
+            </FormGroup>
           </div>
-          <div className="w-[55%] mt-[30px]">
+          <div className="w-full mt-[30px]">
             <Table striped>
               <thead>
                 <tr>
@@ -157,14 +173,22 @@ function CollectionDetails() {
                 </tr>
               </thead>
               <tbody>
-                {collectionMaterial?.map((material, index) => (
-                  <tr key={index}>
-                    <td>{material.materialType?.name}</td>
-                    <td>{moneyFormat(material.amount)}</td>
-                    <td>{moneyFormat(material.totalAmountDisbursed)}</td>
-                    <td>{material.totalCollectedMaterial}</td>
+                {collectionMaterial && collectionMaterial.length > 0 ? (
+                  collectionMaterial.map((material, index) => (
+                    <tr key={index}>
+                      <td>{material.materialType?.name}</td>
+                      <td>{moneyFormat(material.amount)}</td>
+                      <td>{moneyFormat(material.totalAmountDisbursed)}</td>
+                      <td>{material.totalCollectedMaterial}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="text-center py-4">
+                      No Collection Material Available
+                    </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </Table>
           </div>
@@ -174,4 +198,4 @@ function CollectionDetails() {
   );
 }
 
-export default CollectionDetails;
+export default AgentDetails;

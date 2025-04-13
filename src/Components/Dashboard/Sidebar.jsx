@@ -4,19 +4,43 @@ import { FaSquarePlus } from "react-icons/fa6";
 import { IoBook } from "react-icons/io5";
 import { TbArrowsExchange2 } from "react-icons/tb";
 import { FaTruckMoving } from "react-icons/fa6";
+import { FaUser, FaUserFriends } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const accountType = useSelector((state) => state?.user?.currentUser?.data.accountType);
 
-  // Sidebar Menu Items with route paths
-  const menuItems = [
-    { name: "Overview", icon: RiHome5Fill, path: "/overview" },
-    { name: "Onboard Agent", icon: FaSquarePlus, path: "/onboard-agents" },
-    { name: "Collection", icon: IoBook, path: "/log-collection" },
-    { name: "Payments", icon: TbArrowsExchange2, path: "/payments" },
-    { name: "Pickups", icon: FaTruckMoving, path: "/pickups" }
-  ];
+  let menuItems;
+
+  if (accountType === 'admin') {
+    menuItems = [
+      { name: "Overview", icon: RiHome5Fill, path: "/overview" },
+      { name: "Agent Management", icon: FaUser, path: "/agent-management" },
+      {
+        name: "Staff Management",
+        icon: FaUserFriends,
+        path: "/staff-management",
+      },
+      {
+        name: "Retail Management",
+        icon: FaUserFriends,
+        path: "/retail-management",
+      },
+      { name: "Pickups", icon: FaTruckMoving, path: "/pickups" },
+      { name: "Collection", icon: IoBook, path: "/collections" },
+      { name: "Transactions", icon: TbArrowsExchange2, path: "/transactions" },
+    ];
+  } else {
+    menuItems = [
+      { name: "Overview", icon: RiHome5Fill, path: "/overview" },
+      { name: "Onboard Agent", icon: FaSquarePlus, path: "/onboard-agents" },
+      { name: "Collection", icon: IoBook, path: "/log-collection" },
+      { name: "Payments", icon: TbArrowsExchange2, path: "/payments" },
+      { name: "Pickups", icon: FaTruckMoving, path: "/pickups" },
+    ];
+  }
 
   return (
     <div className="flex flex-col Sidebar z-1 sticky top-0 max-h-[100vh]">

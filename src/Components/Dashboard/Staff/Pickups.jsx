@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaCalendarAlt, FaTrash } from "react-icons/fa";
 import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
-import { paymentData, retailCollections } from "../../utils/dataset";
-import { publicRequest } from "../../requestMehod";
+import { paymentData, retailCollections } from "../../../utils/dataset";
+import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
