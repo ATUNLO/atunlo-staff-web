@@ -134,7 +134,7 @@ function OnboardAgent() {
   };
 
   const getAccountInfo = async (accountNumber, bankCode) => {
-    setAccountInfoLoading(true)
+    setAccountInfoLoading(true);
     try {
       const response = await publicRequest.get(`/transactions/bank/details`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -146,12 +146,12 @@ function OnboardAgent() {
 
       const data = response.data?.data;
       setAccountInfo(data);
-      setAccountInfoLoading(false)
+      setAccountInfoLoading(false);
       console.log(data);
     } catch (error) {
-      setAccountInfoLoading(false)
-      console.log(error.response.data)
-      setAccountInfo(error?.response?.data?.message)
+      setAccountInfoLoading(false);
+      console.log(error.response.data);
+      setAccountInfo(error?.response?.data?.message);
     }
   };
 
@@ -176,14 +176,17 @@ function OnboardAgent() {
   }, []);
 
   useEffect(() => {
-    const isValidAccount = accountNumber?.length === 10;
-    const hasBankCode = !!selectedBank?.bankCode;
+    const isTenDigits = accountNumber?.length === 10;
+    const hasBank = !!selectedBank?.bankCode;
 
-    if (isValidAccount && hasBankCode) {
-      getAccountInfo(accountNumber, selectedBank?.bankCode);
+    if (isTenDigits && hasBank) {
+      getAccountInfo(accountNumber, selectedBank.bankCode);
+    }
+
+    if (accountNumber?.length < 10) {
+      setAccountInfo({});
     }
   }, [accountNumber, selectedBank]);
-
   const onboardAgent = async (token, agentData) => {
     setLoading(true);
     try {
@@ -336,9 +339,23 @@ function OnboardAgent() {
                   />
                 </FormGroup>
 
-                {accountInfo?.name && (
-                  <p className="text-sm text-gray-700  absolute bottom-[-30px]">
-                    {accountInfo.name}
+                {accountInfoLoading && (
+                  <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
+                    <Spinner color="black" size="sm" />
+                  </p>
+                )}
+
+                {!accountInfoLoading &&
+                  typeof accountInfo === "object" &&
+                  accountInfo?.name && (
+                    <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
+                      {accountInfo.name}
+                    </p>
+                  )}
+
+                {!accountInfoLoading && typeof accountInfo === "string" && (
+                  <p className="text-sm text-red-500 absolute bottom-[-30px] left-0">
+                    {accountInfo}
                   </p>
                 )}
               </div>

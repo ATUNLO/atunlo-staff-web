@@ -3,7 +3,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { FormGroup, Label, Modal, Input, Spinner, Form, Button } from "reactstrap";
 import { toast } from "react-toastify";
 import { publicRequest } from "../../../requestMehod";
-import { FaSquarePlus } from "react-icons/fa6";
+import { FaSquarePlus, FaTrash } from "react-icons/fa6";
 import Select from "react-select";
 
 function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
@@ -13,6 +13,8 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
   const [phone, setPhone] = useState("");
   const [stateId, setStateId] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
+  const [accountInfo, setAccountInfo] = useState("");
+  const [accountInfoLoading, setAccountInfoLoading] = useState(false);
   const [availableStates, setAvailableStates] = useState([]);
   const [materialTypeSelection, setMaterialTypeSelection] = useState([]);
   const [availableBanks, setAvailableBanks] = useState([]);
@@ -70,7 +72,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
   }));
 
   const bankOptions = availableBanks?.map((bank) => ({
-    value: String(bank.id), // Ensure value is a string
+    value: String(bank.code), // Ensure value is a string
     label: bank.name,
   }));
 
@@ -143,12 +145,46 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
     }
   };
 
+  const getAccountInfo = async (accountNumber, bankCode) => {
+    setAccountInfoLoading(true);
+    try {
+      const response = await publicRequest.get(`/transactions/bank/details`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: {
+          accountNumber,
+          bank: bankCode,
+        },
+      });
+
+      const data = response.data?.data;
+      setAccountInfo(data);
+      setAccountInfoLoading(false);
+      console.log(data);
+    } catch (error) {
+      setAccountInfoLoading(false);
+      console.log(error.response.data);
+      setAccountInfo(error?.response?.data?.message);
+    }
+  };
+
   useEffect(() => {
     getStates();
     getMaterialType();
     getBanks();
   }, []);
 
+  useEffect(() => {
+    const isTenDigits = accountNumber?.length === 10;
+    const hasBank = !!selectedBank?.bankCode;
+
+    if (isTenDigits && hasBank) {
+      getAccountInfo(accountNumber, selectedBank.bankCode);
+    }
+
+    if (accountNumber?.length < 10) {
+      setAccountInfo({});
+    }
+  }, [accountNumber, selectedBank]);
   const onboardAgent = async (token, agentData) => {
     setLoading(true);
     try {
@@ -298,23 +334,46 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                   className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] !h-[55px] rounded-[10px]"
                 />
               </FormGroup>
-              <FormGroup className="flex flex-col">
-                <Label
-                  for="AccountNumber"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  Account Number
-                </Label>
-                <Input
-                  id="AccountNumber"
-                  name="AccountNumber"
-                  placeholder=""
-                  type="text"
-                  value={accountNumber}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                  onChange={(e) => setAccountNumber(e.target.value)}
-                />
-              </FormGroup>
+              <div className="flex flex-col relative">
+                <FormGroup className="flex flex-col">
+                  <Label
+                    htmlFor="AccountNumber"
+                    className="font-normal text-[16px] mb-[10px]"
+                  >
+                    Account Number
+                  </Label>
+                  <Input
+                    id="AccountNumber"
+                    name="AccountNumber"
+                    placeholder=""
+                    type="text"
+                    value={accountNumber}
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                    maxLength={10}
+                  />
+                </FormGroup>
+
+                {accountInfoLoading && (
+                  <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
+                    <Spinner color="black" size="sm" />
+                  </p>
+                )}
+
+                {!accountInfoLoading &&
+                  typeof accountInfo === "object" &&
+                  accountInfo?.name && (
+                    <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
+                      {accountInfo.name}
+                    </p>
+                  )}
+
+                {!accountInfoLoading && typeof accountInfo === "string" && (
+                  <p className="text-sm text-red-500 absolute bottom-[-30px] left-0">
+                    {accountInfo}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="bg-[#F3F3F3] w-full min-h-[150px] flex flex-col items-center justify-center gap-[20px] mt-[40px] px-[20px] py-[30px]">
