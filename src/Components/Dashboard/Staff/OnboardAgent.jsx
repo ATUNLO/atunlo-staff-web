@@ -187,6 +187,7 @@ function OnboardAgent() {
       setAccountInfo({});
     }
   }, [accountNumber, selectedBank]);
+  
   const onboardAgent = async (token, agentData) => {
     setLoading(true);
     try {

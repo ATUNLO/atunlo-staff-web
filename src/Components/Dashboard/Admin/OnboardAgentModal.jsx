@@ -1,6 +1,15 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
-import { FormGroup, Label, Modal, Input, Spinner, Form, Button } from "reactstrap";
+import {
+  FormGroup,
+  Label,
+  Modal,
+  Input,
+  Spinner,
+  Form,
+  Button,
+  ModalBody,
+} from "reactstrap";
 import { toast } from "react-toastify";
 import { publicRequest } from "../../../requestMehod";
 import { FaSquarePlus, FaTrash } from "react-icons/fa6";
@@ -197,7 +206,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
 
       setLoading(false);
       toast.success("Agent onboarded successfully!");
-      toggle()
+      toggle();
       resetForm();
       return response.data;
     } catch (error) {
@@ -207,8 +216,6 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
     }
   };
 
-
-
   return (
     <Modal
       isOpen={logmodal}
@@ -217,251 +224,253 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
       className="w-full px-[100px] py-[50px]"
       scrollable
     >
-      <>
-        <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
-          <span className="text-[30px]">Onboard Agent</span>
-          <IoMdCloseCircle
-            size={20}
-            className="absolute right-20 cursor-pointer"
-            onClick={() => toggle()}
-          />
-        </div>
+      <ModalBody>
+        <>
+          <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
+            <span className="text-[30px]">Onboard Agent</span>
+            <IoMdCloseCircle
+              size={20}
+              className="absolute right-20 cursor-pointer"
+              onClick={() => toggle()}
+            />
+          </div>
 
-        <div className="w-full flex items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
-          <Form className="w-full flex flex-col items-center justify-start mt-[55px]">
-            <div className="flex items-center justify-center gap-[50px]">
-              <FormGroup className="flex flex-col ">
-                <Label
-                  for="FullName"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  Full Name
-                </Label>
-                <Input
-                  id="FullName"
-                  name="FullName"
-                  placeholder=""
-                  type="text"
-                  value={fullName}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </FormGroup>
-              <FormGroup className="flex flex-col mb-0">
-                <Label
-                  for="phoneNumber"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  Phone Number
-                </Label>
-                <div className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
-                  <span className="text-[#8F8F8F] text-[16px]">+234</span>
-                  <Input
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    placeholder=""
-                    value={phone}
-                    type="emtextail"
-                    className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
-                    onChange={(e) => setPhone(e.target.value)}
-                    maxLength="10"
-                  />
-                </div>
-              </FormGroup>
-            </div>
-            <div className="flex items-center justify-center gap-[50px] mt-[40px]">
-              <div className="flex flex-col">
-                <Label
-                  for="Address"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  Address
-                </Label>
-                <Input
-                  id="Address"
-                  name="Address"
-                  placeholder=""
-                  type="text"
-                  value={address}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </div>
-              <FormGroup className="flex flex-col">
-                <Label
-                  htmlFor="state"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  State
-                </Label>
-                <Input
-                  id="state"
-                  name="state"
-                  type="select"
-                  value={stateId}
-                  onChange={(e) => setStateId(e.target.value)}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
-                >
-                  <option value="">Select a State</option>
-                  {availableStates?.map((state) => (
-                    <option key={state.id} value={state.id}>
-                      {state.name}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-            </div>
-            <div className="flex items-center justify-center gap-[50px] mt-[40px]">
-              <FormGroup className="flex flex-col ">
-                <Label
-                  htmlFor="BankName"
-                  className="font-normal text-[16px] mb-[10px]"
-                >
-                  Bank Name
-                </Label>
-                <Select
-                  id="BankName"
-                  name="BankName"
-                  options={bankOptions}
-                  value={
-                    bankOptions.find(
-                      (option) => option.value === selectedBank?.bankCode
-                    ) || null
-                  }
-                  onChange={handleBankChange}
-                  isSearchable
-                  isClearable
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] !h-[55px] rounded-[10px]"
-                />
-              </FormGroup>
-              <div className="flex flex-col relative">
-                <FormGroup className="flex flex-col">
+          <div className="w-full flex items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
+            <Form className="w-full flex flex-col items-center justify-start mt-[55px]">
+              <div className="flex items-center justify-center gap-[50px]">
+                <FormGroup className="flex flex-col ">
                   <Label
-                    htmlFor="AccountNumber"
+                    for="FullName"
                     className="font-normal text-[16px] mb-[10px]"
                   >
-                    Account Number
+                    Full Name
                   </Label>
                   <Input
-                    id="AccountNumber"
-                    name="AccountNumber"
+                    id="FullName"
+                    name="FullName"
                     placeholder=""
                     type="text"
-                    value={accountNumber}
-                    className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
-                    onChange={(e) => setAccountNumber(e.target.value)}
-                    maxLength={10}
+                    value={fullName}
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px]"
+                    onChange={(e) => setFullName(e.target.value)}
                   />
                 </FormGroup>
+                <FormGroup className="flex flex-col mb-0">
+                  <Label
+                    for="phoneNumber"
+                    className="font-normal text-[16px] mb-[10px]"
+                  >
+                    Phone Number
+                  </Label>
+                  <div className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
+                    <span className="text-[#8F8F8F] text-[16px]">+234</span>
+                    <Input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      placeholder=""
+                      value={phone}
+                      type="emtextail"
+                      className="!w-[390px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                      onChange={(e) => setPhone(e.target.value)}
+                      maxLength="10"
+                    />
+                  </div>
+                </FormGroup>
+              </div>
+              <div className="flex items-center justify-center gap-[50px] mt-[40px]">
+                <div className="flex flex-col">
+                  <Label
+                    for="Address"
+                    className="font-normal text-[16px] mb-[10px]"
+                  >
+                    Address
+                  </Label>
+                  <Input
+                    id="Address"
+                    name="Address"
+                    placeholder=""
+                    type="text"
+                    value={address}
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px]"
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+                <FormGroup className="flex flex-col">
+                  <Label
+                    htmlFor="state"
+                    className="font-normal text-[16px] mb-[10px]"
+                  >
+                    State
+                  </Label>
+                  <Input
+                    id="state"
+                    name="state"
+                    type="select"
+                    value={stateId}
+                    onChange={(e) => setStateId(e.target.value)}
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
+                  >
+                    <option value="">Select a State</option>
+                    {availableStates?.map((state) => (
+                      <option key={state.id} value={state.id}>
+                        {state.name}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </div>
+              <div className="flex items-center justify-center gap-[50px] mt-[40px]">
+                <FormGroup className="flex flex-col ">
+                  <Label
+                    htmlFor="BankName"
+                    className="font-normal text-[16px] mb-[10px]"
+                  >
+                    Bank Name
+                  </Label>
+                  <Select
+                    id="BankName"
+                    name="BankName"
+                    options={bankOptions}
+                    value={
+                      bankOptions.find(
+                        (option) => option.value === selectedBank?.bankCode
+                      ) || null
+                    }
+                    onChange={handleBankChange}
+                    isSearchable
+                    isClearable
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] !h-[55px] rounded-[10px]"
+                  />
+                </FormGroup>
+                <div className="flex flex-col relative">
+                  <FormGroup className="flex flex-col">
+                    <Label
+                      htmlFor="AccountNumber"
+                      className="font-normal text-[16px] mb-[10px]"
+                    >
+                      Account Number
+                    </Label>
+                    <Input
+                      id="AccountNumber"
+                      name="AccountNumber"
+                      placeholder=""
+                      type="text"
+                      value={accountNumber}
+                      className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px]"
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                      maxLength={10}
+                    />
+                  </FormGroup>
 
-                {accountInfoLoading && (
-                  <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
-                    <Spinner color="black" size="sm" />
-                  </p>
-                )}
-
-                {!accountInfoLoading &&
-                  typeof accountInfo === "object" &&
-                  accountInfo?.name && (
+                  {accountInfoLoading && (
                     <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
-                      {accountInfo.name}
+                      <Spinner color="black" size="sm" />
                     </p>
                   )}
 
-                {!accountInfoLoading && typeof accountInfo === "string" && (
-                  <p className="text-sm text-red-500 absolute bottom-[-30px] left-0">
-                    {accountInfo}
-                  </p>
-                )}
+                  {!accountInfoLoading &&
+                    typeof accountInfo === "object" &&
+                    accountInfo?.name && (
+                      <p className="text-sm text-gray-700 absolute bottom-[-30px] left-0">
+                        {accountInfo.name}
+                      </p>
+                    )}
+
+                  {!accountInfoLoading && typeof accountInfo === "string" && (
+                    <p className="text-sm text-red-500 absolute bottom-[-30px] left-0">
+                      {accountInfo}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div className="bg-[#F3F3F3] w-full min-h-[150px] flex flex-col items-center justify-center gap-[20px] mt-[40px] px-[20px] py-[30px]">
-              {materials.map((material, index) => (
-                <div
-                  key={material.id}
-                  className="flex items-center justify-center gap-[50px]"
-                >
-                  {/* Material Type */}
-                  <FormGroup className="flex flex-col">
-                    <Label
-                      htmlFor={`materialType-${index}`}
-                      className="font-normal text-[16px] mb-[10px]"
-                    >
-                      Material Type
-                    </Label>
-                    <Input
-                      id={`materialType-${index}`}
-                      name="materialType"
-                      type="select"
-                      value={material.type}
-                      onChange={(e) =>
-                        handleMaterialChange(index, "type", e.target.value)
-                      }
-                      className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] pl-[10px] bg-white"
-                    >
-                      <option value="">Select a Material Type</option>
-                      {materialTypeSelection?.map((type) => (
-                        <option key={type.id} value={type.id}>
-                          {type.name}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>
-
-                  {/* Price Per KG + Trash Icon */}
-                  <div className="flex items-center gap-[10px]">
+              <div className="bg-[#F3F3F3] w-full min-h-[150px] flex flex-col items-center justify-center gap-[20px] mt-[40px] px-[20px] py-[30px]">
+                {materials.map((material, index) => (
+                  <div
+                    key={material.id}
+                    className="flex items-center justify-center gap-[50px]"
+                  >
+                    {/* Material Type */}
                     <FormGroup className="flex flex-col">
                       <Label
-                        htmlFor={`pricePerKg-${index}`}
+                        htmlFor={`materialType-${index}`}
                         className="font-normal text-[16px] mb-[10px]"
                       >
-                        Price Per KG
+                        Material Type
                       </Label>
                       <Input
-                        id={`pricePerKg-${index}`}
-                        name="pricePerKg"
-                        type="text"
-                        value={material.price}
+                        id={`materialType-${index}`}
+                        name="materialType"
+                        type="select"
+                        value={material.type}
                         onChange={(e) =>
-                          handleMaterialChange(index, "price", e.target.value)
+                          handleMaterialChange(index, "type", e.target.value)
                         }
-                        className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] bg-white"
-                      />
+                        className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] pl-[10px] bg-white"
+                      >
+                        <option value="">Select a Material Type</option>
+                        {materialTypeSelection?.map((type) => (
+                          <option key={type.id} value={type.id}>
+                            {type.name}
+                          </option>
+                        ))}
+                      </Input>
                     </FormGroup>
 
-                    {/* Delete Button (Only if more than 1 row) */}
-                    {materials.length > 1 && (
-                      <FaTrash
-                        className="text-red-500 cursor-pointer mt-[25px]"
-                        size={20}
-                        onClick={() => removeMaterial(index)}
-                      />
-                    )}
-                  </div>
-                </div>
-              ))}
+                    {/* Price Per KG + Trash Icon */}
+                    <div className="flex items-center gap-[10px]">
+                      <FormGroup className="flex flex-col">
+                        <Label
+                          htmlFor={`pricePerKg-${index}`}
+                          className="font-normal text-[16px] mb-[10px]"
+                        >
+                          Price Per KG
+                        </Label>
+                        <Input
+                          id={`pricePerKg-${index}`}
+                          name="pricePerKg"
+                          type="text"
+                          value={material.price}
+                          onChange={(e) =>
+                            handleMaterialChange(index, "price", e.target.value)
+                          }
+                          className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] bg-white"
+                        />
+                      </FormGroup>
 
-              {/* Add Material Button */}
-              <div
-                className="flex items-center justify-center gap-[5px] cursor-pointer mt-[20px]"
-                onClick={addMaterial}
-              >
-                <FaSquarePlus className="fill-[#50CA00] !w-[20px] h-[20px]" />
-                <p className="font-medium text-[14px] text-[#50CA00] mb-0">
-                  Add Material
-                </p>
+                      {/* Delete Button (Only if more than 1 row) */}
+                      {materials.length > 1 && (
+                        <FaTrash
+                          className="text-red-500 cursor-pointer mt-[25px]"
+                          size={20}
+                          onClick={() => removeMaterial(index)}
+                        />
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Add Material Button */}
+                <div
+                  className="flex items-center justify-center gap-[5px] cursor-pointer mt-[20px]"
+                  onClick={addMaterial}
+                >
+                  <FaSquarePlus className="fill-[#50CA00] !w-[20px] h-[20px]" />
+                  <p className="font-medium text-[14px] text-[#50CA00] mb-0">
+                    Add Material
+                  </p>
+                </div>
               </div>
-            </div>
-            <Button
-              className="!w-[50%] mt-[60px] !bg-[#50cA00] h-[55px] text-white rounded-[10px]"
-              onClick={() => onboardAgent(token, agentData)}
-            >
-              {loading ? <Spinner /> : "Onboard"}
-            </Button>
-          </Form>
-        </div>
-      </>
+              <Button
+                className="!w-[50%] mt-[60px] !bg-[#50cA00] h-[55px] text-white rounded-[10px]"
+                onClick={() => onboardAgent(token, agentData)}
+              >
+                {loading ? <Spinner /> : "Onboard"}
+              </Button>
+            </Form>
+          </div>
+        </>
+      </ModalBody>
     </Modal>
   );
 }

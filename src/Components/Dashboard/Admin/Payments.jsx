@@ -77,21 +77,26 @@ function PaymentsAdmin() {
                 <th className="!text-[#8F8F8F] whitespace-nowrap">Closing Balance</th>
                 <th className="!text-[#8F8F8F] whitespace-nowrap">Bank</th>
                 <th className="!text-[#8F8F8F] whitespace-nowrap">Account Number</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Currency</th>
                 <th className="!text-[#8F8F8F] whitespace-nowrap">Amount</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Direction</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Remarks</th>
                 <th className="!text-[#8F8F8F] whitespace-nowrap">Status</th>
-                <th className="!text-[#8F8F8F] whitespace-nowrap"></th>
               </tr>
             </thead>
             <tbody>
               {transactions?.map((payment, index) => (
                 <tr key={index}>
-                  <td className="whitespace-nowrap">{payment.Recipient || "N/A"}</td>
+                  <td className="whitespace-nowrap">{payment.Recipient || payment.Name}</td>
                   <td className="whitespace-nowrap">{payment.Activity}</td>
                   <td className="whitespace-nowrap">{moneyFormat(payment.openingBalance)}</td>
                   <td className="whitespace-nowrap">{moneyFormat(payment.closingBalance)}</td>
                   <td className="whitespace-nowrap">{payment.recipientBank || 'N/A'}</td>
                   <td className="whitespace-nowrap">{payment.AccountNumber || 'N/A'}</td>
+                  <td className="whitespace-nowrap">{payment.Currency || 'N/A'}</td>
                   <td className="whitespace-nowrap">{moneyFormat(payment.transactionAmount) || 'N/A'}</td>
+                  <td className="whitespace-nowrap">{payment.Direction || 'N/A'}</td>
+                  <td className="whitespace-nowrap">{payment.remarks || 'N/A'}</td>
                   <td
                     className={`
                 ${payment.Status === "SUCCESSFUL" ? "text-success" : ""}
@@ -101,10 +106,6 @@ function PaymentsAdmin() {
               `}
                   >
                     {payment.Status}
-                  </td>
-                  <td className="flex gap-3">
-                    <span className="bg-green-500 text-white rounded-[10px] px-3 py-1">Approve</span>
-                    <span className="bg-red-500 text-white rounded-[10px] px-3 py-1">Deny</span>
                   </td>
                 </tr>
               ))}
