@@ -67,6 +67,7 @@ function Payments() {
               <MobileDatePicker className="" />
             </div>
           </div>
+          <div className="overflow-scroll">
           <Table striped>
             <thead>
               <tr className="!text-[#8F8F8F]">
@@ -101,7 +102,8 @@ function Payments() {
               ))}
             </tbody>
           </Table>
-          <div className="flex items-center justify-between pl-5">
+          </div>
+          <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
             <p>
               Page ({totalPages1?.currentPage} of {totalPages1?.totalPages}){" "}
               {totalPages1?.totalItems} items

@@ -58,7 +58,7 @@ function CollectionDetails() {
   };
 
   return (
-    <div className="px-[30px] py-[40px] w-full">
+    <div className="px-[10px] lg:px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
         <div className="flex items-center h-[60px] justify-start gap-5">
           <Link to="/log-collection" className="text-black no-underline">
@@ -70,7 +70,7 @@ function CollectionDetails() {
         </div>
         <div className="w-full h-[1px] bg-[#e9e9e9] mt-[20px]"></div>
         <div className="w-full flex flex-col items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
-          <div className="w-full flex items-center justify-center gap-[50px]">
+          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[50px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
                 Name
@@ -80,7 +80,7 @@ function CollectionDetails() {
                 name="FullName"
                 placeholder=""
                 type="text"
-                className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[428px] h-[55px] rounded-[10px]"
                 value={collection?.agentName}
               />
             </FormGroup>
@@ -97,11 +97,11 @@ function CollectionDetails() {
                 placeholder=""
                 value={formatDate(collection?.collectionDate)}
                 type="emtextail"
-                className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                className="!w-[310px] lg:w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
             </FormGroup>
           </div>
-          <div className="w-full flex items-center justify-center gap-[50px] mt-[20px]">
+          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[20px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
                 Prepayment
@@ -111,7 +111,7 @@ function CollectionDetails() {
                 name="FullName"
                 placeholder=""
                 type="text"
-                className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[428px] h-[55px] rounded-[10px]"
                 value={collection?.prepayment}
               />
             </FormGroup>
@@ -128,11 +128,11 @@ function CollectionDetails() {
                 placeholder=""
                 value={collection?.totalDue}
                 type="emtextail"
-                className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                className="!w-[310px] lg:w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
             </FormGroup>
           </div>
-          <div className="w-[55%] mt-[20px] flex flex-col items-start justify-start">
+          <div className="w-[90%] lg:w-[55%] mt-[20px] flex flex-col items-start justify-start">
             <p>Image</p>
             <div className="w-full h-[252px] bg-[#F3F3F3] rounded-[10px] flex items-center justify-center">
               <img
@@ -142,16 +142,16 @@ function CollectionDetails() {
               />
             </div>
           </div>
-          <div className="w-[55%] mt-[30px]">
+          <div className="w-[100%] lg:w-[55%] mt-[30px] overflow-scroll">
             <Table striped>
               <thead>
                 <tr>
-                  <th className="!text-[#8F8F8F] font-normal">Material Type</th>
-                  <th className="!text-[#8F8F8F] font-normal">Amount</th>
-                  <th className="!text-[#8F8F8F] font-normal">
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Material Type</th>
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Amount</th>
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                     Total Amount Disbursed
                   </th>
-                  <th className="!text-[#8F8F8F] font-normal">
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                     Total Collected Material
                   </th>
                 </tr>

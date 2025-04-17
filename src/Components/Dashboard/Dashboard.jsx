@@ -3,7 +3,7 @@ import Overview from "./Staff/Overview";
 import OverviewAdmin from "./Admin/Overview";
 import Sidebar from "./Sidebar";
 import OnboardAgent from "./Staff/OnboardAgent";
-import LogCollection from "./Admin/LogCollection";
+import LogCollection from "./Staff/LogCollection";
 import Payments from "./Staff/Payments";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut } from "../../Redux/LoginSlice";
@@ -11,16 +11,19 @@ import Pickups from "./Staff/Pickups";
 import CollectionDetails from "./Staff/CollectionDetails";
 import StaffManagement from "./Admin/StaffManagement";
 import RetailManagement from "./Admin/RetailManagement";
-import AgentManagement from './Admin/AgentManagement'
+import AgentManagement from "./Admin/AgentManagement";
 import AgentDetails from "./Admin/AgentDetails";
 import RetailDetails from "./Admin/RetailDetails";
 import PaymentsAdmin from "./Admin/Payments";
 import PickupsAdmin from "./Admin/Pickups";
 import LogCollectionAdmin from "./Admin/LogCollection";
+import { Offcanvas, OffcanvasBody, OffcanvasHeader } from "reactstrap";
+import { useState } from "react";
 
 function Dashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showSidebar, setShowSidebar] = useState(false);
   const user = useSelector((state) => state.user?.currentUser?.data);
   const accountType = useSelector(
     (state) => state?.user?.currentUser?.data.accountType
@@ -34,18 +37,38 @@ function Dashboard() {
   return (
     <div>
       <div className="flex">
-        <Sidebar />
+        <div className="hidden lg:block">
+          <Sidebar />
+        </div>
         <div className="border-solid border-[1px] border-[#E9E9E9] w-full">
           <div className="flex items-center justify-between w-full border-solid border-[1px] border-[#E9E9E9] h-[65px] px-4 mb-0">
-            <h1 className="text-[24px] font-extrabold ml-[30px]">
+            <div className="block lg:hidden">
+              <img src="/assets/menu.png" alt=""onClick={() => setShowSidebar(!showSidebar)} />
+            </div>
+            <Offcanvas
+              isOpen={showSidebar}
+              toggle={() => setShowSidebar(!showSidebar)}
+              direction="start"
+              className="!z-[9999] !w-[250px]"
+            >
+              <OffcanvasHeader toggle={() => setShowSidebar(!showSidebar)}>
+                Menu
+              </OffcanvasHeader>
+              <OffcanvasBody>
+                <Sidebar  toggleSidebar={() => setShowSidebar(!showSidebar)}/>
+              </OffcanvasBody>
+            </Offcanvas>
+            <h1 className="text-[14px] lg:text-[24px] font-extrabold ml-[30px]">
               Welcome, {user?.name}
             </h1>
             <div
-              className="flex gap-[5px] cursor-pointer"
+              className="flex gap-[2px] lg:gap-[5px] cursor-pointer"
               onClick={LogOutHandler}
             >
               <img src="assets/logout.png" />
-              <p className="text-[#FF3B30] mb-0 text-[16px]">Log out</p>
+              <p className="text-[#FF3B30] mb-0 text-[12px] lg:text-[16px]">
+                Log out
+              </p>
             </div>
           </div>
           <Routes>

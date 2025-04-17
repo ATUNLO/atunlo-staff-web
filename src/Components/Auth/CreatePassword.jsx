@@ -55,21 +55,21 @@ function CreatePassword() {
             type="text"
             value={token}
             onChange={(e) => setToken(e.target.value)}
-            className="border-solid border-[1px] border-[#E9E9E9] pl-3 w-[378px] h-[55px] rounded-[10px]"
+            className="border-solid border-[1px] border-[#E9E9E9] pl-3 !w-[300px]] h-[55px] rounded-[10px]"
           />
         </FormGroup>
 
         {/* New Password Field */}
         <FormGroup className="flex flex-col mt-[30px]">
           <Label htmlFor="password" className="font-normal text-[16px] mb-[10px]">New Password</Label>
-          <div className="relative w-[378px]">
+          <div className="relative !w-[300px]">
             <Input
               id="password"
               name="password"
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border-solid border-[1px] border-[#E9E9E9] pl-3 w-full h-[55px] rounded-[10px] pr-10"
+              className="border-solid border-[1px] border-[#E9E9E9] pl-3 !w-[300px] h-[55px] rounded-[10px] pr-10"
             />
             <button
               type="button"
@@ -84,7 +84,7 @@ function CreatePassword() {
         {/* Confirm New Password Field */}
         <FormGroup className="flex flex-col mt-[30px]">
           <Label htmlFor="confirmPassword" className="font-normal text-[16px] mb-[10px]">Confirm New Password</Label>
-          <div className="relative w-[378px]">
+          <div className="relative !w-[300px]">
             <Input
               id="confirmPassword"
               name="confirmPassword"
@@ -114,7 +114,7 @@ function CreatePassword() {
 
         {/* Back Button */}
         <Button
-          className="w-full h-[55px] !bg-gray-400 text-white rounded-[10px] mt-[15px]"
+          className="w-full h-[55px] !bg-gray-400 text-white rounded-[10px] mt-[15px] mb-[30px]"
           type="button"
           onClick={() => navigate("/forgot-password")}
         >

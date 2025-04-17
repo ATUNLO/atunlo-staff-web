@@ -40,7 +40,7 @@ function ForgotPassword() {
         We&apos;ll send your reset instructions
       </p>
 
-      <Form className="w-[378px]">
+      <Form className="!w-[300px] lg:w-[378px]">
         <FormGroup className="flex flex-col mt-[60px]">
           <Label htmlFor="email" className="font-normal text-[16px] mb-[10px]">
             Email Address

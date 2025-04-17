@@ -7,7 +7,7 @@ import { FaTruckMoving } from "react-icons/fa6";
 import { FaUser, FaUserFriends } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-function Sidebar() {
+function Sidebar({toggleSidebar}) {
   const navigate = useNavigate();
   const location = useLocation();
   const accountType = useSelector((state) => state?.user?.currentUser?.data.accountType);
@@ -47,7 +47,7 @@ function Sidebar() {
       <div className="w-[220px] flex items-center pl-5 h-[65px]">
         <img src="assets/logo.png" alt="" className="" />
       </div>
-      <div className="w-[220px] h-full border-solid border-[1px] border-[#E9E9E9] flex flex-col gap-[40px] items-start pt-[40px] pl-[26px]">
+      <div className="w-[220px] h-full lg:border-solid lg:border-[1px] lg:border-[#E9E9E9] flex flex-col gap-[40px] items-start pt-[40px] pl-[26px]">
         {menuItems.map((item) => {
           const isSelected = location.pathname === item.path; // Check if the current path matches
 
@@ -57,7 +57,13 @@ function Sidebar() {
               className={`flex items-center gap-[10px] cursor-pointer ${
                 isSelected ? "text-[#50CA00] font-bold" : "text-[#8F8F8F]"
               }`}
-              onClick={() => navigate(item.path)}
+              onClick={() => {
+                navigate(item.path);
+                if (window.innerWidth < 1024 && toggleSidebar) {
+                  toggleSidebar(); 
+                }
+              }}
+              
             >
               <item.icon
                 size={24}

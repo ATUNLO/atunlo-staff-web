@@ -187,7 +187,7 @@ function OnboardAgent() {
       setAccountInfo({});
     }
   }, [accountNumber, selectedBank]);
-  
+
   const onboardAgent = async (token, agentData) => {
     setLoading(true);
     try {
@@ -210,12 +210,12 @@ function OnboardAgent() {
   };
 
   return (
-    <div className="px-[30px] py-[40px] w-full">
+    <div className="lg:px-[30px] px-[10px] py-[40px] w-full">
       <div className="flex flex-col">
         <h1 className="text-[20px] font-medium mb-[30px]">Onboard Agents</h1>
-        <div className="w-full flex items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
+        <div className="w-full flex items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] py-[55px] mb-[30px]">
           <Form className="w-full flex flex-col items-center justify-start mt-[55px]">
-            <div className="flex items-center justify-center gap-[50px]">
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-[50px]">
               <FormGroup className="flex flex-col ">
                 <Label
                   for="FullName"
@@ -229,7 +229,7 @@ function OnboardAgent() {
                   placeholder=""
                   type="text"
                   value={fullName}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px]  h-[55px] rounded-[10px]"
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </FormGroup>
@@ -240,7 +240,7 @@ function OnboardAgent() {
                 >
                   Phone Number
                 </Label>
-                <div className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
+                <div className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
                   <span className="text-[#8F8F8F] text-[16px]">+234</span>
                   <Input
                     id="phoneNumber"
@@ -255,7 +255,7 @@ function OnboardAgent() {
                 </div>
               </FormGroup>
             </div>
-            <div className="flex items-center justify-center gap-[50px] mt-[40px]">
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[40px]">
               <div className="flex flex-col">
                 <Label
                   for="Address"
@@ -269,7 +269,7 @@ function OnboardAgent() {
                   placeholder=""
                   type="text"
                   value={address}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px] h-[55px] rounded-[10px]"
                   onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
@@ -286,7 +286,7 @@ function OnboardAgent() {
                   type="select"
                   value={stateId}
                   onChange={(e) => setStateId(e.target.value)}
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
                 >
                   <option value="">Select a State</option>
                   {availableStates?.map((state) => (
@@ -297,7 +297,7 @@ function OnboardAgent() {
                 </Input>
               </FormGroup>
             </div>
-            <div className="flex items-center justify-center gap-[50px] mt-[40px]">
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[40px]">
               <FormGroup className="flex flex-col ">
                 <Label
                   htmlFor="BankName"
@@ -317,7 +317,7 @@ function OnboardAgent() {
                   onChange={handleBankChange}
                   isSearchable
                   isClearable
-                  className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] !h-[55px] rounded-[10px]"
+                  className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px] !h-[55px] rounded-[10px]"
                 />
               </FormGroup>
               <div className="flex flex-col relative">
@@ -334,7 +334,7 @@ function OnboardAgent() {
                     placeholder=""
                     type="text"
                     value={accountNumber}
-                    className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px] h-[55px] rounded-[10px]"
                     onChange={(e) => setAccountNumber(e.target.value)}
                     maxLength={10}
                   />
@@ -366,7 +366,7 @@ function OnboardAgent() {
               {materials.map((material, index) => (
                 <div
                   key={material.id}
-                  className="flex items-center justify-center gap-[50px]"
+                  className="flex flex-col lg:flex-row items-center justify-center gap-[50px]"
                 >
                   {/* Material Type */}
                   <FormGroup className="flex flex-col">
@@ -384,7 +384,7 @@ function OnboardAgent() {
                       onChange={(e) =>
                         handleMaterialChange(index, "type", e.target.value)
                       }
-                      className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] pl-[10px] bg-white"
+                      className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[428px] h-[55px] rounded-[10px] pl-[10px] bg-white"
                     >
                       <option value="">Select a Material Type</option>
                       {materialTypeSelection?.map((type) => (
@@ -396,7 +396,7 @@ function OnboardAgent() {
                   </FormGroup>
 
                   {/* Price Per KG + Trash Icon */}
-                  <div className="flex items-center gap-[10px]">
+                  <div className="flex items-center gap-[10px] relative">
                     <FormGroup className="flex flex-col">
                       <Label
                         htmlFor={`pricePerKg-${index}`}
@@ -412,15 +412,15 @@ function OnboardAgent() {
                         onChange={(e) =>
                           handleMaterialChange(index, "price", e.target.value)
                         }
-                        className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px] bg-white"
+                        className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[428px] h-[55px] rounded-[10px] bg-white"
                       />
                     </FormGroup>
 
                     {/* Delete Button (Only if more than 1 row) */}
                     {materials.length > 1 && (
                       <FaTrash
-                        className="text-red-500 cursor-pointer mt-[25px]"
-                        size={20}
+                        className="text-red-500 cursor-pointer mt-[25px] absolute right-[-20px]"
+                        size={15}
                         onClick={() => removeMaterial(index)}
                       />
                     )}

@@ -65,7 +65,7 @@ function SetPassword() {
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <img src="/assets/logo.png" className="mt-[40px]" alt="Logo" />
-      <h1 className="mt-[150px] text-[24px] font-medium">Set Password</h1>
+      <h1 className="mt-[50px] lg:mt-[150px] text-[24px] font-medium">Set Password</h1>
       <Form onSubmit={handleSubmit}>
         {/* New Password Field */}
         <FormGroup className="flex flex-col mt-[30px]">
@@ -75,7 +75,7 @@ function SetPassword() {
           >
             New Password
           </Label>
-          <div className="relative w-[378px]">
+          <div className="relative !w-[300px] lg:w-[378px]">
             <Input
               id="password"
               name="password"
@@ -102,12 +102,12 @@ function SetPassword() {
           >
             Confirm New Password
           </Label>
-          <div className="relative w-[378px]">
+          <div className="relative !w-[300px] lg:w-[378px]">
             <Input
               id="confirmPassword"
               name="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
-              className="border-solid border-[1px] border-[#E9E9E9] pl-3 w-full h-[55px] rounded-[10px] pr-10"
+              className="border-solid border-[1px] border-[#E9E9E9] pl-3 !w-[300px] lg:w-[378px] h-[55px] rounded-[10px] pr-10"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />

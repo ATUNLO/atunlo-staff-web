@@ -58,6 +58,8 @@ function SignIn() {
     }
   };
 
+ 
+
   useEffect(() => {
     if(isAdmin){
       if (success) {
@@ -92,8 +94,8 @@ function SignIn() {
           <Label check>Login as Admin</Label>
         </FormGroup>
       </div>
-      <div>
-        <Form>
+      <div >
+        <Form className="flex flex-col items-center justify-center w-full">
           <FormGroup className="flex flex-col mt-[30px]">
             <Label for="email" className="font-normal text-[16px]">
               Email Address
@@ -103,7 +105,7 @@ function SignIn() {
               name="email"
               placeholder=""
               type="email"
-              className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px]"
+              className="border-solid border-[1px] border-[#E9E9E9] !w-[300px] lg:w-[378px] h-[55px] rounded-[10px]"
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormGroup>
@@ -111,12 +113,12 @@ function SignIn() {
             <Label htmlFor="password" className="font-normal text-[16px]">
               Password
             </Label>
-            <div className="relative w-[378px]">
+            <div className="relative !w-[300px] lg:w-[378px]">
               <Input
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
-                className="border-solid border-[1px] border-[#E9E9E9] w-full pl-3 h-[55px] rounded-[10px] pr-10"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[300px] lg:w-[378px] pl-3 h-[55px] rounded-[10px] pr-10"
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button
@@ -128,7 +130,7 @@ function SignIn() {
               </button>
             </div>
           </FormGroup>
-          <div className="flex items-end justify-end">
+          <div className="flex w-full items-end justify-end">
             <Link to="/forgot-password" className="text-[#50CA00] font-normal">
               Forgot Password?
             </Link>

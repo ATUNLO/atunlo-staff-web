@@ -17,8 +17,6 @@ function Pickups() {
   const [pickupsCompleted, setPickupsCompleted] = useState([]);
   const [totalPages1, setTotalPages1] = useState("");
   const [totalPages2, setTotalPages2] = useState("");
- 
-
 
   const getPickUps = async () => {
     try {
@@ -115,7 +113,7 @@ function Pickups() {
         <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           {pickupType === "Pending" && (
             <>
-              <div className="flex justify-end mb-5 gap-3 pr-5">
+              <div className="flex justify-end mb-5 gap-3 lg:pr-5">
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
@@ -134,44 +132,54 @@ function Pickups() {
                   <MobileDatePicker className="" />
                 </div>
               </div>
-              <Table striped>
-                <thead>
-                  <tr>
-                    <th className="!text-[#8F8F8F] font-normal">Quantity</th>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Collector Name
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Pickup Location
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal">Status</th>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Remarks/Notes
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pickups?.map((pickup, id) => (
-                    <tr key={id}>
-                      <td>{pickup.quantity}</td>
-                      <td>{pickup.assignedName || "None"}</td>
-                      <td>{pickup.address}</td>
-                      <td>{pickup.status}</td>
-                      <td>{pickup.remarks || "None"}</td>
-                      <td
-                        className="flex gap-[29px] items-center justify-center cursor-pointer"
-                        onClick={() => assignPickuptoMe(pickup.id)}
-                      >
-                        <span className="bg-[#8F8F8F] text-white px-2 py-1 rounded-[10px]">
-                          Assign to me
-                        </span>
-                      </td>
+              <div className="overflow-scroll">
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Quantity
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Collector Name
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Pickup Location
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Status
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Remarks/Notes
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <div className="flex items-center justify-between pl-5">
+                  </thead>
+                  <tbody>
+                    {pickups?.map((pickup, id) => (
+                      <tr key={id}>
+                        <td className="whitespace-nowrap">{pickup.quantity}</td>
+                        <td className="whitespace-nowrap">
+                          {pickup.assignedName || "None"}
+                        </td>
+                        <td className="whitespace-nowrap">{pickup.address}</td>
+                        <td className="whitespace-nowrap">{pickup.status}</td>
+                        <td className="whitespace-nowrap">
+                          {pickup.remarks || "None"}
+                        </td>
+                        <td
+                          className="flex gap-[29px] items-center justify-center cursor-pointer whitespace-nowrap"
+                          onClick={() => assignPickuptoMe(pickup.id)}
+                        >
+                          <span className="bg-[#8F8F8F] text-white px-2 py-1 rounded-[10px]">
+                            Assign to me
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+              <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
                   Page ({totalPages1?.currentPage} of {totalPages1?.totalPages}){" "}
                   {totalPages1?.totalItems} items
@@ -267,117 +275,130 @@ function Pickups() {
                   <MobileDatePicker className="" />
                 </div>
               </div>
-              <Table striped>
-                <thead>
-                  <tr>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Material Type
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal">Quantity</th>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Collector Name
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Pickup Location
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal">Status</th>
-                    <th className="!text-[#8F8F8F] font-normal">
-                      Remarks/Notes
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pickupsCompleted.map((pickup, id) => (
-                    <tr key={id}>
-                      <td>{pickup.materials || "Not available"}</td>
-                      <td>{pickup.quantity}</td>
-                      <td>{pickup.assignedName}</td>
-                      <td>{pickup.Location}</td>
-                      <td>{pickup.status}</td>
-                      <td>{pickup.remarks || "Not available"}</td>
+              <div className="overflow-scroll">
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Material Type
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Quantity
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Collector Name
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Pickup Location
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Status
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Remarks/Notes
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-              {totalPages2?.totalItems > 0 && (
-              <div className="flex items-center justify-between pl-5">
-                <p>
-                  Page ({totalPages2?.currentPage} of {totalPages2?.totalPages}) {totalPages2?.totalItems}{" "}
-                  items
-                </p>
-                <Pagination className="custom-pagination">
-                  {/* First Page */}
-                  <PaginationItem disabled={totalPages2?.currentPage === 1}>
-                    <PaginationLink
-                      first
-                      href="#"
-                      onClick={() => setCurrentPage(1)}
-                    />
-                  </PaginationItem>
-
-                  {/* Previous Page */}
-                  <PaginationItem disabled={totalPages2?.currentPage === 1}>
-                    <PaginationLink
-                      previous
-                      href="#"
-                      onClick={() =>
-                        setCurrentPage(totalPages2?.currentPage - 1)
-                      }
-                    />
-                  </PaginationItem>
-
-                  {/* Dynamic Page Numbers */}
-                  {[...Array(totalPages2?.totalPages || 1)].map((_, index) => {
-                    const page = index + 1;
-                    return (
-                      <PaginationItem
-                        key={page}
-                        active={totalPages2?.currentPage === page}
-                      >
-                        <PaginationLink
-                          href="#"
-                          onClick={() => setCurrentPage(page)}
-                        >
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  })}
-
-                  {/* Next Page */}
-                  <PaginationItem
-                    disabled={
-                      totalPages2?.currentPage === totalPages2?.totalPages
-                    }
-                  >
-                    <PaginationLink
-                      next
-                      href="#"
-                      onClick={() =>
-                        setCurrentPage(totalPages2?.currentPage + 1)
-                      }
-                    />
-                  </PaginationItem>
-
-                  {/* Last Page */}
-                  <PaginationItem
-                    disabled={
-                      totalPages2?.currentPage === totalPages2?.totalPages
-                    }
-                  >
-                    <PaginationLink
-                      last
-                      href="#"
-                      onClick={() => setCurrentPage(totalPages2?.totalPages)}
-                    />
-                  </PaginationItem>
-                </Pagination>
+                  </thead>
+                  <tbody>
+                    {pickupsCompleted.map((pickup, id) => (
+                      <tr key={id}>
+                        <td className="whitespace-nowrap">
+                          {pickup.materials || "Not available"}
+                        </td>
+                        <td className="whitespace-nowrap">{pickup.quantity}</td>
+                        <td className="whitespace-nowrap">
+                          {pickup.assignedName}
+                        </td>
+                        <td className="whitespace-nowrap">{pickup.Location}</td>
+                        <td className="whitespace-nowrap">{pickup.status}</td>
+                        <td className="whitespace-nowrap">
+                          {pickup.remarks || "Not available"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </div>
+              {totalPages2?.totalItems > 0 && (
+                <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
+                  <p>
+                    Page ({totalPages2?.currentPage} of{" "}
+                    {totalPages2?.totalPages}) {totalPages2?.totalItems} items
+                  </p>
+                  <Pagination className="custom-pagination">
+                    {/* First Page */}
+                    <PaginationItem disabled={totalPages2?.currentPage === 1}>
+                      <PaginationLink
+                        first
+                        href="#"
+                        onClick={() => setCurrentPage(1)}
+                      />
+                    </PaginationItem>
+
+                    {/* Previous Page */}
+                    <PaginationItem disabled={totalPages2?.currentPage === 1}>
+                      <PaginationLink
+                        previous
+                        href="#"
+                        onClick={() =>
+                          setCurrentPage(totalPages2?.currentPage - 1)
+                        }
+                      />
+                    </PaginationItem>
+
+                    {/* Dynamic Page Numbers */}
+                    {[...Array(totalPages2?.totalPages || 1)].map(
+                      (_, index) => {
+                        const page = index + 1;
+                        return (
+                          <PaginationItem
+                            key={page}
+                            active={totalPages2?.currentPage === page}
+                          >
+                            <PaginationLink
+                              href="#"
+                              onClick={() => setCurrentPage(page)}
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
+                      }
+                    )}
+
+                    {/* Next Page */}
+                    <PaginationItem
+                      disabled={
+                        totalPages2?.currentPage === totalPages2?.totalPages
+                      }
+                    >
+                      <PaginationLink
+                        next
+                        href="#"
+                        onClick={() =>
+                          setCurrentPage(totalPages2?.currentPage + 1)
+                        }
+                      />
+                    </PaginationItem>
+
+                    {/* Last Page */}
+                    <PaginationItem
+                      disabled={
+                        totalPages2?.currentPage === totalPages2?.totalPages
+                      }
+                    >
+                      <PaginationLink
+                        last
+                        href="#"
+                        onClick={() => setCurrentPage(totalPages2?.totalPages)}
+                      />
+                    </PaginationItem>
+                  </Pagination>
+                </div>
               )}
             </>
           )}
         </div>
-        
       </div>
     </div>
   );
