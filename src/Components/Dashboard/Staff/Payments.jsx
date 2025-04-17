@@ -71,22 +71,22 @@ function Payments() {
           <Table striped>
             <thead>
               <tr className="!text-[#8F8F8F]">
-                <th className="!text-[#8F8F8F] nowrap">Name</th>
-                <th className="!text-[#8F8F8F] nowrap">Date</th>
-                <th className="!text-[#8F8F8F]">Bank</th>
-                <th className="!text-[#8F8F8F]">Account No</th>
-                <th className="!text-[#8F8F8F]">Total Due</th>
-                <th className="!text-[#8F8F8F]">Status</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Name</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Date</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Bank</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Account No</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Total Due</th>
+                <th className="!text-[#8F8F8F] whitespace-nowrap">Status</th>
               </tr>
             </thead>
             <tbody>
               {transactionData?.map((payment, index) => (
                 <tr key={index}>
-                  <td>{payment.name}</td>
-                  <td>{payment.collectionDate}</td>
-                  <td>{payment.bankName}</td>
-                  <td>{payment.accountNo}</td>
-                  <td>{moneyFormat(payment.totalDue)}</td>
+                  <td className="whitespace-nowrap">{payment.name}</td>
+                  <td className="whitespace-nowrap">{payment.collectionDate}</td>
+                  <td className="whitespace-nowrap">{payment.bankName}</td>
+                  <td className="whitespace-nowrap">{payment.accountNo}</td>
+                  <td className="whitespace-nowrap">{moneyFormat(payment.totalDue)}</td>
                   <td
                     className={`
                 ${payment.status === "SUCCESSFUL" ? "text-success" : ""}
@@ -94,7 +94,7 @@ function Payments() {
                 ${payment.status === "INITIATED" ? "text-warning" : ""}
                 ${payment.status === "REVERSED" ? "text-warning" : ""}
                 ${payment.status === "REJECTED" ? "text-danger" : ""}
-              `}
+              whitespace-nowrap`}
                   >
                     {payment.status}
                   </td>

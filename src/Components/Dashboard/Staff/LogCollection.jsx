@@ -192,27 +192,27 @@ function LogCollection() {
                 <Table striped>
                   <thead>
                     <tr>
-                      <th className="!text-[#8F8F8F] font-normal">
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                         Agent Name
                       </th>
-                      <th className="!text-[#8F8F8F] font-normal">
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                         Date of Collection
                       </th>
-                      <th className="!text-[#8F8F8F] font-normal">
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                         Prepayment
                       </th>
-                      <th className="!text-[#8F8F8F] font-normal">Total Due</th>
-                      <th className="!text-[#8F8F8F] font-normal"></th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Total Due</th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {collections?.map((collection, index) => (
                       <tr key={index}>
-                        <td>{collection.agentName}</td>
-                        <td>{collection.collectionDate}</td>
-                        <td>{moneyFormat(collection.prepayment)}</td>
-                        <td>{moneyFormat(collection.totalDue)}</td>
-                        <td className="flex gap-[20px] items-center justify-center">
+                        <td className="whitespace-nowrap">{collection.agentName}</td>
+                        <td className="whitespace-nowrap">{collection.collectionDate}</td>
+                        <td className="whitespace-nowrap">{moneyFormat(collection.prepayment)}</td>
+                        <td className="whitespace-nowrap">{moneyFormat(collection.totalDue)}</td>
+                        <td className="flex gap-[20px] items-center justify-center whitespace-nowrap">
                           {/* ✅ Navigate to collection details page */}
                           <p
                             className="underline mb-0 cursor-pointer text-blue-500 hover:text-blue-700"
