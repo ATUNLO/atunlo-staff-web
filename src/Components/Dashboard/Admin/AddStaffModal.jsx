@@ -5,21 +5,22 @@ import { publicRequest } from "../../../requestMehod";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-function AddStaffModal({ toggleAddStaff, addStaffmodal,getStaff }) {
+function AddStaffModal({ toggleAddStaff, addStaffmodal, getStaff }) {
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
 
-  const staffData = {
-    emailaddress: email,
-    name: fullName,
-    phone: phone,
-  };
-
-  const addStaff = async (token, staffData) => {
+  const addStaff = async (token) => {
     setLoading(true);
+
+    const staffData = {
+      emailaddress: email,
+      name: fullName,
+      phone: phone,
+    };
+
     try {
       const url = `/admin/add/staff`;
       const response = await publicRequest.post(url, staffData, {
@@ -28,16 +29,21 @@ function AddStaffModal({ toggleAddStaff, addStaffmodal,getStaff }) {
         },
       });
 
+      if (response?.status === 200 || response?.status === 201) {
+        toast.success(response?.data?.message || "Staff added successfully.");
+         toggleAddStaff();
+         getStaff();
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+
       setLoading(false);
-      toast.success(response?.data?.message);
-      toggleAddStaff()
-      getStaff();
     } catch (error) {
       setLoading(false);
       toast.error(error.response?.data?.message || "Failed to add staff.");
-      throw error;
     }
   };
+
   return (
     <Modal
       isOpen={addStaffmodal}
@@ -116,8 +122,11 @@ function AddStaffModal({ toggleAddStaff, addStaffmodal,getStaff }) {
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <div className="w-[300px] !h-[55px] bg-[#50c100] flex items-center justify-center rounded-md mt-[70px] mb-[50px]" onClick={() => addStaff(token,staffData)}>
-              <p className="mb-0 text-white font-semibold text-[16px]">
+            <div
+              className="w-[300px] !h-[55px] bg-[#50c100] flex items-center justify-center rounded-md mt-[70px] mb-[50px]"
+              onClick={() => addStaff(token)}
+            >
+              <p className="mb-0 text-white font-semibold text-[16px] cursor-pointer">
                 {loading ? <Spinner /> : "Add Staff"}
               </p>
             </div>

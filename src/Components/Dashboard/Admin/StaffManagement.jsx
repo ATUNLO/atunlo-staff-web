@@ -56,7 +56,7 @@ function StaffManagement() {
         <AddStaffModal
           addStaffmodal={addStaffmodal}
           toggleAddStaff={toggleAddStaff}
-          getstaff={getStaff}
+          getStaff={getStaff}
         />
       )}
       <div className="px-[30px] py-[40px] w-full">

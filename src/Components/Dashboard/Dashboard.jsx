@@ -52,7 +52,7 @@ function Dashboard() {
               className="!z-[9999] !w-[250px]"
             >
               <OffcanvasHeader toggle={() => setShowSidebar(!showSidebar)}>
-                Menu
+                
               </OffcanvasHeader>
               <OffcanvasBody>
                 <Sidebar  toggleSidebar={() => setShowSidebar(!showSidebar)}/>
