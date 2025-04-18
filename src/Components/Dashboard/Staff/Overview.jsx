@@ -43,7 +43,7 @@ function Overview() {
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
-        <div className="mb-10">
+        <div className="mb-10 w-full lg:max-w-[500px]">
           <h2 className="mb-2 lg:mb-4 text-[14px] lg:text-[22px]">Staff Balance</h2>
           <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[22px] lg:text-[40px] px-[20px] py-[15px] rounded-[10px] flex items-center justify-center">{moneyFormat(balance)}</span>
         </div>

@@ -80,7 +80,7 @@ function PickupsAdmin() {
     getPickUpsCompleted();
   }, []);
   return (
-    <div className="px-[30px] py-[40px] w-full">
+    <div className="px-[10px] lg:px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
         <div className="w-full flex items-center justify-between">
           <h1 className="text-[20px] font-medium mb-[30px]">Pickups</h1>
@@ -114,7 +114,7 @@ function PickupsAdmin() {
         <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           {pickupType === "Pending" && (
             <>
-              <div className="flex justify-end mb-5 gap-3 pr-5">
+              <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
@@ -123,7 +123,7 @@ function PickupsAdmin() {
                     placeholder="Search"
                   />
                 </div>
-                <div className="w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
+                <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
                   <FaCalendarAlt size={20} className="text-[#50CA00]" />
                   <MobileDatePicker
                     className="w-[200px] text-[14px]"
@@ -133,33 +133,34 @@ function PickupsAdmin() {
                   <MobileDatePicker className="" />
                 </div>
               </div>
+              <div className="overflow-scroll">
               <Table striped>
                 <thead>
                   <tr>
-                    <th className="!text-[#8F8F8F] font-normal">Quantity</th>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Quantity</th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Collector Name
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Pickup Location
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal">Status</th>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Status</th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Remarks/Notes
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal"></th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {pickups?.map((pickup, id) => (
                     <tr key={id}>
-                      <td>{pickup.quantity}</td>
-                      <td>{pickup.assignedName || "None"}</td>
-                      <td>{pickup.address}</td>
-                      <td>{pickup.status}</td>
-                      <td>{pickup.remarks || "None"}</td>
+                      <td className="whitespace-nowrap">{pickup.quantity}</td>
+                      <td className="whitespace-nowrap">{pickup.assignedName || "None"}</td>
+                      <td className="whitespace-nowrap">{pickup.address}</td>
+                      <td className="whitespace-nowrap">{pickup.status}</td>
+                      <td className="whitespace-nowrap">{pickup.remarks || "None"}</td>
                       <td
-                        className="flex gap-[29px] items-center justify-center cursor-pointer"
+                        className="flex gap-[29px] items-center justify-center cursor-pointer whitespace-nowrap"
                         onClick={() => assignPickuptoMe(pickup.id)}
                       >
                         <span className="bg-[#8F8F8F] text-white px-2 py-1 rounded-[10px]">
@@ -170,7 +171,8 @@ function PickupsAdmin() {
                   ))}
                 </tbody>
               </Table>
-              <div className="flex items-center justify-between pl-5">
+              </div>
+              <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
                   Page ({totalPages1?.currentPage} of {totalPages1?.totalPages}){" "}
                   {totalPages1?.totalItems} items
@@ -247,7 +249,7 @@ function PickupsAdmin() {
           )}
           {pickupType === "Completed" && (
             <>
-              <div className="flex justify-end mb-5 gap-3 pr-5">
+              <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
@@ -256,7 +258,7 @@ function PickupsAdmin() {
                     placeholder="Search"
                   />
                 </div>
-                <div className="w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
+                <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
                   <FaCalendarAlt size={20} className="text-[#50CA00]" />
                   <MobileDatePicker
                     className="w-[200px] text-[14px]"
@@ -269,18 +271,18 @@ function PickupsAdmin() {
               <Table striped>
                 <thead>
                   <tr>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Material Type
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal">Quantity</th>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Quantity</th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Collector Name
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Pickup Location
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal">Status</th>
-                    <th className="!text-[#8F8F8F] font-normal">
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Status</th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Remarks/Notes
                     </th>
                   </tr>
@@ -288,18 +290,18 @@ function PickupsAdmin() {
                 <tbody>
                   {pickupsCompleted.map((pickup, id) => (
                     <tr key={id}>
-                      <td>{pickup.materials || "Not available"}</td>
-                      <td>{pickup.quantity}</td>
-                      <td>{pickup.assignedName}</td>
-                      <td>{pickup.Location}</td>
-                      <td>{pickup.status}</td>
-                      <td>{pickup.remarks || "Not available"}</td>
+                      <td className="whitespace-nowrap">{pickup.materials || "Not available"}</td>
+                      <td className="whitespace-nowrap">{pickup.quantity}</td>
+                      <td className="whitespace-nowrap">{pickup.assignedName}</td>
+                      <td className="whitespace-nowrap">{pickup.Location}</td>
+                      <td className="whitespace-nowrap">{pickup.status}</td>
+                      <td className="whitespace-nowrap">{pickup.remarks || "Not available"}</td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
               {totalPages2?.totalItems > 0 && (
-              <div className="flex items-center justify-between pl-5">
+              <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
                   Page ({totalPages2?.currentPage} of {totalPages2?.totalPages}) {totalPages2?.totalItems}{" "}
                   items

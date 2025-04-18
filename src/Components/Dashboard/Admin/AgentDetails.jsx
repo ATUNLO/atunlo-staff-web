@@ -52,20 +52,20 @@ function AgentDetails() {
   };
 
   return (
-    <div className="px-[30px] py-[40px] w-full">
+    <div className="px-[15px] lg:px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
         <div className="flex items-center h-[60px] justify-start gap-5">
-          <Link to="/log-collection" className="text-black no-underline">
+          <Link to="/agent-management" className="text-black no-underline">
             <div className="w-[88px] h-[40px] flex items-center justify-center gap-1 border-[1px] border-solid border-[#E9E9E9] rounded-md">
               <BiArrowBack />
               <p className="mb-0">Back</p>
             </div>
           </Link>
-          <h4>Agent Management</h4>
+          <h4 className="text-[18px] lg:text-[24px]">Agent Management</h4>
         </div>
         <div className="w-full h-[1px] bg-[#e9e9e9] mt-[20px]"></div>
         <div className="w-full flex flex-col items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
-          <div className="w-full flex items-center justify-center gap-[50px]">
+          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[50px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
                 Full Name
@@ -75,7 +75,7 @@ function AgentDetails() {
                 name="FullName"
                 placeholder=""
                 type="text"
-                className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] !lg:w-[428px] h-[55px] rounded-[10px]"
                 value={agent?.fullName}
               />
             </FormGroup>
@@ -92,11 +92,11 @@ function AgentDetails() {
                 placeholder=""
                 value={agent?.address}
                 type="emtextail"
-                className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                className="!w-[320px] !lg:w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
             </FormGroup>
           </div>
-          <div className="w-full flex items-center justify-center gap-[50px] mt-[20px]">
+          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[20px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
                 State
@@ -106,7 +106,7 @@ function AgentDetails() {
                 name="FullName"
                 placeholder=""
                 type="text"
-                className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] !lg:w-[428px] h-[55px] rounded-[10px]"
                 value={agent?.state?.name}
               />
             </FormGroup>
@@ -123,11 +123,11 @@ function AgentDetails() {
                 placeholder=""
                 value={agent?.phoneNumber}
                 type="emtextail"
-                className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                className="!w-[320px] !lg:w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
             </FormGroup>
           </div>
-          <div className="w-full flex items-center justify-center gap-[50px] mt-[20px]">
+          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[20px]">
             <FormGroup className="flex flex-col ">
               <Label for="Name" className="font-normal text-[16px] mb-[10px]">
                 Bank Name
@@ -137,7 +137,7 @@ function AgentDetails() {
                 name="FullName"
                 placeholder=""
                 type="text"
-                className="border-solid border-[1px] border-[#E9E9E9] !w-[428px] h-[55px] rounded-[10px]"
+                className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] !lg:w-[428px] h-[55px] rounded-[10px]"
                 value={agent?.bankName}
               />
             </FormGroup>
@@ -154,20 +154,20 @@ function AgentDetails() {
                 placeholder=""
                 value={agent?.accountNumber}
                 type="emtextail"
-                className="!w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                className="!w-[320px] !lg:w-[428px] h-[55px] rounded-[10px] outline-none ml-[10px]"
               />
             </FormGroup>
           </div>
-          <div className="w-full mt-[30px]">
+          <div className="w-full mt-[30px] overflow-scroll">
             <Table striped>
               <thead>
                 <tr>
-                  <th className="!text-[#8F8F8F] font-normal">Material Type</th>
-                  <th className="!text-[#8F8F8F] font-normal">Amount</th>
-                  <th className="!text-[#8F8F8F] font-normal">
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Material Type</th>
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Amount</th>
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                     Total Amount Disbursed
                   </th>
-                  <th className="!text-[#8F8F8F] font-normal">
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                     Total Collected Material
                   </th>
                 </tr>
@@ -176,10 +176,10 @@ function AgentDetails() {
                 {collectionMaterial && collectionMaterial.length > 0 ? (
                   collectionMaterial.map((material, index) => (
                     <tr key={index}>
-                      <td>{material.materialType?.name}</td>
-                      <td>{moneyFormat(material.amount)}</td>
-                      <td>{moneyFormat(material.totalAmountDisbursed)}</td>
-                      <td>{material.totalCollectedMaterial}</td>
+                      <td className="whitespace-nowrap">{material.materialType?.name}</td>
+                      <td className="whitespace-nowrap">{moneyFormat(material.amount)}</td>
+                      <td className="whitespace-nowrap">{moneyFormat(material.totalAmountDisbursed)}</td>
+                      <td className="whitespace-nowrap">{material.totalCollectedMaterial}</td>
                     </tr>
                   ))
                 ) : (

@@ -48,7 +48,7 @@ function PaymentsAdmin() {
       <div className="flex flex-col">
         <h1 className="text-[20px] font-medium mb-[30px]">Transactions</h1>
         <div className="min-w-[100%] h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] py-[55px] mb-[30px]">
-          <div className="flex justify-end mb-5 gap-3 pr-5">
+          <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
             <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
               <CiSearch className=" text-[#8F8F8F] " size={24} />
               <input
@@ -57,7 +57,7 @@ function PaymentsAdmin() {
                 placeholder="Search"
               />
             </div>
-            <div className="w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
+            <div className="lw-full g:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
               <FaCalendarAlt size={20} className="text-[#50CA00]" />
               <MobileDatePicker
                 className="w-[200px] text-[14px]"
@@ -112,7 +112,7 @@ function PaymentsAdmin() {
             </tbody>
           </Table>
           </div>
-          <div className="flex items-center justify-between pl-5">
+          <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
           <p>
               Page ({totalPages1?.currentPage} of {totalPages1?.totalPages}){" "}
               {totalPages1?.totalItems} items

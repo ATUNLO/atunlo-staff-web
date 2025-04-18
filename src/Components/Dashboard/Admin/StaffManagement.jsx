@@ -2,7 +2,13 @@ import { MobileDatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 // import { FaSquarePlus } from "react-icons/fa6";
-import { FaPlus, FaDownload, FaCalendarAlt, FaTrash, FaEye } from "react-icons/fa";
+import {
+  FaPlus,
+  FaDownload,
+  FaCalendarAlt,
+  FaTrash,
+  FaEye,
+} from "react-icons/fa";
 
 import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
 import { publicRequest } from "../../../requestMehod";
@@ -17,15 +23,14 @@ function StaffManagement() {
   const [addStaffmodal, setAddStaffModal] = useState(false);
   const [editStaffmodal, setEditStaffModal] = useState(false);
   const [totalPages1, setTotalPages1] = useState("");
+  const [loading, setLoading] = useState(false)
   const [staff, setStaffs] = useState([]);
   const navigate = useNavigate();
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
 
- 
   const toggleAddStaff = () => {
     setAddStaffModal(!addStaffmodal);
   };
-
 
   const getStaff = async () => {
     try {
@@ -42,13 +47,9 @@ function StaffManagement() {
     }
   };
 
-
-
   useEffect(() => {
     getStaff();
   }, []);
-
-
 
   return (
     <>
@@ -61,38 +62,26 @@ function StaffManagement() {
       )}
       <div className="px-[30px] py-[40px] w-full">
         <div className="flex flex-col">
-          <div className="w-full flex items-center justify-between">
+          <div className="w-full flex flex-col lg:flex-row items-start lg:items-center justify-between">
             <h1 className="text-[20px] font-medium mb-[30px]">
               Staff Management
             </h1>
-            <div className="flex gap-[30px]">
-            <div
-              className="flex items-center justify-center gap-2 bg-white py-[16px] px-[20px] text-black text-[16px] rounded-[10px] cursor-pointer border-[1px] border-solid border-black"
-            >
-              <span>Add Multiple Staff (CSV)</span>
-            </div>
-            <div
-              className="flex items-center justify-center gap-2 bg-[#50CA00] py-[16px] px-[20px] text-white text-[16px] rounded-[10px] cursor-pointer"
-              onClick={toggleAddStaff}
-            >
-              <FaPlus />
-              <span>Add Single Staff</span>
-            </div>
-            </div>
-
-          </div>
-          <div className="flex justify-between  mb-[40px] mt-[20px] w-full">
-            <div className="flex items-center justify-center w-[250px] gap-2 bg-white border-solid border-[1px] border-[#e9e9e9] py-[16px] px-[10px] text-[#50CA00] text-[16px] rounded-[10px]">
-              <FaDownload />
-              <span className="text-[14px] font-bold">
-                Download Agent Details
-              </span>
+            <div className="flex flex-col lg:flex-row gap-[30px] mb-[20px]">
+              <div className="flex  items-center justify-center gap-2 bg-white py-[16px] px-[20px] text-black text-[16px] rounded-[10px] cursor-pointer border-[1px] border-solid border-black">
+                <span>Add Multiple Staff (CSV)</span>
+              </div>
+              <div
+                className="flex items-center justify-center gap-2 bg-[#50CA00] py-[16px] px-[20px] text-white text-[16px] rounded-[10px] cursor-pointer"
+                onClick={toggleAddStaff}
+              >
+                <FaPlus />
+                <span>Add Single Staff</span>
+              </div>
             </div>
           </div>
-
           <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
             <>
-              <div className="flex justify-end mb-5 gap-3 pr-5">
+              <div className="flex flex-col justify-start lg:justify-end mb-5 gap-3 lg:pr-5">
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
@@ -101,7 +90,7 @@ function StaffManagement() {
                     placeholder="Search"
                   />
                 </div>
-                <div className="w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
+                <div className="w-[270px] lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
                   <FaCalendarAlt size={20} className="text-[#50CA00]" />
                   <MobileDatePicker
                     className="w-[200px] text-[14px]"
@@ -111,36 +100,44 @@ function StaffManagement() {
                   <MobileDatePicker className="" />
                 </div>
               </div>
-              <Table striped>
-                <thead>
-                  <tr>
-                    <th className="!text-[#8F8F8F] font-normal">Name</th>
-                    <th className="!text-[#8F8F8F] font-normal">Email</th>
-                    <th className="!text-[#8F8F8F] font-normal">Phone Number</th>
-                    <th className="!text-[#8F8F8F] font-normal"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {staff?.map((staff, index) => (
-                    <tr
-                      key={index}
-                      className="cursor-pointer"
-                      
-                    >
-                      <td>{staff.name}</td>
-                      <td>{staff.emailaddress}</td>
-                      <td>{staff.phoneNumber || "N/A"}</td>
-                      <td>
-                        <div className="flex gap-[20px] items-center justify-center">
-                          <RiEditFill />
-                          <FaTrash className="fill-red-600 cursor-pointer" />
-                        </div>
-                      </td>
+              <div className="overflow-scroll">
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Name
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Email
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Phone Number
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-              <div className="flex items-center justify-between pl-5">
+                  </thead>
+                  <tbody>
+                    {staff?.map((staff, index) => (
+                      <tr key={index} className="cursor-pointer">
+                        <td className="whitespace-nowrap">{staff.name}</td>
+                        <td className="whitespace-nowrap">
+                          {staff.emailaddress}
+                        </td>
+                        <td className="whitespace-nowrap">
+                          {staff.phoneNumber || "N/A"}
+                        </td>
+                        <td className="whitespace-nowrap">
+                          <div className="flex gap-[20px] items-center justify-center">
+                            <RiEditFill />
+                            <FaTrash className="fill-red-600 cursor-pointer" />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+              <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
                   Page ({totalPages1?.currentPage} of {totalPages1?.totalPages}){" "}
                   {totalPages1?.totalItems} items

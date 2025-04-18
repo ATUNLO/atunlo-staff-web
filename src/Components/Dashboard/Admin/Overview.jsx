@@ -1,6 +1,7 @@
 import { BarChart } from "@mui/x-charts";
 import { dataset, dataset2, valueFormatter } from "../../../utils/dataset";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 //import { useSelector } from "react-redux";
 
 const chartSetting = {
@@ -19,6 +20,29 @@ function OverviewAdmin() {
     return `₦${new Intl.NumberFormat("en-US").format(number)}`;
   };
 
+  const [chartSetting, setChartSetting] = useState({
+    width: 500,
+    height: 330,
+    margin: { left: 120 },
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 1024; // Tailwind's lg breakpoint
+
+      setChartSetting(
+        isMobile
+          ? { width: 320, height: 250, margin: { left: 60 } } // mobile/small screen
+          : { width: 500, height: 330, margin: { left: 120 } } // desktop/web
+      );
+    };
+
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
@@ -27,9 +51,9 @@ function OverviewAdmin() {
           <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[40px] px-[20px] py-[15px] rounded-[10px]">{moneyFormat(balance)}</span>
         </div> */}
         <h1 className="text-[20px] font-medium mb-[30px]">Agents Overview</h1>
-        <div className="w-full h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
+        <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           <div className="flex justify-end">Calendar</div>
-          <div className="flex">
+          <div className="flex flex-col lg:flex-row">
             <div className="flex gap-[17px]">
               <div className="flex flex-col">
                 <div className="w-[229px]">
@@ -68,13 +92,13 @@ function OverviewAdmin() {
                   </div>
                 </div>
               </div>
-              <div className="bg-[#E9E9E9] w-[1px]  mb-[53px]"></div>
+              <div className="bg-[#E9E9E9] w-[1px]  mb-[53px] hidden lg:block"></div>
             </div>
-            <div className="ml-[100px] w-full">
-              <h1 className="font-medium text-[16px]">
+            <div className="lg:ml-[100px] w-full">
+              <h1 className="font-medium text-[16px] text-center">
                 Top and Bottom 3 Performing Agents
               </h1>
-              <div className="flex items-center justify-between w-full">
+              <div className="flex flex-col lg:flex-row items-center justify-between w-full">
                 <div className="flex items-center">
                   <p className="rotate-[-90deg] h-[20px] text-[14px] font-light text-[#8F8F8F]">
                     Agent Name
@@ -117,11 +141,11 @@ function OverviewAdmin() {
                       {...chartSetting}
                     />
                     <p className="text-center text-[14px] font-light text-[#8F8F8F]">
-                      Quantity
+                      Quantity (KG)
                     </p>
                   </div>
                 </div>
-                <div className="mr-10">
+                <div className="lg:mr-10">
                   <div className="flex items-center gap-[5px]">
                     <div className="w-[15px] h-[12px] bg-[#50cA00]"></div>
                     <p className="text-[#8f8f8f] text-[14px] mb-0">
@@ -143,7 +167,7 @@ function OverviewAdmin() {
       <h1 className="text-[20px] font-medium mb-[30px]">Collection Overview</h1>
       <div className="w-full h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
         <div className="flex justify-end">Search and Calendar</div>
-        <div className="flex items-center ml-10">
+        <div className="flex justify-center items-center lg:ml-10">
           <p className="rotate-[-90deg] h-[20px] text-[14px] font-light text-[#8F8F8F]">
             Materials
           </p>
@@ -184,7 +208,7 @@ function OverviewAdmin() {
               {...chartSetting}
             />
             <p className="text-center text-[14px] font-light text-[#8F8F8F]">
-              Quantity
+              Quantity (KG)
             </p>
           </div>
         </div>

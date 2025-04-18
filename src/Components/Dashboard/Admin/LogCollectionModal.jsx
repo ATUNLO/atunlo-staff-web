@@ -256,20 +256,20 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
         isOpen={logmodal}
         toggle={toggle}
         size="xl"
-        className="w-full px-[100px]"
+        className="w-full lg:px-[100px]"
         scrollable
       >
           <>
-            <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
-              <span className="text-[30px]">Logging Collection</span>
+            <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full lg:px-10">
+              <span className="text-[24px] lg:text-[30px]">Logging Collection</span>
               <IoMdCloseCircle
                 size={20}
-                className="absolute right-20"
+                className="absolute lg:right-20 right-5"
                 onClick={toggle}
               />
             </div>
             <div className="w-full h-auto  rounded-[10px] px-[50px] py-[22px] mb-[30px] overflow-y-scroll">
-              <div className="flex items-center justify-between gap-[50px]">
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-[50px]">
                 <FormGroup className="flex flex-col relative">
                   <Label
                     for="agentName"
@@ -277,7 +277,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                   >
                     Agent Name
                   </Label>
-                  <div className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px] flex items-center pl-[20px] relative">
+                  <div className="border-solid border-[1px] border-[#E9E9E9] w-[320px] lg:w-[378px] h-[55px] rounded-[10px] flex items-center pl-[20px] relative">
                     <span className="text-[#8F8F8F] text-[16px]">
                       <FiSearch />
                     </span>
@@ -331,7 +331,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                     Date of Collection
                   </Label>
                   <DatePicker
-                    className="w-[378px] h-[55px] rounded-[10px] outline-none border-[#E9E9E9]"
+                    className="w-[320px] lg:w-[378px] h-[55px] rounded-[10px] outline-none border-[#E9E9E9]"
                     selected={collectionDate ? new Date(collectionDate) : null}
                     onChange={(date) =>
                       setCollectionDate(date.toISOString().split("T")[0])
@@ -343,7 +343,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                 {materials.map((material, index) => (
                   <div key={material.id} className="mt-[40px] relative">
                     {/* First Row: Material Type & Quantity */}
-                    <div className="flex items-center justify-between gap-[50px]">
+                    <div className="flex flex-col lg:flex-row items-center justify-between gap-[50px]">
                       {/* Material Type */}
                       <FormGroup className="flex flex-col">
                         <Label
@@ -365,7 +365,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                                 Number(e.target.value)
                               ) // ✅ Convert value to number
                           }
-                          className="border-solid border-[1px] border-[#E9E9E9] !w-[378px] h-[55px] rounded-[10px] pl-[10px] bg-white"
+                          className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:!w-[378px] h-[55px] rounded-[10px] pl-[10px] bg-white"
                         >
                           <option value="">Select a Material Type</option>
                           {materialTypeSelection?.map((type) => (
@@ -377,7 +377,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                       </FormGroup>
 
                       {/* Quantity */}
-                      <FormGroup className="flex flex-col w-[378px]">
+                      <FormGroup className="flex flex-col !w-[320px] lg:!w-[378px]">
                         <Label
                           htmlFor={`quantity-${index}`}
                           className="font-normal text-[16px] mb-[10px]"
@@ -402,9 +402,9 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                     </div>
 
                     {/* Second Row: Price Per KG & Amount + Trash Icon */}
-                    <div className="flex items-start justify-between gap-[50px] mt-[20px]">
+                    <div className="flex flex-col lg:flex-row items-start justify-between gap-[50px] mt-[20px]">
                       {/* Price Per KG */}
-                      <FormGroup className="flex flex-col w-[378px]">
+                      <FormGroup className="flex flex-col !w-[320px] lg:!w-[378px]">
                         <Label
                           htmlFor={`pricePerKg-${index}`}
                           className="font-normal text-[16px] mb-[10px]"
@@ -419,12 +419,12 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                           onChange={(e) =>
                             handleMaterialChange(index, "pricePerKg", e.target.value)
                           }
-                          className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px] bg-white"
+                          className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:!w-[378px] h-[55px] rounded-[10px] bg-white"
                         />
                       </FormGroup>
 
                       {/* Amount */}
-                      <FormGroup className="flex flex-col w-[378px]">
+                      <FormGroup className="flex flex-col !w-[320px] lg:!w-[378px]">
                         <Label
                           htmlFor={`amount-${index}`}
                           className="font-normal text-[16px] mb-[10px]"
@@ -443,7 +443,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                               e.target.value
                             )
                           }
-                          className="border-solid border-[1px] border-[#E9E9E9] w-[378px] h-[55px] rounded-[10px] bg-white"
+                          className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:!w-[378px] h-[55px] rounded-[10px] bg-white"
                         />
                         <div
                           className="flex items-center justify-start gap-[5px] cursor-pointer mt-[20px]"
@@ -467,7 +467,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                     </div>
                   </div>
                 ))}
-                <div className="flex items-center justify-between gap-[50px] mt-[30px]">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-[50px] mt-[30px]">
                   <FormGroup className="flex flex-col">
                     <Label
                       for="prepayment"
@@ -482,7 +482,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                       placeholder=""
                       type="text"
                       value={moneyFormat(prepayment)}
-                      className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                      className="!w-[320px] lg:!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                       onChange={(e) => setPrepayment(e.target.value)}
                     />
                   </FormGroup>
@@ -501,7 +501,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                       readOnly
                       placeholder=""
                       type="emtextail"
-                      className="!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                      className="!w-[320px] lg:!w-[378px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                     />
                   </FormGroup>
                 </div>

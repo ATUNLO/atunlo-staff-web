@@ -49,20 +49,20 @@ function AddStaffModal({ toggleAddStaff, addStaffmodal, getStaff }) {
       isOpen={addStaffmodal}
       toggle={toggleAddStaff}
       size="xl"
-      className="w-full px-[100px] py-[50px]"
+      className="w-full lg:px-[100px] lg:py-[50px]"
       scrollable
     >
       <ModalBody className="flex flex-col items-center justify-center">
         <>
-          <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
+          <div className="flex items-center justify-center relative pt-[50px] lg:mb-[70px] w-full px-10">
             <span className="text-[30px]">Add Staff</span>
             <IoMdCloseCircle
               size={20}
-              className="absolute right-20"
+              className="absolute lg:right-20 right-5"
               onClick={() => toggleAddStaff()}
             />
           </div>
-          <div className="flex items-start justify-start gap-[50px] mt-[30px] mx-auto">
+          <div className="flex flex-col lg:flex-row items-start justify-start gap-[50px] mt-[30px] mx-auto">
             {/* Column 1: Full Name & Phone Number */}
             <div className="flex flex-col gap-[30px]">
               <FormGroup className="flex flex-col">

@@ -221,23 +221,23 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
       isOpen={logmodal}
       toggle={toggle}
       size="xl"
-      className="w-full px-[100px] py-[50px]"
+      className="!w-full lg:px-[100px] py-[50px]"
       scrollable
     >
       <ModalBody>
         <>
           <div className="flex items-center justify-center relative pt-[50px] mb-[70px] w-full px-10">
-            <span className="text-[30px]">Onboard Agent</span>
+            <span className="text-[24px] lg:text-[30px]">Onboard Agent</span>
             <IoMdCloseCircle
               size={20}
-              className="absolute right-20 cursor-pointer"
+              className="absolute lg:right-20 right-5 cursor-pointer"
               onClick={() => toggle()}
             />
           </div>
 
           <div className="w-full flex items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
             <Form className="w-full flex flex-col items-center justify-start mt-[55px]">
-              <div className="flex items-center justify-center gap-[50px]">
+              <div className="flex flex-col lg:flex-row items-center justify-center gap-[50px]">
                 <FormGroup className="flex flex-col ">
                   <Label
                     for="FullName"
@@ -251,7 +251,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                     placeholder=""
                     type="text"
                     value={fullName}
-                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px]"
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px]"
                     onChange={(e) => setFullName(e.target.value)}
                   />
                 </FormGroup>
@@ -262,7 +262,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                   >
                     Phone Number
                   </Label>
-                  <div className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
+                  <div className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px] flex items-center pl-[20px]">
                     <span className="text-[#8F8F8F] text-[16px]">+234</span>
                     <Input
                       id="phoneNumber"
@@ -270,14 +270,14 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                       placeholder=""
                       value={phone}
                       type="emtextail"
-                      className="!w-[390px] h-[55px] rounded-[10px] outline-none ml-[10px]"
+                      className="!w-[310px] lg:w-[390px] h-[55px] rounded-[10px] outline-none ml-[10px]"
                       onChange={(e) => setPhone(e.target.value)}
                       maxLength="10"
                     />
                   </div>
                 </FormGroup>
               </div>
-              <div className="flex items-center justify-center gap-[50px] mt-[40px]">
+              <div className="flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[40px]">
                 <div className="flex flex-col">
                   <Label
                     for="Address"
@@ -291,7 +291,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                     placeholder=""
                     type="text"
                     value={address}
-                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px]"
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px]"
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </div>
@@ -308,7 +308,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                     type="select"
                     value={stateId}
                     onChange={(e) => setStateId(e.target.value)}
-                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px] flex items-center pl-[20px]"
                   >
                     <option value="">Select a State</option>
                     {availableStates?.map((state) => (
@@ -319,7 +319,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                   </Input>
                 </FormGroup>
               </div>
-              <div className="flex items-center justify-center gap-[50px] mt-[40px]">
+              <div className="flex flex-col lg:flex-row items-center justify-center gap-[50px] mt-[40px]">
                 <FormGroup className="flex flex-col ">
                   <Label
                     htmlFor="BankName"
@@ -339,7 +339,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                     onChange={handleBankChange}
                     isSearchable
                     isClearable
-                    className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] !h-[55px] rounded-[10px]"
+                    className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] !h-[55px] rounded-[10px]"
                   />
                 </FormGroup>
                 <div className="flex flex-col relative">
@@ -356,7 +356,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                       placeholder=""
                       type="text"
                       value={accountNumber}
-                      className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px]"
+                      className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px]"
                       onChange={(e) => setAccountNumber(e.target.value)}
                       maxLength={10}
                     />
@@ -388,7 +388,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                 {materials.map((material, index) => (
                   <div
                     key={material.id}
-                    className="flex items-center justify-center gap-[50px]"
+                    className="flex flex-col lg:flex-row items-center justify-center gap-[50px]"
                   >
                     {/* Material Type */}
                     <FormGroup className="flex flex-col">
@@ -406,7 +406,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                         onChange={(e) =>
                           handleMaterialChange(index, "type", e.target.value)
                         }
-                        className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] pl-[10px] bg-white"
+                        className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px] pl-[10px] bg-white"
                       >
                         <option value="">Select a Material Type</option>
                         {materialTypeSelection?.map((type) => (
@@ -418,7 +418,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                     </FormGroup>
 
                     {/* Price Per KG + Trash Icon */}
-                    <div className="flex items-center gap-[10px]">
+                    <div className="flex items-center gap-[10px] relative">
                       <FormGroup className="flex flex-col">
                         <Label
                           htmlFor={`pricePerKg-${index}`}
@@ -434,7 +434,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                           onChange={(e) =>
                             handleMaterialChange(index, "price", e.target.value)
                           }
-                          className="border-solid border-[1px] border-[#E9E9E9] !w-[390px] h-[55px] rounded-[10px] bg-white"
+                          className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px] bg-white"
                         />
                       </FormGroup>
 
