@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LogOut } from "../../Redux/LoginSlice";
 import Pickups from "./Staff/Pickups";
 import CollectionDetails from "./Staff/CollectionDetails";
+import CollectionDetailsAdmin from "./Admin/CollectionDetails";
 import StaffManagement from "./Admin/StaffManagement";
 import RetailManagement from "./Admin/RetailManagement";
 import AgentManagement from "./Admin/AgentManagement";
@@ -19,6 +20,7 @@ import PickupsAdmin from "./Admin/Pickups";
 import LogCollectionAdmin from "./Admin/LogCollection";
 import { Offcanvas, OffcanvasBody, OffcanvasHeader } from "reactstrap";
 import { useState } from "react";
+import PayoutsAdmin from "./Admin/Payouts";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -36,7 +38,7 @@ function Dashboard() {
   };
   return (
     <div>
-      <div className="flex">
+      <div className="flex overflow-scroll">
         <div className="hidden lg:block">
           <Sidebar />
         </div>
@@ -98,10 +100,11 @@ function Dashboard() {
                 />
                 <Route path="/collections" element={<LogCollectionAdmin />} />
                 <Route path="/transactions" element={<PaymentsAdmin />} />
+                <Route path="/payouts" element={<PayoutsAdmin />} />
                 <Route path="/pickups" element={<PickupsAdmin />} />
                 <Route
                   path="/collections/:id"
-                  element={<CollectionDetails />}
+                  element={<CollectionDetailsAdmin />}
                 />
                 <Route
                   path="/agent-management/:id"

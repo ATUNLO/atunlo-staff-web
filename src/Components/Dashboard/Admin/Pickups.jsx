@@ -12,12 +12,10 @@ function PickupsAdmin() {
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   const [currentPage, setCurrentPage] = useState(1);
   const [pickups, setPickups] = useState([]);
-  const [assignToMe, setAssignToMe] = useState([]);
+  const [assignToMe, setAssignToMe] = useState("");
   const [pickupsCompleted, setPickupsCompleted] = useState([]);
   const [totalPages1, setTotalPages1] = useState("");
   const [totalPages2, setTotalPages2] = useState("");
- 
-
 
   const getPickUps = async () => {
     try {
@@ -49,7 +47,8 @@ function PickupsAdmin() {
           },
         }
       );
-      setAssignToMe(response?.data?.message);
+      setAssignToMe(response?.message);
+      console.log(assignToMe);
       toast.success(assignToMe);
     } catch (error) {
       setAssignToMe(error?.response?.data?.message);
@@ -134,43 +133,57 @@ function PickupsAdmin() {
                 </div>
               </div>
               <div className="overflow-scroll">
-              <Table striped>
-                <thead>
-                  <tr>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Quantity</th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
-                      Collector Name
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
-                      Pickup Location
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Status</th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
-                      Remarks/Notes
-                    </th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pickups?.map((pickup, id) => (
-                    <tr key={id}>
-                      <td className="whitespace-nowrap">{pickup.quantity}</td>
-                      <td className="whitespace-nowrap">{pickup.assignedName || "None"}</td>
-                      <td className="whitespace-nowrap">{pickup.address}</td>
-                      <td className="whitespace-nowrap">{pickup.status}</td>
-                      <td className="whitespace-nowrap">{pickup.remarks || "None"}</td>
-                      <td
-                        className="flex gap-[29px] items-center justify-center cursor-pointer whitespace-nowrap"
-                        onClick={() => assignPickuptoMe(pickup.id)}
-                      >
-                        <span className="bg-[#8F8F8F] text-white px-2 py-1 rounded-[10px]">
-                          Assign to me
-                        </span>
-                      </td>
+                <Table striped>
+                  <thead>
+                    <tr>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Quantity
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Collector Name
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Pickup Location
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Status
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                        Remarks/Notes
+                      </th>
+                      <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {pickups?.map((pickup, id) => (
+                      <tr key={id}>
+                        <td className="whitespace-nowrap">
+                          {pickup.quantity} KG
+                        </td>
+                        <td className="whitespace-nowrap">
+                          {pickup.assignedName || "None"}
+                        </td>
+                        <td className="whitespace-nowrap">{pickup.address}</td>
+                        <td className="whitespace-nowrap">{pickup.status}</td>
+                        <td className="whitespace-nowrap">
+                          {pickup.remarks || "None"}
+                        </td>
+                        <td className="whitespace-nowrap">
+                          {!pickup.assignedName && (
+                            <div
+                              className="flex gap-[29px] items-center justify-center cursor-pointer"
+                              onClick={() => assignPickuptoMe(pickup.id)}
+                            >
+                              <span className="bg-[#8F8F8F] text-white px-2 py-1 rounded-[10px]">
+                                Assign to me
+                              </span>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </div>
               <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
@@ -274,14 +287,18 @@ function PickupsAdmin() {
                     <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Material Type
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Quantity</th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                      Quantity(KG)
+                    </th>
                     <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Collector Name
                     </th>
                     <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Pickup Location
                     </th>
-                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Status</th>
+                    <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                      Status
+                    </th>
                     <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                       Remarks/Notes
                     </th>
@@ -290,95 +307,102 @@ function PickupsAdmin() {
                 <tbody>
                   {pickupsCompleted.map((pickup, id) => (
                     <tr key={id}>
-                      <td className="whitespace-nowrap">{pickup.materials || "Not available"}</td>
+                      <td className="whitespace-nowrap">
+                        {pickup.materials || "Not available"}
+                      </td>
                       <td className="whitespace-nowrap">{pickup.quantity}</td>
-                      <td className="whitespace-nowrap">{pickup.assignedName}</td>
+                      <td className="whitespace-nowrap">
+                        {pickup.assignedName}
+                      </td>
                       <td className="whitespace-nowrap">{pickup.Location}</td>
                       <td className="whitespace-nowrap">{pickup.status}</td>
-                      <td className="whitespace-nowrap">{pickup.remarks || "Not available"}</td>
+                      <td className="whitespace-nowrap">
+                        {pickup.remarks || "Not available"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </Table>
               {totalPages2?.totalItems > 0 && (
-              <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
-                <p>
-                  Page ({totalPages2?.currentPage} of {totalPages2?.totalPages}) {totalPages2?.totalItems}{" "}
-                  items
-                </p>
-                <Pagination className="custom-pagination">
-                  {/* First Page */}
-                  <PaginationItem disabled={totalPages2?.currentPage === 1}>
-                    <PaginationLink
-                      first
-                      href="#"
-                      onClick={() => setCurrentPage(1)}
-                    />
-                  </PaginationItem>
+                <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
+                  <p>
+                    Page ({totalPages2?.currentPage} of{" "}
+                    {totalPages2?.totalPages}) {totalPages2?.totalItems} items
+                  </p>
+                  <Pagination className="custom-pagination">
+                    {/* First Page */}
+                    <PaginationItem disabled={totalPages2?.currentPage === 1}>
+                      <PaginationLink
+                        first
+                        href="#"
+                        onClick={() => setCurrentPage(1)}
+                      />
+                    </PaginationItem>
 
-                  {/* Previous Page */}
-                  <PaginationItem disabled={totalPages2?.currentPage === 1}>
-                    <PaginationLink
-                      previous
-                      href="#"
-                      onClick={() =>
-                        setCurrentPage(totalPages2?.currentPage - 1)
+                    {/* Previous Page */}
+                    <PaginationItem disabled={totalPages2?.currentPage === 1}>
+                      <PaginationLink
+                        previous
+                        href="#"
+                        onClick={() =>
+                          setCurrentPage(totalPages2?.currentPage - 1)
+                        }
+                      />
+                    </PaginationItem>
+
+                    {/* Dynamic Page Numbers */}
+                    {[...Array(totalPages2?.totalPages || 1)].map(
+                      (_, index) => {
+                        const page = index + 1;
+                        return (
+                          <PaginationItem
+                            key={page}
+                            active={totalPages2?.currentPage === page}
+                          >
+                            <PaginationLink
+                              href="#"
+                              onClick={() => setCurrentPage(page)}
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        );
                       }
-                    />
-                  </PaginationItem>
+                    )}
 
-                  {/* Dynamic Page Numbers */}
-                  {[...Array(totalPages2?.totalPages || 1)].map((_, index) => {
-                    const page = index + 1;
-                    return (
-                      <PaginationItem
-                        key={page}
-                        active={totalPages2?.currentPage === page}
-                      >
-                        <PaginationLink
-                          href="#"
-                          onClick={() => setCurrentPage(page)}
-                        >
-                          {page}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  })}
-
-                  {/* Next Page */}
-                  <PaginationItem
-                    disabled={
-                      totalPages2?.currentPage === totalPages2?.totalPages
-                    }
-                  >
-                    <PaginationLink
-                      next
-                      href="#"
-                      onClick={() =>
-                        setCurrentPage(totalPages2?.currentPage + 1)
+                    {/* Next Page */}
+                    <PaginationItem
+                      disabled={
+                        totalPages2?.currentPage === totalPages2?.totalPages
                       }
-                    />
-                  </PaginationItem>
+                    >
+                      <PaginationLink
+                        next
+                        href="#"
+                        onClick={() =>
+                          setCurrentPage(totalPages2?.currentPage + 1)
+                        }
+                      />
+                    </PaginationItem>
 
-                  {/* Last Page */}
-                  <PaginationItem
-                    disabled={
-                      totalPages2?.currentPage === totalPages2?.totalPages
-                    }
-                  >
-                    <PaginationLink
-                      last
-                      href="#"
-                      onClick={() => setCurrentPage(totalPages2?.totalPages)}
-                    />
-                  </PaginationItem>
-                </Pagination>
-              </div>
+                    {/* Last Page */}
+                    <PaginationItem
+                      disabled={
+                        totalPages2?.currentPage === totalPages2?.totalPages
+                      }
+                    >
+                      <PaginationLink
+                        last
+                        href="#"
+                        onClick={() => setCurrentPage(totalPages2?.totalPages)}
+                      />
+                    </PaginationItem>
+                  </Pagination>
+                </div>
               )}
             </>
           )}
         </div>
-        
       </div>
     </div>
   );

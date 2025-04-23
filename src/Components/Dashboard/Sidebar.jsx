@@ -3,6 +3,7 @@ import { RiHome5Fill } from "react-icons/ri";
 import { FaSquarePlus } from "react-icons/fa6";
 import { IoBook } from "react-icons/io5";
 import { TbArrowsExchange2 } from "react-icons/tb";
+import { BsFillSendArrowDownFill } from "react-icons/bs";
 import { FaTruckMoving } from "react-icons/fa6";
 import { FaUser, FaUserFriends } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -31,6 +32,7 @@ function Sidebar({toggleSidebar}) {
       { name: "Pickups", icon: FaTruckMoving, path: "/pickups" },
       { name: "Collection", icon: IoBook, path: "/collections" },
       { name: "Transactions", icon: TbArrowsExchange2, path: "/transactions" },
+      { name: "Payouts", icon: BsFillSendArrowDownFill, path: "/payouts" },
     ];
   } else {
     menuItems = [

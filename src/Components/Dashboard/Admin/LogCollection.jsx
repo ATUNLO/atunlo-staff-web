@@ -1,14 +1,8 @@
-// import { FormGroup, Input, Label } from "reactstrap";
-// import { FiSearch } from "react-icons/fi";
-// import { DatePicker } from "@mui/x-date-pickers";
-// import { FaTrash } from "react-icons/fa";
-// import { materialTypes } from "../../utils/dataset";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-// import { FaSquarePlus } from "react-icons/fa6";
 import { FaPlus, FaDownload, FaCalendarAlt, FaTrash } from "react-icons/fa";
-
+import * as XLSX from "xlsx";
 import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
 import LogCollectionModal from "./LogCollectionModal";
 import { publicRequest } from "../../../requestMehod";
@@ -41,6 +35,42 @@ function LogCollectionAdmin() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleDownload = () => {
+    if (!collections || collections.length === 0) {
+      alert("No data available to download.");
+      return;
+    }
+
+    // Table Headers
+    const headers = [
+      "Agent Name",
+      "Date of Collection",
+      "Prepayment",
+      "Total Due",
+    ];
+
+    // Table Data (Extract and Format)
+    const tableData = collections.map((collection) => [
+      collection.agentName,
+      collection.collectionDate,
+      moneyFormat(collection.prepayment),
+      moneyFormat(collection.totalDue),
+    ]);
+
+    // Combine Headers + Data
+    const finalData = [headers, ...tableData];
+
+    // Convert to worksheet
+    const worksheet = XLSX.utils.aoa_to_sheet(finalData);
+
+    // Create a workbook and append sheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Collections");
+
+    // Save file
+    XLSX.writeFile(workbook, "collections.xlsx");
   };
 
   const getMaterialType = async () => {
@@ -95,7 +125,7 @@ function LogCollectionAdmin() {
             </div>
           </div>
           <div className="flex justify-between  mb-[40px] mt-[20px] w-full">
-            <div className="flex items-center justify-center w-[250px] gap-2 bg-[#EDEDED] py-[16px] px-[10px] text-black text-[16px] rounded-[10px]">
+            <div className="flex items-center justify-center w-[250px] gap-2 bg-[#EDEDED] py-[16px] px-[10px] text-black text-[16px] rounded-[10px] cursor-pointer" onClick={handleDownload}>
               <span className="text-[14px] font-bold">Download Collection</span>
               <FaDownload />
             </div>
@@ -147,7 +177,7 @@ function LogCollectionAdmin() {
                         <p
                           className="underline mb-0 cursor-pointer text-blue-500 hover:text-blue-700"
                           onClick={() =>
-                            navigate(`/log-collection/${collection.id}`)
+                            navigate(`/collections/${collection.id}`)
                           }
                         >
                           View

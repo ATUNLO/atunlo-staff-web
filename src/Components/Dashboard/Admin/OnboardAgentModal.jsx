@@ -221,7 +221,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
       isOpen={logmodal}
       toggle={toggle}
       size="xl"
-      className="!w-full lg:px-[100px] py-[50px]"
+      className="!w-full lg:w-[100%] lg:px-[100px] py-[50px]"
       scrollable
     >
       <ModalBody>

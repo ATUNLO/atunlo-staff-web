@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RiEditFill } from "react-icons/ri";
 import AddStaffModal from "./AddStaffModal";
+import EditStaffModal from "./EditStaffModal";
 
 function StaffManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,13 +24,23 @@ function StaffManagement() {
   const [addStaffmodal, setAddStaffModal] = useState(false);
   const [editStaffmodal, setEditStaffModal] = useState(false);
   const [totalPages1, setTotalPages1] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [staff, setStaffs] = useState([]);
+  const [selectedStaffId, setSelectedStaffId] = useState(null);
   const navigate = useNavigate();
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
 
   const toggleAddStaff = () => {
     setAddStaffModal(!addStaffmodal);
+  };
+
+  const toggleEditStaff = () => {
+    setEditStaffModal(!editStaffmodal);
+  };
+
+  const handleEditStaff = (id) => {
+    setSelectedStaffId(id);
+    toggleEditStaff(); 
   };
 
   const getStaff = async () => {
@@ -58,6 +69,16 @@ function StaffManagement() {
           addStaffmodal={addStaffmodal}
           toggleAddStaff={toggleAddStaff}
           getStaff={getStaff}
+          handleEditStaff={handleEditStaff}
+        />
+      )}
+
+      {editStaffmodal && (
+        <EditStaffModal
+          editStaffmodal={editStaffmodal}
+          toggleEditStaff={toggleEditStaff}
+          getStaff={getStaff}
+          id={selectedStaffId}
         />
       )}
       <div className="px-[30px] py-[40px] w-full">
@@ -81,7 +102,7 @@ function StaffManagement() {
           </div>
           <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
             <>
-              <div className="flex flex-col justify-start lg:justify-end mb-5 gap-3 lg:pr-5">
+              <div className="flex flex-col lg:flex-row justify-start lg:justify-end mb-5 gap-3 lg:pr-5">
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
@@ -124,11 +145,11 @@ function StaffManagement() {
                           {staff.emailaddress}
                         </td>
                         <td className="whitespace-nowrap">
-                          {staff.phoneNumber || "N/A"}
+                          {staff.phone || "N/A"}
                         </td>
                         <td className="whitespace-nowrap">
                           <div className="flex gap-[20px] items-center justify-center">
-                            <RiEditFill />
+                            <RiEditFill   onClick={() => handleEditStaff(staff.id)}/>
                             <FaTrash className="fill-red-600 cursor-pointer" />
                           </div>
                         </td>

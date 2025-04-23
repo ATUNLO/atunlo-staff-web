@@ -256,7 +256,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
         isOpen={logmodal}
         toggle={toggle}
         size="xl"
-        className="w-full lg:px-[100px]"
+        className="w-[100%]"
         scrollable
       >
           <>
@@ -396,7 +396,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection,getCollect
                               e.target.value
                             )
                           }
-                          className="border-solid border-[1px] border-[#E9E9E9] w-full h-[55px] rounded-[10px] bg-white"
+                          className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:!w-[378px] h-[55px] rounded-[10px] bg-white"
                         />
                       </FormGroup>
                     </div>

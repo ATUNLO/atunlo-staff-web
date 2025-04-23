@@ -43,8 +43,12 @@ function AgentManagement() {
     if (!agents || agents.length === 0) return;
   
     const formattedData = agents.map(agent => ({
-      Name: agent.fullName,
-      Location: agent?.state?.name,
+      Name: agent.fullName || "",
+      Location: agent?.state?.name || "",
+      Address: agent.address || "",
+      "Bank Name": agent.bankName || "",
+      "Account Number": agent.accountNumber || "",
+      "Phone Number": agent.phoneNumber || "",
       "Assign To": agent.assignTo || "N/A"
     }));
   
@@ -117,7 +121,7 @@ function AgentManagement() {
             </div>
           </div>
           <div className="flex justify-between  mb-[40px] mt-[20px] w-full">
-            <div className="flex items-center justify-center w-[250px] gap-2 bg-white border-solid border-[1px] border-[#e9e9e9] py-[10px] lg:py-[16px] lg:px-[10px] text-[#50CA00] text-[16px] rounded-[10px]"  onClick={handleDownload}>
+            <div className="flex items-center justify-center w-[250px] gap-2 bg-white border-solid border-[1px] border-[#e9e9e9] py-[10px] lg:py-[16px] lg:px-[10px] text-[#50CA00] text-[16px] rounded-[10px] cursor-pointer"  onClick={handleDownload}>
               <FaDownload />
               <span className="text-[14px] font-bold">
                 Download Agent Details
@@ -136,17 +140,8 @@ function AgentManagement() {
                     placeholder="Search"
                   />
                 </div>
-                <div className="w-[290px] lg:w-[335px]  h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
-                  <FaCalendarAlt size={20} className="text-[#50CA00]" />
-                  <MobileDatePicker
-                    className="w-[200px] text-[14px]"
-                    placeholder="mm/dd/yyyy"
-                  />
-                  <span>-</span>
-                  <MobileDatePicker className="" />
-                </div>
               </div>
-              <div className="overflow-x-scroll">
+              <div className="w-full overflow-x-scroll">
                 {loading ? (
                   <div className="flex justify-center items-center py-10">
                     <Spinner color="success" />
@@ -162,6 +157,18 @@ function AgentManagement() {
                           Location
                         </th>
                         <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                          Address
+                        </th>
+                        <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                          Bank Name
+                        </th>
+                        <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                          Account Number
+                        </th>
+                        <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                          Phone Number
+                        </th>
+                        <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                           Assign To
                         </th>
                         <th className="!text-[#8F8F8F] font-normal whitespace-nowrap"></th>
@@ -175,6 +182,18 @@ function AgentManagement() {
                           </td>
                           <td className="whitespace-nowrap">
                             {agent.state.name}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {agent.address}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {agent.bankName}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {agent.accountNumber}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {agent.phoneNumber}
                           </td>
                           <td className="whitespace-nowrap">
                             {agent.assignTo || "N/A"}
