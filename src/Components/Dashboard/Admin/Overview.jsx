@@ -1,10 +1,9 @@
 import { BarChart, LineChart, PieChart } from "@mui/x-charts";
 import { dataset, dataset2, valueFormatter } from "../../../utils/dataset";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MobileDatePicker } from "@mui/x-date-pickers";
-//import { useSelector } from "react-redux";
+
 
 const names = [
   "John Doe",
@@ -62,6 +61,8 @@ function OverviewAdmin() {
           ? { width: 320, height: 250, margin: { left: 60 } } // mobile/small screen
           : { width: 500, height: 330, margin: { left: 60 } } // desktop/web
       );
+
+     
     };
 
     handleResize(); // initial check
@@ -76,7 +77,7 @@ function OverviewAdmin() {
 
       setChartSetting2(
         isMobile
-          ? { width: 320, height: 250, margin: { left: 60 } } // mobile/small screen
+          ? { width: 420, height: 400, margin: { left: 60 } } // mobile/small screen
           : { width: 600, height: 330, margin: { left: 0 } } // desktop/web
       );
     };
@@ -156,7 +157,7 @@ function OverviewAdmin() {
                           ],
                         },
                       ]}
-                      width={450}
+                      width={350}
                       height={100}
                     />
                   </div>
@@ -164,7 +165,7 @@ function OverviewAdmin() {
               </div>
               <div className="bg-[#E9E9E9] w-[1px]  mb-[53px] hidden lg:block"></div>
             </div>
-            <div className="w-full flex items-center justify-center gap-[60px]">
+            <div className="w-full flex flex-col lg:flex-row mt-5 lg:mt-1 items-center justify-center gap-[60px]">
               <div className="w-[287px] h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] pl-[20px] rounded-[10px]">
                 <h3 className="mb-[26px] text-[18px]">Top 5 Agents</h3>
                 {names.map((name, index) => (
@@ -217,8 +218,8 @@ function OverviewAdmin() {
         <h1 className="text-[20px] font-medium mb-[30px]">
           Retailers Overview
         </h1>
-        <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
-          <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
+        <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[10px] lg:px-[30px] py-[22px] mb-[30px]">
+          <div className="w-full flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
             <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
               <FaCalendarAlt size={20} className="text-[#50CA00]" />
               <MobileDatePicker
@@ -229,10 +230,10 @@ function OverviewAdmin() {
               <MobileDatePicker className="" />
             </div>
           </div>
-          <div className="flex flex-col lg:flex-row">
+          <div className="w-full flex flex-col lg:flex-row">
             <div className="flex gap-[17px]">
               <div className="flex flex-col w-[329px]">
-                <div className="w-[229px]">
+                <div className="w-full lg:w-[229px]">
                   <div className="flex items-center justify-center flex-col">
                     <div className="flex gap-[5px] mb-[30px] items-center">
                       <img
@@ -282,7 +283,7 @@ function OverviewAdmin() {
                           ],
                         },
                       ]}
-                      width={450}
+                      width={350}
                       height={100}
                     />
                   </div>
@@ -290,13 +291,13 @@ function OverviewAdmin() {
               </div>
               <div className="bg-[#E9E9E9] w-[1px]  mb-[53px] hidden lg:block"></div>
             </div>
-            <div className="w-full flex items-center justify-center gap-[60px] ml-[30px]">
+            <div className="w-full flex items-center justify-center gap-[60px] lg:ml-[30px] mt-5">
               <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px]">
                 <h3 className="mb-[26px] text-[18px]">Retail Leaderboard</h3>
                 {names.map((name, index) => (
                   <li
                     key={index}
-                    className="flex justify-between items-center gap-4 p-2 mb-[24px]"
+                    className="w-full flex justify-between items-center gap-4 p-2 mb-[24px]"
                   >
                     <div className="flex gap-3">
                       <img
@@ -325,7 +326,7 @@ function OverviewAdmin() {
             <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
               <FaCalendarAlt size={20} className="text-[#50CA00]" />
               <MobileDatePicker
-                className="w-[200px] text-[14px]"
+                className="w-full lg:w-[200px] text-[14px]"
                 placeholder="mm/dd/yyyy"
               />
               <span>-</span>
@@ -443,8 +444,8 @@ function OverviewAdmin() {
               </div>
               <div className="bg-[#E9E9E9] w-[1px]  mb-[53px] hidden lg:block"></div>
             </div>
-            <div className="w-full flex items-center justify-center gap-[60px] ml-[30px]">
-              <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px] flex items-center ml-[50px]">
+            <div className="w-full flex items-center justify-center gap-[60px] lg:ml-[30px]">
+              <div className="w-[400px] lg:w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px] flex items-center ml-[50px]">
                 <BarChart
                   dataset={dataset2}
                   yAxis={[
@@ -486,7 +487,7 @@ function OverviewAdmin() {
         </div>
       </div>
       <h1 className="text-[20px] font-medium mb-[30px]">Collected Overview</h1>
-      <div className="w-full h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
+      <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
         <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
           <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
             <FaCalendarAlt size={20} className="text-[#50CA00]" />
@@ -498,15 +499,15 @@ function OverviewAdmin() {
             <MobileDatePicker className="" />
           </div>
         </div>
-        <div className="flex w-full items-center justify-between">
+        <div className="flex flex-col lg:flex-row w-full items-center justify-between">
           <div className="flex justify-center items-center lg:ml-10">
             <p className="rotate-[-90deg] h-[20px] text-[14px] font-light text-[#8F8F8F]">
               Materials
             </p>
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center overflow-scroll">
               <LineChart
                 height={300}
-                width={400}
+                width={300}
                 series={[
                   { data: pData, label: "pv" },
                   { data: uData, label: "uv" },
