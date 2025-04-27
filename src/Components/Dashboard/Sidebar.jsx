@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { RiHome5Fill } from "react-icons/ri";
 import { FaSquarePlus } from "react-icons/fa6";
 import { IoBook } from "react-icons/io5";
-import { TbArrowsExchange2 } from "react-icons/tb";
+import { TbArrowsExchange2,TbAutomation } from "react-icons/tb";
 import { BsFillSendArrowDownFill } from "react-icons/bs";
 import { FaTruckMoving } from "react-icons/fa6";
 import { FaUser, FaUserFriends } from "react-icons/fa";
@@ -33,6 +33,7 @@ function Sidebar({toggleSidebar}) {
       { name: "Collection", icon: IoBook, path: "/collections" },
       { name: "Transactions", icon: TbArrowsExchange2, path: "/transactions" },
       { name: "Payouts", icon: BsFillSendArrowDownFill, path: "/payouts" },
+      { name: "Customer Automation", icon: TbAutomation, path: "/customer-automation" },
     ];
   } else {
     menuItems = [

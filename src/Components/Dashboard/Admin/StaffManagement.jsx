@@ -10,7 +10,16 @@ import {
   FaEye,
 } from "react-icons/fa";
 
-import { Modal, ModalBody, Pagination, PaginationItem, PaginationLink, Spinner, Table } from "reactstrap";
+import {
+  Modal,
+  ModalBody,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Spinner,
+  Table,
+} from "reactstrap";
+import Papa from "papaparse";
 import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -48,7 +57,7 @@ function StaffManagement() {
 
   const handleEditStaff = (id) => {
     setSelectedStaffId(id);
-    toggleEditStaff(); 
+    toggleEditStaff();
   };
 
   const getStaff = async () => {
@@ -74,7 +83,7 @@ function StaffManagement() {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       if (response?.status === 200) {
         toast.success(response?.data?.message || "Staff deleted successfully.");
         toggleDeleteStaff(); // close the modal
@@ -83,12 +92,58 @@ function StaffManagement() {
         toast.error("Failed to delete staff. Please try again.");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "An error occurred while deleting.");
+      toast.error(
+        error.response?.data?.message || "An error occurred while deleting."
+      );
     } finally {
       setLoading(false);
     }
   };
-  
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    Papa.parse(file, {
+      header: true, // Tells PapaParse to read headers from CSV
+      skipEmptyLines: true,
+      complete: async function (results) {
+        console.log("Parsed Result:", results.data);
+
+        // Now call the API
+        await addMultipleStaff(results.data);
+      },
+    });
+  };
+
+  const addMultipleStaff = async (staffList) => {
+    setLoading(true);
+
+    try {
+      // Loop through and send one-by-one
+      for (const staff of staffList) {
+        const payload = {
+          emailaddress: staff.emailaddress,
+          name: staff.name,
+          phone: staff.phone,
+        };
+
+        await publicRequest.post("/admin/add/staff", payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+
+      toast.success("All staff added successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.response?.data?.message || "Failed to add staff.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getStaff();
   }, []);
@@ -114,7 +169,7 @@ function StaffManagement() {
       )}
 
       {deleteStaffmodal && (
-          <Modal
+        <Modal
           isOpen={deleteStaffmodal}
           toggle={toggleDeleteStaff}
           size="md"
@@ -132,9 +187,9 @@ function StaffManagement() {
                 />
               </div>
               <div className="flex flex-col lg:flex-row items-start justify-start gap-[50px] mt-[30px] mx-auto">
-                
-               <h3 className="text-center">Are you sure you want to delete this Staff and thier details?</h3>
-     
+                <h3 className="text-center">
+                  Are you sure you want to delete this Staff and thier details?
+                </h3>
               </div>
               <div className="flex items-center justify-center gap-5">
                 <div
@@ -150,7 +205,7 @@ function StaffManagement() {
                   onClick={() => toggleDeleteStaff()}
                 >
                   <p className="mb-0 text-black font-semibold text-[16px] cursor-pointer">
-                   Keep Staff
+                    Keep Staff
                   </p>
                 </div>
               </div>
@@ -165,8 +220,18 @@ function StaffManagement() {
               Staff Management
             </h1>
             <div className="flex flex-col lg:flex-row gap-[30px] mb-[20px]">
-              <div className="flex  items-center justify-center gap-2 bg-white py-[16px] px-[20px] text-black text-[16px] rounded-[10px] cursor-pointer border-[1px] border-solid border-black">
-                <span>Add Multiple Staff (CSV)</span>
+              <div className="relative">
+                <label className="flex items-center justify-center gap-2 bg-white py-[16px] px-[20px] text-black text-[16px] rounded-[10px] cursor-pointer border-[1px] border-solid border-black">
+                  <span>
+                    {loading ? "Uploading..." : "Add Multiple Staff (CSV)"}
+                  </span>
+                  <input
+                    type="file"
+                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </label>
               </div>
               <div
                 className="flex items-center justify-center gap-2 bg-[#50CA00] py-[16px] px-[20px] text-white text-[16px] rounded-[10px] cursor-pointer"
@@ -226,8 +291,13 @@ function StaffManagement() {
                         </td>
                         <td className="whitespace-nowrap">
                           <div className="flex gap-[20px] items-center justify-center">
-                            <RiEditFill   onClick={() => handleEditStaff(staff.id)}/>
-                            <FaTrash className="fill-red-600 cursor-pointer"  onClick={() => toggleDeleteStaff(staff.id)}/>
+                            <RiEditFill
+                              onClick={() => handleEditStaff(staff.id)}
+                            />
+                            <FaTrash
+                              className="fill-red-600 cursor-pointer"
+                              onClick={() => toggleDeleteStaff(staff.id)}
+                            />
                           </div>
                         </td>
                       </tr>
