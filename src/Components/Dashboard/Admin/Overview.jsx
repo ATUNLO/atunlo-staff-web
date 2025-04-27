@@ -335,7 +335,7 @@ function OverviewAdmin() {
           </div>
           <div className="flex flex-col lg:flex-row">
             <div className="flex gap-[17px]">
-              <div className="flex flex-col w-[329px]">
+              <div className="flex flex-col w-full lg:w-[329px]">
                 <div className="w-[229px]">
                   <div className="flex items-center justify-center flex-col">
                     <div className="flex gap-[5px] mb-[30px] items-center">
@@ -357,8 +357,8 @@ function OverviewAdmin() {
               </div>
               <div className="bg-[#E9E9E9] w-[1px]  mb-[53px] hidden lg:block"></div>
             </div>
-            <div className="w-full flex items-center justify-center gap-[60px] ml-[30px]">
-              <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px] flex items-center ml-[50px]">
+            <div className="w-full flex items-center justify-center gap-[60px] lg:ml-[30px]">
+              <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px] flex items-center lg:ml-[50px]">
                 <BarChart
                   dataset={dataset2}
                   xAxis={[

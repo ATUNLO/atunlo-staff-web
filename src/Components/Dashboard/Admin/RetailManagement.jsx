@@ -5,11 +5,13 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
 import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function RetailManagement() {
   const [retailers, SetRetailers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages1, setTotalPages1] = useState("");
+  const navigate = useNavigate();
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
 
   const getRetailers = async () => {
@@ -80,7 +82,7 @@ function RetailManagement() {
                     <td>{retailers.emailaddress}</td>
                     <td>{retailers.userStatus}</td>
                     <td>
-                      <span className="w-[92px] h-[36px] bg-[#50CA00] text-white py-[7px] px-[30px] rounded-[10px]">
+                      <span className="w-[92px] h-[36px] bg-[#50CA00] text-white py-[7px] px-[30px] rounded-[10px]" onClick={() => navigate(`/retail-management/${retailers.id}`)}>
                         View
                       </span>
                     </td>

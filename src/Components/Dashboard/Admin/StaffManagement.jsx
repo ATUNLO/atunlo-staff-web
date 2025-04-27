@@ -10,19 +10,22 @@ import {
   FaEye,
 } from "react-icons/fa";
 
-import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
+import { Modal, ModalBody, Pagination, PaginationItem, PaginationLink, Spinner, Table } from "reactstrap";
 import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RiEditFill } from "react-icons/ri";
 import AddStaffModal from "./AddStaffModal";
 import EditStaffModal from "./EditStaffModal";
+import { IoMdCloseCircle } from "react-icons/io";
+import { toast } from "react-toastify";
 
 function StaffManagement() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [addStaffmodal, setAddStaffModal] = useState(false);
   const [editStaffmodal, setEditStaffModal] = useState(false);
+  const [deleteStaffmodal, setDeleteStaffModal] = useState(false);
   const [totalPages1, setTotalPages1] = useState("");
   const [loading, setLoading] = useState(false);
   const [staff, setStaffs] = useState([]);
@@ -36,6 +39,11 @@ function StaffManagement() {
 
   const toggleEditStaff = () => {
     setEditStaffModal(!editStaffmodal);
+  };
+
+  const toggleDeleteStaff = (id) => {
+    setDeleteStaffModal(!deleteStaffmodal);
+    setSelectedStaffId(id);
   };
 
   const handleEditStaff = (id) => {
@@ -58,6 +66,29 @@ function StaffManagement() {
     }
   };
 
+  const deleteStaff = async (id) => {
+    setLoading(true);
+    try {
+      const response = await publicRequest.delete(`/admin/delete/staff/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response?.status === 200) {
+        toast.success(response?.data?.message || "Staff deleted successfully.");
+        toggleDeleteStaff(); // close the modal
+        getStaff(); // refresh the staff list
+      } else {
+        toast.error("Failed to delete staff. Please try again.");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "An error occurred while deleting.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
     getStaff();
   }, []);
@@ -80,6 +111,52 @@ function StaffManagement() {
           getStaff={getStaff}
           id={selectedStaffId}
         />
+      )}
+
+      {deleteStaffmodal && (
+          <Modal
+          isOpen={deleteStaffmodal}
+          toggle={toggleDeleteStaff}
+          size="md"
+          className="w-full lg:py-[50px]"
+          scrollable
+        >
+          <ModalBody className="flex flex-col items-center justify-center">
+            <>
+              <div className="flex items-center justify-center relative pt-[50px] lg:mb-[70px] w-full px-10">
+                <span className="text-[30px]">Delete Staff</span>
+                <IoMdCloseCircle
+                  size={20}
+                  className="absolute lg:right-20 right-5"
+                  onClick={() => toggleDeleteStaff()}
+                />
+              </div>
+              <div className="flex flex-col lg:flex-row items-start justify-start gap-[50px] mt-[30px] mx-auto">
+                
+               <h3 className="text-center">Are you sure you want to delete this Staff and thier details?</h3>
+     
+              </div>
+              <div className="flex items-center justify-center gap-5">
+                <div
+                  className="w-[150px] !h-[55px] bg-[#50c100] flex items-center justify-center rounded-md mt-[70px] mb-[50px]"
+                  onClick={() => deleteStaff(selectedStaffId)}
+                >
+                  <p className="mb-0 text-white font-semibold text-[16px] cursor-pointer">
+                    {loading ? <Spinner /> : "Delete Staff"}
+                  </p>
+                </div>
+                <div
+                  className="w-[150px] !h-[55px] bg-white border-[1px] border-solid border-[#50c100] text-black flex items-center justify-center rounded-md mt-[70px] mb-[50px]"
+                  onClick={() => toggleDeleteStaff()}
+                >
+                  <p className="mb-0 text-black font-semibold text-[16px] cursor-pointer">
+                   Keep Staff
+                  </p>
+                </div>
+              </div>
+            </>
+          </ModalBody>
+        </Modal>
       )}
       <div className="px-[30px] py-[40px] w-full">
         <div className="flex flex-col">
@@ -150,7 +227,7 @@ function StaffManagement() {
                         <td className="whitespace-nowrap">
                           <div className="flex gap-[20px] items-center justify-center">
                             <RiEditFill   onClick={() => handleEditStaff(staff.id)}/>
-                            <FaTrash className="fill-red-600 cursor-pointer" />
+                            <FaTrash className="fill-red-600 cursor-pointer"  onClick={() => toggleDeleteStaff(staff.id)}/>
                           </div>
                         </td>
                       </tr>
