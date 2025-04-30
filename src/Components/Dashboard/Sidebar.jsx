@@ -52,7 +52,7 @@ function Sidebar({toggleSidebar}) {
       </div>
       <div className="w-[220px] h-full lg:border-solid lg:border-[1px] lg:border-[#E9E9E9] flex flex-col gap-[40px] items-start pt-[40px] pl-[26px]">
         {menuItems.map((item) => {
-          const isSelected = location.pathname === item.path; // Check if the current path matches
+          const isSelected = location.pathname === item.path; 
 
           return (
             <div
