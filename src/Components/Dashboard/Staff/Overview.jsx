@@ -3,10 +3,36 @@ import { dataset, dataset2, valueFormatter } from "../../../utils/dataset";
 import { useSelector } from "react-redux";
 //import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { publicRequest } from "../../../requestMehod";
 
 
 
 function Overview() {
+  const token = useSelector((state) => state?.user?.currentUser?.data.token);
+  const [overviewData, setOverviewData] = useState([]);
+
+  const getOverviewData = async () => {
+    try {
+      const response = await publicRequest.get(
+        `/admin/dashboard/overview`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const data = response?.data?.data?.result;
+      setOverviewData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getOverviewData();
+  }, []);
+
+
+  console.log(overviewData)
   // const user = useSelector((state) => state?.user?.currentUser.data);
   const balance = useSelector((state) => state?.user?.currentUser?.data.balance);
   const [chartSetting, setChartSetting] = useState({

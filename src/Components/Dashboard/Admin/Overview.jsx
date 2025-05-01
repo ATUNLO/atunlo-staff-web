@@ -3,7 +3,8 @@ import { dataset, dataset2, valueFormatter } from "../../../utils/dataset";
 import { useEffect, useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MobileDatePicker } from "@mui/x-date-pickers";
-
+import { publicRequest } from "../../../requestMehod";
+import { useSelector } from "react-redux";
 
 const names = [
   "John Doe",
@@ -32,14 +33,20 @@ const bottomIcons = [
 const margin = { right: 24 };
 const uData = [4000, 3000, 2000, 2780];
 const pData = [2400, 1398, 9800, 3908];
-const xLabels = [
-  "Sept",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+const xLabels = ["Sept", "Oct", "Nov", "Dec"];
 
 function OverviewAdmin() {
+  const moneyFormat = (value) => {
+    if (value === "" || value === null || value === undefined) return "";
+
+    // Ensure it's a valid number before formatting
+    const number = Number(value);
+    if (isNaN(number)) return "₦0"; // Prevent NaN issues
+
+    return `₦${number.toLocaleString("en-US")}`;
+  };
+ 
+ 
   const [chartSetting, setChartSetting] = useState({
     width: 500,
     height: 330,
@@ -52,6 +59,29 @@ function OverviewAdmin() {
     margin: { left: 120 },
   });
 
+  const token = useSelector((state) => state?.user?.currentUser?.data.token);
+  const [overviewData, setOverviewData] = useState([]);
+
+
+  const getOverviewData = async () => {
+    try {
+      const response = await publicRequest.get(`/admin/dashboard/overview`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = response?.data?.data;
+      setOverviewData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(overviewData);
+
+  useEffect(() => {
+    getOverviewData();
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       const isMobile = window.innerWidth < 1024; // Tailwind's lg breakpoint
@@ -61,8 +91,6 @@ function OverviewAdmin() {
           ? { width: 320, height: 250, margin: { left: 60 } } // mobile/small screen
           : { width: 500, height: 330, margin: { left: 60 } } // desktop/web
       );
-
-     
     };
 
     handleResize(); // initial check
@@ -88,6 +116,9 @@ function OverviewAdmin() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const monthlyData = overviewData[8] || [];
+  const monthName = monthlyData.map((item) => item.monthName); 
+  const totalPrices = monthlyData.map((item) => parseFloat(item.totalPrice));
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
@@ -120,8 +151,9 @@ function OverviewAdmin() {
                       </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
-                      150
+                      {overviewData[2]?.[0]?.totalAgents}
                     </h2>
+
                     <div className="bg-[#E9E9E9] w-full h-[1px] mb-[53px]"></div>
                   </div>
                 </div>
@@ -137,29 +169,26 @@ function OverviewAdmin() {
                         Active vs Inactive Agents
                       </p>
                     </div>
-                    <PieChart
-                      colors={["#50CA00", "#FF9500"]}
-                      series={[
-                        {
-                          data: [
-                            {
-                              id: 0,
-                              value: 700,
-                              label: "Active Agents",
-                              color: "#50CA00",
-                            },
-                            {
-                              id: 1,
-                              value: 120,
-                              label: "Inactive Agents",
-                              color: "#FF9500",
-                            },
-                          ],
-                        },
-                      ]}
-                      width={350}
-                      height={100}
-                    />
+                    {overviewData[3] && Array.isArray(overviewData[3]) && (
+                      <PieChart
+                        colors={["#50CA00", "#FF9500"]}
+                        series={[
+                          {
+                            data: overviewData[3].map((item, index) => ({
+                              id: index,
+                              value: item.agentCount,
+                              label: `${item.agentStatus} Agents`,
+                              color:
+                                item.agentStatus === "Active"
+                                  ? "#50CA00"
+                                  : "#FF9500",
+                            })),
+                          },
+                        ]}
+                        width={350}
+                        height={100}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -168,7 +197,7 @@ function OverviewAdmin() {
             <div className="w-full flex flex-col lg:flex-row mt-5 lg:mt-1 items-center justify-center gap-[60px]">
               <div className="w-[287px] h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] pl-[20px] rounded-[10px]">
                 <h3 className="mb-[26px] text-[18px]">Top 5 Agents</h3>
-                {names.map((name, index) => (
+                {overviewData[0]?.map((agent, index) => (
                   <li
                     key={index}
                     className="flex items-center gap-4 p-2 mb-[24px]"
@@ -184,13 +213,15 @@ function OverviewAdmin() {
                         {index + 1}
                       </span>
                     )}
-                    <span className="text-gray-800 font-medium">{name}</span>
+                    <span className="text-gray-800 font-medium">
+                      {agent.agentName}
+                    </span>
                   </li>
                 ))}
               </div>
               <div className="w-[287px] h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] pl-[20px] rounded-[10px]">
                 <h3 className="mb-[26px] text-[18px]">Bottom 5 Agents</h3>
-                {names.map((name, index) => (
+                {overviewData[1]?.map((agent, index) => (
                   <li
                     key={index}
                     className="flex items-center gap-4 p-2 mb-[24px]"
@@ -206,7 +237,9 @@ function OverviewAdmin() {
                         {index + 1}
                       </span>
                     )}
-                    <span className="text-gray-800 font-medium">{name}</span>
+                    <span className="text-gray-800 font-medium">
+                      {agent.agentName}
+                    </span>
                   </li>
                 ))}
               </div>
@@ -246,7 +279,7 @@ function OverviewAdmin() {
                       </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
-                      150
+                      {overviewData[5]?.[0]?.totalRetailUsers}
                     </h2>
                     <div className="bg-[#E9E9E9] w-full h-[1px] mb-[53px]"></div>
                   </div>
@@ -294,7 +327,7 @@ function OverviewAdmin() {
             <div className="w-full flex items-center justify-center gap-[60px] lg:ml-[30px] mt-5">
               <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px]">
                 <h3 className="mb-[26px] text-[18px]">Retail Leaderboard</h3>
-                {names.map((name, index) => (
+                {overviewData[4]?.map((agent, index) => (
                   <li
                     key={index}
                     className="w-full flex justify-between items-center gap-4 p-2 mb-[24px]"
@@ -305,10 +338,12 @@ function OverviewAdmin() {
                         alt="medal"
                         className="w-6 h-6 object-contain"
                       />
-                      <span className="text-gray-800 font-medium">{name}</span>
+                      <span className="text-gray-800 font-medium">
+                        {agent.name}
+                      </span>
                     </div>
                     <span className="text-gray-500 font-semibold bg-[#E1E1E1] rounded-[5px] py-[2px] px-[8px]">
-                      120 kg
+                      {agent.totalQuantity}
                     </span>
                   </li>
                 ))}
@@ -432,11 +467,11 @@ function OverviewAdmin() {
                         className="w-[20px] h-[20px]"
                       />
                       <p className="text-[14px] font-normal mb-0">
-                        Total Disbursement
+                        Total Payout
                       </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
-                      1.5m
+                      {moneyFormat(overviewData[6]?.[0]?.totalPayouts)}
                     </h2>
                     <div className="bg-[#E9E9E9] w-full h-[1px] mb-[53px]"></div>
                   </div>
@@ -508,11 +543,8 @@ function OverviewAdmin() {
               <LineChart
                 height={300}
                 width={300}
-                series={[
-                  { data: pData, label: "pv" },
-                  { data: uData, label: "uv" },
-                ]}
-                xAxis={[{ scaleType: "point", data: xLabels }]}
+                series={[{ data: totalPrices, label: "Total Price (₦)" }]}
+                xAxis={[{ scaleType: "point", data: monthName }]}
                 yAxis={[{ width: 50 }]}
                 margin={margin}
               />
