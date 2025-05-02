@@ -5,23 +5,19 @@ import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { publicRequest } from "../../../requestMehod";
 
-
-
 function Overview() {
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   const [overviewData, setOverviewData] = useState([]);
 
   const getOverviewData = async () => {
     try {
-      const response = await publicRequest.get(
-        `/admin/dashboard/overview`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await publicRequest.get(`/admin/dashboard/overview`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-      const data = response?.data?.data?.result;
+      const data = response?.data?.data;
       setOverviewData(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -31,15 +27,31 @@ function Overview() {
     getOverviewData();
   }, []);
 
-
-  console.log(overviewData)
+  console.log(overviewData);
   // const user = useSelector((state) => state?.user?.currentUser.data);
-  const balance = useSelector((state) => state?.user?.currentUser?.data.balance);
+  const balance = useSelector(
+    (state) => state?.user?.currentUser?.data.balance
+  );
   const [chartSetting, setChartSetting] = useState({
     width: 500,
     height: 330,
     margin: { left: 120 },
   });
+
+  const topAgentsRaw = overviewData[0]; // Assuming top agents array is here
+  const bottomAgentsRaw = overviewData[1]; // Assuming bottom agents array is here
+
+  const topThree = topAgentsRaw.slice(0, 3).map((agent) => ({
+    name: agent.agentName,
+    amount: Number(agent.totalKg),
+  }));
+
+  const bottomThree = bottomAgentsRaw.slice(0, 3).map((agent) => ({
+    name: agent.agentName,
+    amount: Number(agent.totalKg),
+  }));
+
+  const dataset = [...topThree, ...bottomThree];
 
   useEffect(() => {
     const handleResize = () => {
@@ -58,8 +70,6 @@ function Overview() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
-
   const moneyFormat = (value) => {
     if (!value) return "";
     const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
@@ -70,8 +80,12 @@ function Overview() {
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
         <div className="mb-10 w-full lg:max-w-[500px]">
-          <h2 className="mb-2 lg:mb-4 text-[14px] lg:text-[22px]">Staff Balance</h2>
-          <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[22px] lg:text-[40px] px-[20px] py-[15px] rounded-[10px] flex items-center justify-center">{moneyFormat(balance)}</span>
+          <h2 className="mb-2 lg:mb-4 text-[14px] lg:text-[22px]">
+            Staff Balance
+          </h2>
+          <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[22px] lg:text-[40px] px-[20px] py-[15px] rounded-[10px] flex items-center justify-center">
+            {moneyFormat(balance)}
+          </span>
         </div>
         <h1 className="text-[20px] font-medium mb-[30px]">Agents Overview</h1>
         <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
@@ -92,7 +106,7 @@ function Overview() {
                       </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
-                      150
+                      {overviewData[2]?.[0]?.totalAgents}
                     </h2>
                     <div className="bg-[#E9E9E9] w-full h-[1px] mb-[53px]"></div>
                   </div>
@@ -110,7 +124,7 @@ function Overview() {
                       </p>
                     </div>
                     <h2 className="text-[50px] text-[#50CA00] mb-[53px]">
-                      150
+                      {overviewData[3]?.[0]?.agentCount}
                     </h2>
                   </div>
                 </div>
@@ -189,7 +203,6 @@ function Overview() {
       </div>
       <h1 className="text-[20px] font-medium mb-[30px]">Collection Overview</h1>
       <div className="w-full h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
-        <div className="flex justify-end">Search and Calendar</div>
         <div className="flex justify-center items-center lg:ml-10">
           <p className="rotate-[-90deg] h-[20px] text-[14px] font-light text-[#8F8F8F]">
             Materials

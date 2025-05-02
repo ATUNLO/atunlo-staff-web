@@ -205,7 +205,6 @@ function AgentManagement() {
                                   navigate(`/agent-management/${agent.id}`)
                                 }
                               />
-                              <RiEditFill />
                               <FaTrash className="fill-red-600 cursor-pointer" />
                             </div>
                           </td>

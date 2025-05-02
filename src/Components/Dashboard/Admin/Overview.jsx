@@ -124,17 +124,6 @@ function OverviewAdmin() {
       <div className="flex flex-col">
         <h1 className="text-[20px] font-medium mb-[30px]">Agents Overview</h1>
         <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
-          <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
-            <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
-              <FaCalendarAlt size={20} className="text-[#50CA00]" />
-              <MobileDatePicker
-                className="w-[200px] text-[14px]"
-                placeholder="mm/dd/yyyy"
-              />
-              <span>-</span>
-              <MobileDatePicker className="" />
-            </div>
-          </div>
           <div className="flex flex-col lg:flex-row">
             <div className="flex gap-[17px]">
               <div className="flex flex-col w-[329px]">
@@ -252,17 +241,6 @@ function OverviewAdmin() {
           Retailers Overview
         </h1>
         <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[10px] lg:px-[30px] py-[22px] mb-[30px]">
-          <div className="w-full flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
-            <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
-              <FaCalendarAlt size={20} className="text-[#50CA00]" />
-              <MobileDatePicker
-                className="w-[200px] text-[14px]"
-                placeholder="mm/dd/yyyy"
-              />
-              <span>-</span>
-              <MobileDatePicker className="" />
-            </div>
-          </div>
           <div className="w-full flex flex-col lg:flex-row">
             <div className="flex gap-[17px]">
               <div className="flex flex-col w-[329px]">
@@ -327,7 +305,7 @@ function OverviewAdmin() {
             <div className="w-full flex items-center justify-center gap-[60px] lg:ml-[30px] mt-5">
               <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] py-[14px] px-[20px] rounded-[10px]">
                 <h3 className="mb-[26px] text-[18px]">Retail Leaderboard</h3>
-                {overviewData[4]?.map((agent, index) => (
+                {overviewData[4]?.slice(0, 5)?.map((agent, index) => (
                   <li
                     key={index}
                     className="w-full flex justify-between items-center gap-4 p-2 mb-[24px]"
@@ -357,17 +335,6 @@ function OverviewAdmin() {
           Disbursements Overview
         </h1>
         <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
-          <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
-            <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
-              <FaCalendarAlt size={20} className="text-[#50CA00]" />
-              <MobileDatePicker
-                className="w-full lg:w-[200px] text-[14px]"
-                placeholder="mm/dd/yyyy"
-              />
-              <span>-</span>
-              <MobileDatePicker className="" />
-            </div>
-          </div>
           <div className="flex flex-col lg:flex-row">
             <div className="flex gap-[17px]">
               <div className="flex flex-col w-full lg:w-[329px]">
@@ -523,7 +490,7 @@ function OverviewAdmin() {
       </div>
       <h1 className="text-[20px] font-medium mb-[30px]">Collected Overview</h1>
       <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
-        <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
+        {/* <div className="flex flex-col lg:flex-row justify-end mb-5 gap-3 pr-5">
           <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
             <FaCalendarAlt size={20} className="text-[#50CA00]" />
             <MobileDatePicker
@@ -533,11 +500,11 @@ function OverviewAdmin() {
             <span>-</span>
             <MobileDatePicker className="" />
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-col lg:flex-row w-full items-center justify-between">
-          <div className="flex justify-center items-center lg:ml-10">
+          <div className="flex justify-center items-center lg:ml-0 overflow-hidden">
             <p className="rotate-[-90deg] h-[20px] text-[14px] font-light text-[#8F8F8F]">
-              Materials
+              Amount
             </p>
             <div className="flex flex-col items-center justify-center overflow-scroll">
               <LineChart
