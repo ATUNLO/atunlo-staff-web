@@ -41,12 +41,12 @@ function Overview() {
   const topAgentsRaw = overviewData[0]; // Assuming top agents array is here
   const bottomAgentsRaw = overviewData[1]; // Assuming bottom agents array is here
 
-  const topThree = topAgentsRaw.slice(0, 3).map((agent) => ({
+  const topThree = topAgentsRaw?.slice(0, 3).map((agent) => ({
     name: agent.agentName,
     amount: Number(agent.totalKg),
   }));
 
-  const bottomThree = bottomAgentsRaw.slice(0, 3).map((agent) => ({
+  const bottomThree = bottomAgentsRaw?.slice(0, 3).map((agent) => ({
     name: agent.agentName,
     amount: Number(agent.totalKg),
   }));
