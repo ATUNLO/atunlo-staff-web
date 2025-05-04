@@ -354,7 +354,7 @@ function OnboardAgentModal({ logmodal, toggle, token, getAgents }) {
                       id="AccountNumber"
                       name="AccountNumber"
                       placeholder=""
-                      type="text"
+                      type="number"
                       value={accountNumber}
                       className="border-solid border-[1px] border-[#E9E9E9] !w-[310px] lg:w-[390px] h-[55px] rounded-[10px]"
                       onChange={(e) => setAccountNumber(e.target.value)}

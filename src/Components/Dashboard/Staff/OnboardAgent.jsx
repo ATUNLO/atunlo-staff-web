@@ -332,7 +332,7 @@ function OnboardAgent() {
                     id="AccountNumber"
                     name="AccountNumber"
                     placeholder=""
-                    type="text"
+                    type="number"
                     value={accountNumber}
                     className="border-solid border-[1px] border-[#E9E9E9] !w-[320px] lg:w-[428px] h-[55px] rounded-[10px]"
                     onChange={(e) => setAccountNumber(e.target.value)}

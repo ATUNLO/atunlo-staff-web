@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginStaff, loginAdmin } from "../../Redux/apiCalls";
+import { LogOut } from "../../Redux/LoginSlice";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 
@@ -19,7 +20,7 @@ function SignIn() {
   console.log(isAdmin)
 
   const user = useSelector((state) => state?.user);
-  const changedPassword = user?.currentUser?.data?.isPasswordSet;
+  const changedPassword = user?.currentUser?.data?.isPasswordSet ?? false;
   const { success } = user;
 
   const handleToggle = () => {
@@ -28,6 +29,7 @@ function SignIn() {
 
   useEffect(() => {
     if (location.pathname === "/") {
+      dispatch(LogOut())
       localStorage.clear();
     }
   }, [location.pathname]);
@@ -77,6 +79,8 @@ function SignIn() {
     }
   }
   }, [navigate, success, changedPassword, isAdmin]);
+
+  console.log(success,changedPassword)
   return (
     <div className="w-full flex flex-col items-center justify-center py-10">
       <img src="/assets/logo.png" className="mt-[40px]" />
