@@ -4,10 +4,8 @@ import { CiSearch } from "react-icons/ci";
 // import { FaSquarePlus } from "react-icons/fa6";
 import {
   FaPlus,
-  FaDownload,
   FaCalendarAlt,
   FaTrash,
-  FaEye,
 } from "react-icons/fa";
 
 import {
@@ -31,7 +29,7 @@ import { toast } from "react-toastify";
 
 function StaffManagement() {
   const [currentPage, setCurrentPage] = useState(1);
-
+  const pageSize = 500;
   const [addStaffmodal, setAddStaffModal] = useState(false);
   const [editStaffmodal, setEditStaffModal] = useState(false);
   const [deleteStaffmodal, setDeleteStaffModal] = useState(false);
@@ -62,9 +60,12 @@ function StaffManagement() {
 
   const getStaff = async () => {
     try {
-      const response = await publicRequest.get(`/admin/list/staff?type=staff`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await publicRequest.get(
+        `/admin/list/staff?type=staff&page=${currentPage}&size=${pageSize}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       const data = response.data?.data?.result;
       setStaffs(data);
@@ -146,7 +147,7 @@ function StaffManagement() {
 
   useEffect(() => {
     getStaff();
-  }, []);
+  }, [currentPage]);
 
   return (
     <>
