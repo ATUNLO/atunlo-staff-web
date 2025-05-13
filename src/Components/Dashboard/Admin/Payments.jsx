@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 //import Table from "@mui/material/Table";
-import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
+import { Pagination, PaginationItem, PaginationLink, Spinner, Table } from "reactstrap";
 import { CiSearch } from "react-icons/ci";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MobileDatePicker } from "@mui/x-date-pickers";
@@ -12,9 +12,11 @@ function PaymentsAdmin() {
   const [totalPages1, setTotalPages1] = useState("");
   const [transactions, setTransactions] = useState([]);
   const [reference, setReference] = useState("");
+  const [loading, setLoading] = useState(false)
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   
   const getTransactions = async (ref) => {
+    setLoading(true)
     try {
       const params = {};
       if (ref) {
@@ -29,9 +31,11 @@ function PaymentsAdmin() {
       const data = response.data?.data?.result;
       setTransactions(data);
       setTotalPages1(response?.data?.data);
+      setLoading(false)
       console.log(data);
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -88,6 +92,11 @@ function PaymentsAdmin() {
             </div> */}
           </div>
           <div className="w-[100%] overflow-x-auto">
+          {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
             <Table striped>
               <thead>
                 <tr className="!text-[#8F8F8F]">
@@ -163,6 +172,7 @@ function PaymentsAdmin() {
                 ))}
               </tbody>
             </Table>
+                )}
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
             <p>

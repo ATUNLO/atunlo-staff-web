@@ -2,7 +2,7 @@ import { MobileDatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaCalendarAlt } from "react-icons/fa";
-import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
+import { Pagination, PaginationItem, PaginationLink, Spinner, Table } from "reactstrap";
 import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -13,11 +13,13 @@ function PickupsAdmin() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pickups, setPickups] = useState([]);
   const [assignToMe, setAssignToMe] = useState("");
+  const [loading, setLoading] = useState(false)
   const [pickupsCompleted, setPickupsCompleted] = useState([]);
   const [totalPages1, setTotalPages1] = useState("");
   const [totalPages2, setTotalPages2] = useState("");
 
   const getPickUps = async () => {
+    setLoading(true)
     try {
       const response = await publicRequest.get(
         `/admin_staff/get-pickups?status=initiated_pending`,
@@ -30,8 +32,10 @@ function PickupsAdmin() {
       setPickups(data);
       setTotalPages1(response?.data?.data);
       console.log(totalPages1);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -133,6 +137,11 @@ function PickupsAdmin() {
                 </div>
               </div>
               <div className="overflow-scroll">
+              {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
                 <Table striped>
                   <thead>
                     <tr>
@@ -184,6 +193,7 @@ function PickupsAdmin() {
                     ))}
                   </tbody>
                 </Table>
+                )}
               </div>
               <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
@@ -281,6 +291,11 @@ function PickupsAdmin() {
                   <MobileDatePicker className="" />
                 </div>
               </div>
+              {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
               <Table striped>
                 <thead>
                   <tr>
@@ -323,6 +338,7 @@ function PickupsAdmin() {
                   ))}
                 </tbody>
               </Table>
+                )}
               {totalPages2?.totalItems > 0 && (
                 <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                   <p>

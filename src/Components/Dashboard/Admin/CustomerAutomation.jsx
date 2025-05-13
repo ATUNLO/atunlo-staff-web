@@ -28,6 +28,7 @@ function CustomerAutomation() {
   };
 
   const getAutomatedCustomers = async () => {
+    setLoading(true)
     try {
       const response = await publicRequest.get(
         `/admin/get/automated-customers`,
@@ -39,10 +40,12 @@ function CustomerAutomation() {
       const data = response.data?.data?.result;
       setAutomatedStaff(data);
       console.log(data)
+      setLoading(false)
       setTotalPages1(response?.data?.data);
       console.log(data);
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -223,6 +226,11 @@ function CustomerAutomation() {
         <div className="w-full h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           <>
             <div className="overflow-scroll">
+            {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
               <Table striped>
                 <thead>
                   <tr>
@@ -271,6 +279,7 @@ function CustomerAutomation() {
                   )}
                 </tbody>
               </Table>
+                )}
             </div>
             {automatedStaff.length > 0 && (
               <div className="flex flex-col lg:flex-row items-center justify-between pl-5">

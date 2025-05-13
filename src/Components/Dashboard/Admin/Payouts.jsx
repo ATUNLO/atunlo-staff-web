@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 //import Table from "@mui/material/Table";
-import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
+import {
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Spinner,
+  Table,
+} from "reactstrap";
 import { CiSearch } from "react-icons/ci";
 import { FaCalendarAlt } from "react-icons/fa";
 import { MobileDatePicker } from "@mui/x-date-pickers";
@@ -191,75 +197,80 @@ function PayoutsAdmin() {
           {payoutType === "Pending" && (
             <>
               <div className="w-[100%] overflow-scroll">
-                <Table striped>
-                  <thead>
-                    <tr className="!text-[#8F8F8F]">
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Recipient
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Reference
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Account Number
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Bank
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Account Number
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Amount
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Transaction Date
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Remarks
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Status
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactions?.map((payment, index) => (
-                      <tr key={index}>
-                        <td className="whitespace-nowrap">
-                          {payment.AccountName}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.reference}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.AccountNumber}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.recipientBank || "N/A"}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.AccountNumber || "N/A"}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {moneyFormat(payment.Amount) || "N/A"}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {formatDateTime(payment.createdAt) || "N/A"}
-                        </td>
-                        <td
-                          className="whitespace-nowrap"
-                          title={payment.remarks}
-                        >
-                          {payment.remarks
-                            ? payment.remarks.length > 20
-                              ? `${payment.remarks.slice(0, 20)}...`
-                              : payment.remarks
-                            : "N/A"}
-                        </td>
-                        <td
-                          className={`
+                {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
+                  <Table striped>
+                    <thead>
+                      <tr className="!text-[#8F8F8F]">
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Recipient
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Reference
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Account Number
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Bank
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Account Number
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Amount
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Transaction Date
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Remarks
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Status
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {transactions?.map((payment, index) => (
+                        <tr key={index}>
+                          <td className="whitespace-nowrap">
+                            {payment.AccountName}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.reference}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.AccountNumber}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.recipientBank || "N/A"}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.AccountNumber || "N/A"}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {moneyFormat(payment.Amount) || "N/A"}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {formatDateTime(payment.createdAt) || "N/A"}
+                          </td>
+                          <td
+                            className="whitespace-nowrap"
+                            title={payment.remarks}
+                          >
+                            {payment.remarks
+                              ? payment.remarks.length > 20
+                                ? `${payment.remarks.slice(0, 20)}...`
+                                : payment.remarks
+                              : "N/A"}
+                          </td>
+                          <td
+                            className={`
                 ${payment.status === "SUCCESSFUL" ? "text-success" : ""}
                 ${payment.status === "PENDING" ? "text-warning" : ""}
                 ${payment.status === "INITIATED" ? "text-warning" : ""}
@@ -267,37 +278,38 @@ function PayoutsAdmin() {
                 ${payment.status === "REVERSED" ? "text-warning" : ""}
                 ${payment.status === "REJECTED" ? "text-danger" : ""}
               `}
-                        >
-                          {payment.status}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.status === "INITIATED" ? (
-                            <div className="flex gap-3">
-                              <span
-                                className="bg-green-500 text-white px-3 py-1 rounded-md cursor-pointer"
-                                onClick={() =>
-                                  updatePayoutAdmin("approve", payment.id)
-                                }
-                              >
-                                Approve
-                              </span>
-                              <span
-                                className="bg-red-500 text-white px-3 py-1 rounded-md cursor-pointer"
-                                onClick={() =>
-                                  updatePayoutAdmin("reject", payment.id)
-                                }
-                              >
-                                Deny
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-gray-400">-</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                          >
+                            {payment.status}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.status === "INITIATED" ? (
+                              <div className="flex gap-3">
+                                <span
+                                  className="bg-green-500 text-white px-3 py-1 rounded-md cursor-pointer"
+                                  onClick={() =>
+                                    updatePayoutAdmin("approve", payment.id)
+                                  }
+                                >
+                                  Approve
+                                </span>
+                                <span
+                                  className="bg-red-500 text-white px-3 py-1 rounded-md cursor-pointer"
+                                  onClick={() =>
+                                    updatePayoutAdmin("reject", payment.id)
+                                  }
+                                >
+                                  Deny
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-gray-400">-</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
               </div>
               <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
@@ -377,74 +389,79 @@ function PayoutsAdmin() {
           {payoutType === "Completed" && (
             <>
               <div className="w-[100%] overflow-scroll">
-                <Table striped>
-                  <thead>
-                    <tr className="!text-[#8F8F8F]">
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Recipient
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Reference
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Account Number
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Bank
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Account Number
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Amount
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Transaction Date
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Remarks
-                      </th>
-                      <th className="!text-[#8F8F8F] whitespace-nowrap">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {transactions?.map((payment, index) => (
-                      <tr key={index}>
-                        <td className="whitespace-nowrap">
-                          {payment.AccountName}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.reference}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.AccountNumber}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.recipientBank || "N/A"}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {payment.AccountNumber || "N/A"}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {moneyFormat(payment.Amount) || "N/A"}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          {formatDateTime(payment.createdAt) || "N/A"}
-                        </td>
-                        <td
-                          className="whitespace-nowrap"
-                          title={payment.remarks}
-                        >
-                          {payment.remarks
-                            ? payment.remarks.length > 20
-                              ? `${payment.remarks.slice(0, 20)}...`
-                              : payment.remarks
-                            : "N/A"}
-                        </td>
-                        <td
-                          className={`
+                {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
+                  <Table striped>
+                    <thead>
+                      <tr className="!text-[#8F8F8F]">
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Recipient
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Reference
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Account Number
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Bank
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Account Number
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Amount
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Transaction Date
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Remarks
+                        </th>
+                        <th className="!text-[#8F8F8F] whitespace-nowrap">
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {transactions?.map((payment, index) => (
+                        <tr key={index}>
+                          <td className="whitespace-nowrap">
+                            {payment.AccountName}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.reference}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.AccountNumber}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.recipientBank || "N/A"}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {payment.AccountNumber || "N/A"}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {moneyFormat(payment.Amount) || "N/A"}
+                          </td>
+                          <td className="whitespace-nowrap">
+                            {formatDateTime(payment.createdAt) || "N/A"}
+                          </td>
+                          <td
+                            className="whitespace-nowrap"
+                            title={payment.remarks}
+                          >
+                            {payment.remarks
+                              ? payment.remarks.length > 20
+                                ? `${payment.remarks.slice(0, 20)}...`
+                                : payment.remarks
+                              : "N/A"}
+                          </td>
+                          <td
+                            className={`
                 ${payment.status === "SUCCESSFUL" ? "text-success" : ""}
                 ${payment.status === "PENDING" ? "text-warning" : ""}
                 ${payment.status === "INITIATED" ? "text-warning" : ""}
@@ -452,13 +469,14 @@ function PayoutsAdmin() {
                 ${payment.status === "REVERSED" ? "text-warning" : ""}
                 ${payment.status === "REJECTED" ? "text-danger" : ""}
               `}
-                        >
-                          {payment.status}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                          >
+                            {payment.status}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                )}
               </div>
               <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>

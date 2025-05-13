@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus, FaDownload, FaCalendarAlt, FaTrash } from "react-icons/fa";
 import * as XLSX from "xlsx";
-import { Pagination, PaginationItem, PaginationLink, Table } from "reactstrap";
+import { Pagination, PaginationItem, PaginationLink, Spinner, Table } from "reactstrap";
 import LogCollectionModal from "./LogCollectionModal";
 import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 function LogCollectionAdmin() {
   const [currentPage, setCurrentPage] = useState(1);
   const [logmodal, setLogModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [totalPages1, setTotalPages1] = useState("");
   const [collections, setCollections] = useState([]);
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function LogCollectionAdmin() {
   };
 
   const getCollections = async () => {
+    setLoading(true)
     try {
       const response = await publicRequest.get(`/admin_staff/get-collections`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -32,8 +34,10 @@ function LogCollectionAdmin() {
       setCollections(data);
       setTotalPages1(response?.data?.data);
       console.log(data);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
     }
   };
 
@@ -153,6 +157,11 @@ function LogCollectionAdmin() {
                 </div>
               </div>
               <div className="overflow-scroll">
+              {loading ? (
+                  <div className="flex justify-center items-center py-10">
+                    <Spinner color="success" />
+                  </div>
+                ) : (
               <Table striped>
                 <thead>
                   <tr>
@@ -188,6 +197,7 @@ function LogCollectionAdmin() {
                   ))}
                 </tbody>
               </Table>
+                )}
               </div>
               <div className="flex flex-col lg:flex-row items-center justify-between pl-5">
                 <p>
