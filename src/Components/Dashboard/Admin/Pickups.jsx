@@ -12,6 +12,8 @@ function PickupsAdmin() {
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   const [currentPage, setCurrentPage] = useState(1);
   const [pickups, setPickups] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [searchText2, setSearchText2] = useState("");
   const [assignToMe, setAssignToMe] = useState("");
   const [loading, setLoading] = useState(false)
   const [pickupsCompleted, setPickupsCompleted] = useState([]);
@@ -82,6 +84,21 @@ function PickupsAdmin() {
     getPickUps();
     getPickUpsCompleted();
   }, []);
+
+  const filterePickups = pickups.filter((pickupDetails) => {
+    const search = searchText.toLowerCase();
+    return Object.values(pickupDetails).some((val) =>
+      val?.toString().toLowerCase().includes(search)
+    );
+  });
+
+
+  const filterePickupsCompleted = pickupsCompleted.filter((pickupDetails) => {
+    const search = searchText2.toLowerCase();
+    return Object.values(pickupDetails).some((val) =>
+      val?.toString().toLowerCase().includes(search)
+    );
+  });
   return (
     <div className="px-[10px] lg:px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
@@ -121,10 +138,12 @@ function PickupsAdmin() {
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
-                    type="text"
-                    className="border-none outline-none w-[180px] text-[14px]"
-                    placeholder="Search"
-                  />
+                  type="text"
+                  className="border-none outline-none w-[180px] text-[14px]"
+                  placeholder="Search"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
                 </div>
                 <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
                   <FaCalendarAlt size={20} className="text-[#50CA00]" />
@@ -164,7 +183,7 @@ function PickupsAdmin() {
                     </tr>
                   </thead>
                   <tbody>
-                    {pickups?.map((pickup, id) => (
+                    {filterePickups?.map((pickup, id) => (
                       <tr key={id}>
                         <td className="whitespace-nowrap">
                           {pickup.quantity} KG
@@ -276,10 +295,12 @@ function PickupsAdmin() {
                 <div className="flex items-center justify-start gap-3 w-[235px] h-[36px] rounded-[10px] border-solid border-[1px] pl-1 border-[#E9E9E9]">
                   <CiSearch className=" text-[#8F8F8F] " size={24} />
                   <input
-                    type="text"
-                    className="border-none outline-none w-[180px] text-[14px]"
-                    placeholder="Search"
-                  />
+                  type="text"
+                  className="border-none outline-none w-[180px] text-[14px]"
+                  placeholder="Search"
+                  value={searchText2}
+                  onChange={(e) => setSearchText2(e.target.value)}
+                />
                 </div>
                 <div className="w-full lg:w-[335px] h-[36px] pl-3 flex items-center rounded-[10px] border-solid border-[1px] border-[#E9E9E9] dateRange">
                   <FaCalendarAlt size={20} className="text-[#50CA00]" />
@@ -320,7 +341,7 @@ function PickupsAdmin() {
                   </tr>
                 </thead>
                 <tbody>
-                  {pickupsCompleted.map((pickup, id) => (
+                  {filterePickupsCompleted.map((pickup, id) => (
                     <tr key={id}>
                       <td className="whitespace-nowrap">
                         {pickup.materials || "Not available"}
