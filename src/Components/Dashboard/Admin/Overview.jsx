@@ -38,13 +38,16 @@ const xLabels = ["Sept", "Oct", "Nov", "Dec"];
 function OverviewAdmin() {
   const moneyFormat = (value) => {
     if (value === "" || value === null || value === undefined) return "";
-
-    // Ensure it's a valid number before formatting
+  
     const number = Number(value);
-    if (isNaN(number)) return "₦0"; // Prevent NaN issues
-
-    return `₦${number.toLocaleString("en-US")}`;
+    if (isNaN(number)) return "₦0.00";
+  
+    return `₦${number.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
   };
+  
  
  
   const [chartSetting, setChartSetting] = useState({
@@ -76,6 +79,9 @@ function OverviewAdmin() {
     }
   };
 
+  const balance = useSelector(
+    (state) => state?.user?.currentUser?.data.balance
+  );
   console.log(overviewData);
 
   useEffect(() => {
@@ -122,6 +128,14 @@ function OverviewAdmin() {
   return (
     <div className="px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
+      <div className="mb-10 w-full lg:max-w-[500px]">
+          <h2 className="mb-2 lg:mb-4 text-[14px] lg:text-[22px]">
+            Admin Balance
+          </h2>
+          <span className="bg-[#E9E9E9] text-[#151515] font-bold text-[22px] lg:text-[40px] px-[20px] py-[15px] rounded-[10px] flex items-center justify-center">
+            {moneyFormat(balance)}
+          </span>
+        </div>
         <h1 className="text-[20px] font-medium mb-[30px]">Agents Overview</h1>
         <div className="w-full h-auto lg:h-[446px] border-solid border-[1px] border-[#E9E9E9] rounded-[10px] px-[30px] py-[22px] mb-[30px]">
           <div className="flex flex-col lg:flex-row">

@@ -7,6 +7,7 @@ import { BsFillSendArrowDownFill } from "react-icons/bs";
 import { FaTruckMoving } from "react-icons/fa6";
 import { FaUser, FaUserFriends } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { RiFundsBoxFill } from "react-icons/ri";
 
 function Sidebar({toggleSidebar}) {
   const navigate = useNavigate();
@@ -30,9 +31,11 @@ function Sidebar({toggleSidebar}) {
         path: "/retail-management",
       },
       { name: "Pickups", icon: FaTruckMoving, path: "/pickups" },
+      { name: "Payments", icon: TbArrowsExchange2, path: "/payment" },
       { name: "Collection", icon: IoBook, path: "/collections" },
       { name: "Transactions", icon: TbArrowsExchange2, path: "/transactions" },
       { name: "Payouts", icon: BsFillSendArrowDownFill, path: "/payouts" },
+      { name: "Fund Agents", icon: RiFundsBoxFill, path: "/funding" },
       { name: "Customer Automation", icon: TbAutomation, path: "/customer-automation" },
     ];
   } else {

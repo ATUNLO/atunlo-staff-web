@@ -22,6 +22,8 @@ import { Offcanvas, OffcanvasBody, OffcanvasHeader } from "reactstrap";
 import { useState } from "react";
 import PayoutsAdmin from "./Admin/Payouts";
 import CustomerAutomation from "./Admin/CustomerAutomation";
+import Funding from "./Admin/Funding";
+import Payment from "./Admin/Payment";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -101,8 +103,10 @@ function Dashboard() {
                 />
                 <Route path="/collections" element={<LogCollectionAdmin />} />
                 <Route path="/transactions" element={<PaymentsAdmin />} />
+                <Route path="/payment" element={<Payment/>} />
                 <Route path="/payouts" element={<PayoutsAdmin />} />
                 <Route path="/pickups" element={<PickupsAdmin />} />
+                <Route path="/funding" element={<Funding />} />
                 <Route path="/customer-automation" element={<CustomerAutomation />} />
                 <Route
                   path="/collections/:id"
