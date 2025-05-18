@@ -79,9 +79,12 @@ function Overview() {
 
   const moneyFormat = (value) => {
     if (!value) return "";
-    const number = value.toString().replace(/\D/g, ""); // Remove non-numeric characters
-    return `₦${new Intl.NumberFormat("en-US").format(number)}`;
+    const number = value.toString().replace(/[^0-9.]/g, ""); // Keep digits and decimal
+    const parsed = parseFloat(number);
+    if (isNaN(parsed)) return "";
+    return `₦${parsed.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
+  
 
 
   return (
