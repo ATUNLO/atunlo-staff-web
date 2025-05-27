@@ -34,8 +34,8 @@ function Sidebar({toggleSidebar}) {
       { name: "Payments", icon: TbArrowsExchange2, path: "/payment" },
       { name: "Collection", icon: IoBook, path: "/collections" },
       { name: "Transactions", icon: TbArrowsExchange2, path: "/transactions" },
-      { name: "Payouts", icon: BsFillSendArrowDownFill, path: "/payouts" },
-      { name: "Fund Agents", icon: RiFundsBoxFill, path: "/funding" },
+      { name: "Retail Payouts", icon: BsFillSendArrowDownFill, path: "/payouts" },
+      { name: "Fund Staff", icon: RiFundsBoxFill, path: "/funding" },
       { name: "Customer Automation", icon: TbAutomation, path: "/customer-automation" },
     ];
   } else {

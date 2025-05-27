@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { BiArrowBack } from "react-icons/bi";
 import { FormGroup, Input, Label, Table } from "reactstrap";
 
+
 function CollectionDetailsAdmin() {
   const { id } = useParams();
   const [collection, setCollection] = useState(null);
@@ -133,21 +134,32 @@ function CollectionDetailsAdmin() {
             </FormGroup>
           </div>
           <div className="w-[90%] lg:w-[55%] mt-[20px] flex flex-col items-start justify-start">
-            <p>Image</p>
-            <div className="w-full h-[252px] bg-[#F3F3F3] rounded-[10px] flex items-center justify-center">
-              <img
-                src={collection?.images[0]}
-                alt=""
-                className="object-contain max-h-full max-w-full"
-              />
+            <p>Images</p>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              {collection?.images?.map((image, index) => (
+                <div
+                  key={index}
+                  className="w-full h-[252px] bg-[#F3F3F3] rounded-[10px] flex items-center justify-center"
+                >
+                  <img
+                    src={image}
+                    alt={`Collection image ${index + 1}`}
+                    className="object-contain max-h-full max-w-full"
+                  />
+                </div>
+              ))}
             </div>
           </div>
           <div className="w-[100%] lg:w-[55%] mt-[30px] overflow-scroll">
             <Table striped>
               <thead>
                 <tr>
-                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Material Type</th>
-                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">Amount</th>
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                    Material Type
+                  </th>
+                  <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
+                    Amount
+                  </th>
                   <th className="!text-[#8F8F8F] font-normal whitespace-nowrap">
                     Total Amount Disbursed
                   </th>

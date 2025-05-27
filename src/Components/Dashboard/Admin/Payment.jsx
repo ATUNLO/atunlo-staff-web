@@ -8,6 +8,7 @@ import { paymentData } from "../../../utils/dataset";
 import { publicRequest } from "../../../requestMehod";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 function Payment() {
   const totalPages = 5;
@@ -55,10 +56,14 @@ function Payment() {
           },
         }
       );
-  
+
       if (response?.status === 200) {
-        toast.success(`Payment ${status === "approve" ? "approved" : "rejected"} successfully.`);
-        getTransactions(); 
+        toast.success(
+          `Payment ${
+            status === "approve" ? "approved" : "rejected"
+          } successfully.`
+        );
+        getTransactions();
       } else {
         toast.error("Action failed. Please try again.");
       }
@@ -68,7 +73,6 @@ function Payment() {
       setLoadingAction(false);
     }
   };
-  
 
   useEffect(() => {
     getTransactions();
@@ -112,6 +116,7 @@ function Payment() {
                   </th>
                   <th className="!text-[#8F8F8F] whitespace-nowrap">Status</th>
                   <th className="!text-[#8F8F8F] whitespace-nowrap"></th>
+                  <th className="!text-[#8F8F8F] whitespace-nowrap"></th>
                 </tr>
               </thead>
               <tbody>
@@ -136,6 +141,11 @@ function Payment() {
               whitespace-nowrap`}
                     >
                       {payment.status}
+                    </td>
+                    <td className="whitespace-nowrap">
+                      <Link to={`/collections/${payment.collectionId}`}>
+                        View Collection
+                      </Link>
                     </td>
                     <td className="whitespace-nowrap">
                       {payment.status === "INITIATED" ? (
