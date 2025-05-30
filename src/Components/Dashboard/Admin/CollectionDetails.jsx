@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation, useNavigate } from "react-router-dom";
 import { publicRequest } from "../../../requestMehod"; // API instance
 import { useSelector } from "react-redux";
 import { BiArrowBack } from "react-icons/bi";
 import { FormGroup, Input, Label, Table } from "reactstrap";
-
 
 function CollectionDetailsAdmin() {
   const { id } = useParams();
   const [collection, setCollection] = useState(null);
   const [collectionMaterial, setCollectionMaterial] = useState(null);
   const token = useSelector((state) => state?.user?.currentUser?.data?.token);
+  const location = useLocation(); 
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (location.state?.from) {
+      navigate(location.state.from);
+    } else {
+      navigate(-1);
+    }
+  };
 
   const moneyFormat = (value) => {
     if (value === "" || value === null || value === undefined) return "";
@@ -62,12 +71,13 @@ function CollectionDetailsAdmin() {
     <div className="px-[10px] lg:px-[30px] py-[40px] w-full">
       <div className="flex flex-col">
         <div className="flex items-center h-[60px] justify-start gap-5">
-          <Link to="/log-collection" className="text-black no-underline">
-            <div className="w-[88px] h-[40px] flex items-center justify-center gap-1 border-[1px] border-solid border-[#E9E9E9] rounded-md">
-              <BiArrowBack />
-              <p className="mb-0">Back</p>
-            </div>
-          </Link>
+          <div
+            onClick={handleBack}
+            className="w-[88px] h-[40px] flex items-center justify-center gap-1 border-[1px] border-solid border-[#E9E9E9] rounded-md cursor-pointer"
+          >
+            <BiArrowBack />
+            <p className="mb-0">Back</p>
+          </div>
         </div>
         <div className="w-full h-[1px] bg-[#e9e9e9] mt-[20px]"></div>
         <div className="w-full flex flex-col items-center justify-start h-auto border-solid border-[1px] border-[#E9E9E9] rounded-[10px]  py-[55px] mb-[30px]">
