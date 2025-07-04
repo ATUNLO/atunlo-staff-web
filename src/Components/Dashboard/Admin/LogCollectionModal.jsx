@@ -11,11 +11,18 @@ import { useSelector } from "react-redux";
 import { publicRequest } from "../../../requestMehod";
 import { toast } from "react-toastify";
 
-function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollections }) {
+function LogCollectionModal({
+  logmodal,
+  toggle,
+  materialTypeSelection,
+  getCollections,
+}) {
   const token = useSelector((state) => state?.user?.currentUser?.data.token);
   const [agentName, setAgentName] = useState("");
   const [loading, setLoading] = useState(false);
-  const balance = useSelector((state) => state?.user?.currentUser?.data.balance);
+  const balance = useSelector(
+    (state) => state?.user?.currentUser?.data.balance
+  );
   const [agentSearchResults, setAgentSearchResults] = useState([]);
   const [agentData, setAgentData] = useState("");
   const [selectedAgent, setSelectedAgent] = useState([]);
@@ -30,28 +37,29 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
   const [selectedImages, setSelectedImages] = useState([]);
   console.log("selectedImages", selectedImages);
   const [totalDue, setTotalDue] = useState(0);
-  
+
   useEffect(() => {
     const total = materials.reduce((acc, item) => {
       const amount = parseFloat(item.amount) || 0;
       return acc + amount;
     }, 0);
-  
-    const parsedPrepayment = parseFloat(prepayment.toString().replace(/[^\d.]/g, "")) || 0;
-    
-    const calculatedTotalDue = parsedPrepayment - total; 
+
+    const parsedPrepayment =
+      parseFloat(prepayment.toString().replace(/[^\d.]/g, "")) || 0;
+
+    const calculatedTotalDue = parsedPrepayment - total;
     setTotalDue(calculatedTotalDue);
   }, [materials, prepayment]);
 
   const [showDropdown, setShowDropdown] = useState(false);
-  
+
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
-    setSelectedImages(prevImages => [...prevImages, ...files]);
+    setSelectedImages((prevImages) => [...prevImages, ...files]);
   };
 
   const removeImage = (indexToRemove) => {
-    setSelectedImages(prevImages => 
+    setSelectedImages((prevImages) =>
       prevImages.filter((_, index) => index !== indexToRemove)
     );
   };
@@ -84,17 +92,29 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
       if (i === index) {
         const updatedMaterial = {
           ...material,
-          [field]: 
+          [field]:
             field === "pricePerKg" || field === "amount" || field === "quantity"
-              ? value === "" ? "" : Number(value)
+              ? value === ""
+                ? ""
+                : Number(value)
               : value,
         };
 
         // Auto-calculate amount when quantity or pricePerKg changes
         if (field === "quantity" || field === "pricePerKg") {
-          const quantity = field === "quantity" ? (value === "" ? 0 : Number(value)) : (material.quantity || 0);
-          const pricePerKg = field === "pricePerKg" ? (value === "" ? 0 : Number(value)) : (material.pricePerKg || 0);
-          
+          const quantity =
+            field === "quantity"
+              ? value === ""
+                ? 0
+                : Number(value)
+              : material.quantity || 0;
+          const pricePerKg =
+            field === "pricePerKg"
+              ? value === ""
+                ? 0
+                : Number(value)
+              : material.pricePerKg || 0;
+
           if (quantity && pricePerKg) {
             updatedMaterial.amount = quantity * pricePerKg;
           } else if (!quantity || !pricePerKg) {
@@ -106,10 +126,10 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
       }
       return material;
     });
-  
+
     setMaterials(updatedMaterials);
   };
-  
+
   const getAgentName = async () => {
     if (agentName.length < 3) return;
     setStatus("loading");
@@ -193,7 +213,6 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
       toggle();
       toast.success("Collection logged successfully!");
       getCollections();
-
     } catch (error) {
       setLoading(false);
       console.error("Error:", error.response?.data || error);
@@ -231,10 +250,8 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
 
           {/* Main Content - Responsive Container */}
           <div className="w-full h-auto rounded-lg px-4 sm:px-6 lg:px-12 xl:px-16 py-6 mb-8 overflow-y-auto max-h-[80vh]">
-            
             {/* Agent Name and Collection Date - Responsive Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 mb-8">
-              
               {/* Agent Name Search */}
               <FormGroup className="flex flex-col relative w-full">
                 <Label
@@ -308,11 +325,12 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
             {/* Materials Section */}
             <div className="space-y-8">
               {materials.map((material, index) => (
-                <div key={material.id} className="relative border border-gray-100 rounded-lg p-4 sm:p-6 bg-gray-50">
-                  
+                <div
+                  key={material.id}
+                  className="relative border border-gray-100 rounded-lg p-4 sm:p-6 bg-gray-50"
+                >
                   {/* Material Type and Quantity Row */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    
                     {/* Material Type */}
                     <FormGroup className="flex flex-col w-full">
                       <Label
@@ -358,7 +376,11 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
                         type="text"
                         value={material.quantity}
                         onChange={(e) =>
-                          handleMaterialChange(index, "quantity", e.target.value)
+                          handleMaterialChange(
+                            index,
+                            "quantity",
+                            e.target.value
+                          )
                         }
                         className="w-full h-14 rounded-lg border-gray-200 bg-white"
                         placeholder="Enter quantity"
@@ -368,7 +390,6 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
 
                   {/* Price Per KG and Amount Row */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
                     {/* Price Per KG */}
                     <FormGroup className="flex flex-col w-full">
                       <Label
@@ -383,7 +404,11 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
                         type="text"
                         value={material.pricePerKg}
                         onChange={(e) =>
-                          handleMaterialChange(index, "pricePerKg", e.target.value)
+                          handleMaterialChange(
+                            index,
+                            "pricePerKg",
+                            e.target.value
+                          )
                         }
                         className="w-full h-14 rounded-lg border-gray-200 bg-white"
                         placeholder="Enter price per KG"
@@ -437,7 +462,6 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
 
             {/* Prepayment and Total Due */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-              
               {/* Prepayment */}
               <FormGroup className="flex flex-col w-full">
                 <Label
@@ -485,15 +509,17 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
               >
                 Upload Images
               </label>
-              
+
               {/* Upload Area */}
-              <div 
+              <div
                 className="w-full border-2 border-dashed border-gray-300 h-32 sm:h-40 rounded-lg flex flex-col items-center justify-center hover:border-gray-400 transition-colors cursor-pointer"
                 onClick={triggerFileInput}
               >
                 <div className="flex flex-col sm:flex-row items-center gap-3 mb-3">
                   <FaRegImage size={32} className="text-green-500" />
-                  <span className="text-gray-700 text-center">Upload Multiple Images</span>
+                  <span className="text-gray-700 text-center">
+                    Upload Multiple Images
+                  </span>
                 </div>
                 <span className="underline cursor-pointer text-gray-600 text-sm">
                   Click here to select images
@@ -518,7 +544,10 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
                   </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     {selectedImages.map((image, index) => (
-                      <div key={index} className="relative group">
+                      <div
+                        key={index}
+                        className="relative group hover:bg-gray-50 p-1 rounded-lg transition"
+                      >
                         <img
                           src={URL.createObjectURL(image)}
                           alt={`Upload ${index + 1}`}
@@ -527,7 +556,7 @@ function LogCollectionModal({ logmodal, toggle, materialTypeSelection, getCollec
                         <button
                           type="button"
                           onClick={() => removeImage(index)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-opacity opacity-100"
                         >
                           ×
                         </button>
